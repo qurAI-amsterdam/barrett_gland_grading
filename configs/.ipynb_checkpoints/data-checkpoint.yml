@@ -1,0 +1,19 @@
+---
+training:
+    - 
+        wsi: 
+            path: /home/mbotros/data/bolero_3/RB0001_HE.tiff
+        wsa: 
+            path: /home/mbotros/data/bolero_3/RB0001_HE_fixed.xml
+    -
+        wsi: 
+            path: /home/mbotros/data/bolero_3/RB0002_HE.tiff
+        wsa: 
+            path: /home/mbotros/data/bolero_3/RB0002_HE_fixed.xml
+    -
+        wsi: 
+            path: /home/mbotros/data/bolero_3/RB0003_HE.tiff
+        wsa: 
+            path: /home/mbotros/data/bolero_3/RB0003_HE_fixed.xml
+
+  

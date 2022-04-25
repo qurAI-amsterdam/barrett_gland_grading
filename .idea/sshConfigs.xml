@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="dlpath.amc.nl" id="b5257a7b-e938-4a41-8f7e-39dfd808e9e2" port="22" nameFormat="DESCRIPTIVE" username="mbotros" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>

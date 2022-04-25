@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="a7f87a4b-9f80-404e-a6d3-0c4c320e0a61" name="dlpath\" url="http://dlpath.amc.nl">
+        <fileTransfer rootFolder="/home/mbotros/code" accessType="SFTP" host="dlpath.amc.nl" port="22" sshConfigId="b5257a7b-e938-4a41-8f7e-39dfd808e9e2" sshConfig="mbotros@dlpath.amc.nl:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
