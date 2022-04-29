@@ -16,7 +16,6 @@ wholeslidedata:
             batch_size: 8
             spacing: 0.25
             shape: [512, 512, 3]
-            y_shape: [324, 324, 4]              # << output shape of UNet (with valid Convs)
             
         label_sampler:
             attribute: OrderedLabelSampler
@@ -26,4 +25,4 @@ wholeslidedata:
             
         point_sampler:
             attribute: UniformPointSampler
-            # buffer: -256 (to sample fully within the ROI)
+
