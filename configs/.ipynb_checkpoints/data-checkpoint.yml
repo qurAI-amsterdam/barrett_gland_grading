@@ -1,9 +1,0 @@
----
-training:
-    - 
-        wsi: 
-            path: /data/archief/AMC-data/Barrett/Bolero/RB0001_HE.tiff
-        wsa: 
-            path: /data/archief/AMC-data/Barrett/Bolero/RB0001_HE_fixed.xml
-
-  
