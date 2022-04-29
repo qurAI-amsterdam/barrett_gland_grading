@@ -1,6 +1,19 @@
 from wholeslidedata.samplers.utils import plot_mask
 from matplotlib import pyplot as plt
-import matplotlib.patches as mpatches
+from pprint import pprint
+
+
+# dataset utilities
+def print_dataset_statistics(dataset):
+    pprint(dataset.annotations_per_label_per_key)
+
+    print('\nAnnotation level: {}'.format(dict(sorted(dataset.annotations_per_label.items()))))
+    print('Pixel level: {}'.format(dict(sorted(dataset.pixels_per_label.items()))))
+
+    # compute pixel ratio's in this dataset
+    total_pixels = sum(dataset.pixels_per_label.values())
+    percentage_dict = {k: (v * 100 / total_pixels) for k, v in sorted(dataset.pixels_per_label.items())}
+    print('Pixel percentage per class: {:.2f}'.format(percentage_dict))
 
 
 # plotting utilities
@@ -19,3 +32,5 @@ def plot_batch(axes, idx, x_batch, y_batch, alpha=0.4, colors=None):
     for batch_index in range(len(x_batch)):
         axes[idx][batch_index].imshow(x_batch[batch_index])
         plot_mask(y_batch[batch_index], axes=axes[idx][batch_index], alpha=alpha, color_values=colors)
+
+
