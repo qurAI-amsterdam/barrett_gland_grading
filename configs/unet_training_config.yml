@@ -3,25 +3,25 @@ wholeslidedata:
         yaml_source: data.yml
         seed: 2
 
-        # todo: add squamous
         label_map:
             e-stroma: 1
             ndbe-g: 2
             lgd-g: 3
             hgd-g: 4
+#            squamous-t: 5
            
         annotation_sources: 
             filters: ['xml']
             
         batch_shape:
-            batch_size: 16
+            batch_size: 32
             spacing: 1
             shape: [512, 512, 3]
             y_shape: [324, 324]
             
         point_sampler:
-            attribute: UniformPointSampler
-#            buffer: -256                       # (to sample fully within the ROI)
+            attribute: RandomPointSampler
+            buffer: -256
             
         sample_callbacks:
             - module: wholeslidedata.samplers.callbacks
@@ -34,11 +34,12 @@ unet:
     n_classes: 3
 
     # training
-    learning_rate: 0.0005
-    epochs: 10
+    learning_rate: 0.001
+    epochs: 100
+    gpus: 2
     cpus: 1
-    train_batches: 100
-    val_batches: 10
+    train_batches: 1000
+    val_batches: 100
     
             
 

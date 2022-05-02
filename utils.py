@@ -12,8 +12,8 @@ def print_dataset_statistics(dataset):
 
     # compute pixel ratio's in this dataset
     total_pixels = sum(dataset.pixels_per_label.values())
-    percentage_dict = {k: (v * 100 / total_pixels) for k, v in sorted(dataset.pixels_per_label.items())}
-    print('Pixel percentage per class: {:.2f}'.format(percentage_dict))
+    percentage_dict = {k: round((v * 100 / total_pixels), 2) for k, v in dataset.pixels_per_label.items()}
+    print('Pixel percentage per class: {}'.format(dict(sorted(percentage_dict.items()))))
 
 
 # plotting utilities
@@ -34,3 +34,11 @@ def plot_batch(axes, idx, x_batch, y_batch, alpha=0.4, colors=None):
         plot_mask(y_batch[batch_index], axes=axes[idx][batch_index], alpha=alpha, color_values=colors)
 
 
+def mean_metrics(d):
+    mean = {}
+    for m in d[0].keys():
+        s = 0
+        for k, v in d.items():
+            s += v[m]
+        mean[m] = s / len(d)
+    return mean

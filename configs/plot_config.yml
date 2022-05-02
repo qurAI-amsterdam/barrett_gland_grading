@@ -8,13 +8,14 @@ wholeslidedata:
             ndbe-g: 2
             lgd-g: 3
             hgd-g: 4
+#            squamous-t: 5
            
         annotation_sources: 
             filters: ['xml']
             
         batch_shape:
-            batch_size: 8
-            spacing: 0.25
+            batch_size: 4
+            spacing: 1
             shape: [512, 512, 3]
             
         label_sampler:

@@ -12,8 +12,9 @@ def to_dysplastic_vs_non_dysplastic(y_batch):
 
     returns: y_batch (np.array)
     """
-    # set stroma as bg
+    # set stroma and squamous as bg
     y_batch = np.where(y_batch == 1, 0, y_batch)
+    # y_batch = np.where(y_batch == 5, 0, y_batch)
 
     # set ndbe as non-dysplastic
     y_batch = np.where(y_batch == 2, 1, y_batch)
