@@ -4,10 +4,10 @@ wholeslidedata:
         seed: 2
 
         label_map:
-            e-stroma: 1
-            ndbe-g: 2
-            lgd-g: 3
-            hgd-g: 4
+            ndbe-g: 1
+            lgd-g: 2
+            hgd-g: 3
+#            e-stroma: 4
 #            squamous-t: 5
            
         annotation_sources: 

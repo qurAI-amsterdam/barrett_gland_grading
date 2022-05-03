@@ -26,8 +26,8 @@ def fix_annotation_files(files, verbose=True, check=True):
     A fixed version with (_fixed_) postfix is added to the folder where it was originally found.
     Parameters:
     annotation_file (str): path to the annotation file
-    :returns
-    Overview in a dataframe of which elements have been removed.
+    Returns:
+    res (pd.DataFrame): Overview in a dataframe of which elements have been removed.
     """
     res = pd.DataFrame(columns=['file', 'annotation', 'coords'])
 

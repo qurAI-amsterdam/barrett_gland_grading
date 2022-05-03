@@ -17,17 +17,17 @@ from utils import mean_metrics
 
 """
 To-do: Train segmentation network for Non-Dysplastic vs Dysplastic
-(*) adjust sampling strategy (with the wholeslidedata package)
 (*) define a train and validation split
+(*) adjust sampling strategy (with the wholeslidedata package)
 (*) normalize data
 (*) add data augmentation
     - HookNet: spatial, color, noise and stain augmentation (Tellez, 2018: Whole-Slide Mitosis Detection)
     - RaeNet: gamma transform, random flipping, Gaussian blur, affine translation and colour distortion on the training data
 (*) decrease learning rate 
     - RaeNet: decreasing the learning rate by a factor of 0.01 every 50 epochs
-(*) check input type: float32 vs float64: is there any difference?
-(*) add class weights
-(*) add dice loss
+(?) check input type: float32 vs float64: is there any difference?
+(?) add class weights
+(?) add dice loss
 """
 
 
@@ -54,16 +54,14 @@ def train(run_name, experiments_dir, wandb_key):
     print('Loaded config: {}'.format(user_config))
     train_config = load_config(user_config)
 
-    # create train and validation generators
+    # create train and validation generators (no reset)
     training_batch_generator = create_batch_iterator(user_config=user_config,
                                                      mode='training',
-                                                     cpus=train_config['cpus'],
-                                                     number_of_batches=train_config['train_batches'])
+                                                     cpus=train_config['cpus'])
 
     validation_batch_generator = create_batch_iterator(mode='validation',
                                                        user_config=user_config,
-                                                       cpus=train_config['cpus'],
-                                                       number_of_batches=train_config['val_batches'])
+                                                       cpus=train_config['cpus'])
 
     print('\nTraining dataset ')
     print_dataset_statistics(training_batch_generator.dataset)
@@ -91,7 +89,9 @@ def train(run_name, experiments_dir, wandb_key):
         train_metrics = {}
         validation_metrics = {}
 
-        for idx, (x, y, info) in enumerate(tqdm(training_batch_generator, desc='Epoch {}'.format(n + 1))):
+        for idx in tqdm(range(train_config['train_batches']), desc='Epoch {}'.format(n + 1)):
+            x, y, info = next(training_batch_generator)
+
             # dysplastic vs non-dysplastic
             y = to_dysplastic_vs_non_dysplastic(y)
 
@@ -116,7 +116,8 @@ def train(run_name, experiments_dir, wandb_key):
 
         # validate
         with torch.no_grad():
-            for idx, (x, y, info) in enumerate(validation_batch_generator):
+            for idx in tqdm(range(train_config['val_batches']), desc='Validating'):
+                x, y, info = next(validation_batch_generator)
                 # dysplastic vs non-dysplastic
                 y = to_dysplastic_vs_non_dysplastic(y)
 
@@ -142,7 +143,8 @@ def train(run_name, experiments_dir, wandb_key):
         print("Train loss: {:.3f}, val loss: {:.3f}".format(training_means['loss'], validation_means['loss']))
         print("Train dice: {}, val dice: {}".format(np.round(training_means['dice per class'], decimals=2),
                                                     np.round(validation_means['dice per class'], decimals=2)))
-        wandb.log({'train loss': training_means['loss'], 'train dice': training_means['dice weighted'],
+        wandb.log({'epoch': n + 1,
+                   'train loss': training_means['loss'], 'train dice': training_means['dice weighted'],
                    'val loss': validation_means['loss'], 'val dice': validation_means['dice weighted']})
 
         # save best model
