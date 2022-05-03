@@ -17,7 +17,6 @@ from utils import mean_metrics
 
 """
 To-do: Train segmentation network for Non-Dysplastic vs Dysplastic
-(*) logging with weights and biases
 (*) adjust sampling strategy (with the wholeslidedata package)
 (*) define a train and validation split
 (*) normalize data
