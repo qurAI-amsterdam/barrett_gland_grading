@@ -5,7 +5,7 @@ data tissue samples and BE biopsies to support pathologists in their diagnostic 
 ### The Task:
 BE experts grade biopsies according to the Vienna Classification:
 
-![](C:\Users\mbotros\PhD\code\barrett_gland_grading\images\overview_grading.png)
+![](images\overview_grading.png)
 
 
 ### Updates:

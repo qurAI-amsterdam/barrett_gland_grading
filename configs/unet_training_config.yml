@@ -14,7 +14,7 @@ wholeslidedata:
             filters: ['xml']
             
         batch_shape:
-            batch_size: 50
+            batch_size: 25
             spacing: 1
             shape: [512, 512, 3]
             y_shape: [324, 324]
@@ -34,11 +34,11 @@ unet:
     n_classes: 3
 
     # training
-    learning_rate: 0.001
-    epochs: 1000
-    train_batches: 20
-    val_batches: 2
-    gpus: 2
+    learning_rate: 0.005
+    epochs: 250
+    train_batches: 100
+    val_batches: 10
+    gpus: 1
     cpus: 1
     
             
