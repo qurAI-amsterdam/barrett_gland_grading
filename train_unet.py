@@ -28,6 +28,7 @@ To-do: Train segmentation network for Non-Dysplastic vs Dysplastic
 (?) check input type: float32 vs float64: is there any difference?
 (?) add class weights
 (?) add dice loss
+(?) plot intermediate predictions in weights and biases
 """
 
 
