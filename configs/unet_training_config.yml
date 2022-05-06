@@ -1,6 +1,6 @@
 wholeslidedata:
     default:
-        yaml_source: data.yml
+        yaml_source: train_split.yml
         seed: 2
 
         label_map:
@@ -35,9 +35,9 @@ unet:
 
     # training
     learning_rate: 0.005
-    epochs: 250
-    train_batches: 100
-    val_batches: 10
+    epochs: 100
+    train_batches: 1000
+    val_batches: 100
     gpus: 1
     cpus: 1
     

@@ -4,10 +4,12 @@ from pprint import pprint
 
 
 # dataset utilities
-def print_dataset_statistics(dataset):
-    pprint(dataset.annotations_per_label_per_key)
+def print_dataset_statistics(dataset, show_all_files=False):
 
-    print('\nAnnotation level: {}'.format(dict(sorted(dataset.annotations_per_label.items()))))
+    if show_all_files:
+        pprint(dataset.annotations_per_label_per_key)
+
+    print('Annotation level: {}'.format(dict(sorted(dataset.annotations_per_label.items()))))
     print('Pixel level: {}'.format(dict(sorted(dataset.pixels_per_label.items()))))
 
     # compute pixel ratio's in this dataset
@@ -34,11 +36,11 @@ def plot_batch(axes, idx, x_batch, y_batch, alpha=0.4, colors=None):
         plot_mask(y_batch[batch_index], axes=axes[idx][batch_index], alpha=alpha, color_values=colors)
 
 
-def mean_metrics(d):
+def mean_metrics(metrics_dict):
     mean = {}
-    for m in d[0].keys():
+    for m in metrics_dict[0].keys():
         s = 0
-        for k, v in d.items():
+        for k, v in metrics_dict.items():
             s += v[m]
-        mean[m] = s / len(d)
+        mean[m] = s / len(metrics_dict)
     return mean
