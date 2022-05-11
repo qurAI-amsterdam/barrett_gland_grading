@@ -25,19 +25,19 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 - [ ] Train a standard UNet as baseline segmentation pipeline for grading into: NDBE, LGD, HGD.
 - [ ] Data augmentations for segmentation in pathology:
     * Manual
-      - HookNet: spatial, color, noise and stain augmentation [[1]](#1). 
+      - HookNet: spatial, color, noise and stain augmentation [[2]](#1). 
       - RaeNet: gamma transform, random flipping, Gaussian blur, affine translation and colour distortion.
     * Trivial Augment: https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html.
     * HE Auto augment: https://github.com/DIAGNijmegen/pathology-he-auto-augment.
     * Spatial augmentations need to be applied on both image and segmentation.
-    * Stain-Transforming Cycle-Consistent GAN [[4]](#4).
+    * Stain-Transforming Cycle-Consistent GAN [[5]](#4).
 - [ ] Experiments:
-  * Context aggregation networks for segmentation in pathology: Hooknet [[2]](#2), RAENet [[3]](#3)
+  * Context aggregation networks for segmentation in pathology: Hooknet [[3]](#3), RAENet [[4]](#4)
   * ImageNet pretrained encoder.
   * Roto-Translation Equivariant CNN's [[6]](#6)
 
 ### Segmentation pipeline for gland grading into: NDBE, LGD or HGD
-* Networks architectures to consider: UNet, Hooknet [[2]](#2), RAENet [[3]](#3)
+* Networks architectures to consider: UNet, Hooknet [[3]](#3), RAENet [[4]](#4)
 * For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-whole-slide-data
   * Includes configuration for patch extraction such as batch size, patch size, spacing.
   * Includes different strategies to sample patches from the WSI (balanced, random, slidingwindow).
