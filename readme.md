@@ -47,13 +47,13 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer. 
 Case or slide level annotations were not provided yet. The relevant datasets on AMC servers (/data/archief/AMC-data/Barrett/) are listed below:
 
-| Dataset   | Cases | Biopsies | Diagnosis Available<br/> biopsy/case level | Raters <br/> (biopsy/case level) |
-|-----------|:-----:|:--------:|:------------------------------------------:|:--------------------------------:|
-| ASL       |  36   |   139    |                     ?                      |                ?                 |
-| Bolero    |  51   |   193    |                    yes                     |                4                 |
-| LANS      |  34   |   104    |                    yes                     |                14                |
-| RBE       |  191  |   473    |                     ?                      |                ?                 |
-| **Total** |  312  |   909    |                    N/A                     |               N/A                |
+| Dataset   | Cases | Biopsies | Diagnosis Available<br/>(biopsy/case level) | Raters<br/>(biopsy/case level) |
+|-----------|:-----:|:--------:|:-------------------------------------------:|:------------------------------:|
+| ASL       |  36   |   139    |                      ?                      |               ?                |
+| Bolero    |  51   |   193    |                  should be                  |               4                |
+| LANS      |  34   |   104    |                  should be                  |               14               |
+| RBE       |  191  |   473    |                      ?                      |               ?                |
+| **Total** |  312  |   909    |                     N/A                     |              N/A               |
 
 
 ### Results
