@@ -44,7 +44,7 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
   * Configuration stored in (`configs/unet_training_config.yml`)
 
 ### Datasets 
-Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer. 
+Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories NDBE, LGD and HGD.
 Case or slide level annotations were not provided yet. The relevant datasets on AMC servers (/data/archief/AMC-data/Barrett/) are listed below:
 
 | Dataset   | Cases | Biopsies | Diagnosis Available<br/>(biopsy/case level) | Raters<br/>(biopsy/case level) |
