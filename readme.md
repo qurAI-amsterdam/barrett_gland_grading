@@ -6,7 +6,7 @@ areas of interest on H&E tissue samples from patients with Barrett's Esophagus (
 BE is associated with an increased risk of developing esophageal cancer. Regular check-ups and pathological assessment of biopsy material are crucial for identifying BE patients at risk.
 Dysplasia in BE is assessed according to the revised Vienna criteria, which are based on the dysplasia classification in inflammatory bowel disease. Evaluation of cytological and architectural severity and invasion status leads to assignment in
 one of the following categories: negative for dysplasia, indefinite for dysplasia (IND), low grade dysplasia (LGD), noninvasive high grade dysplasia (HGD), and invasive neoplasia. Key characteristics used to assess the
-dysplasia grade in BE are surface maturation, glandular architecture, and cytonuclear changes. [[1]](#1)
+dysplasia grade in BE are surface maturation, glandular architecture, and cytonuclear changes. Description and figure from [[1]](#1).
 
 
 ![](images/examples_grading_BE.png)
