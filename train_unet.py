@@ -14,15 +14,17 @@ from tqdm import tqdm
 from sklearn.metrics import f1_score
 import wandb
 from utils import mean_metrics
+from torchvision import transforms
 
 """
 To-do: Train segmentation network for Non-Dysplastic vs Dysplastic
-(*) define a train and validation split
+(*) add more data from RBE
 (*) adjust sampling strategy (with the wholeslidedata package)
 (*) normalize data
 (*) add data augmentation
     - HookNet: spatial, color, noise and stain augmentation (Tellez, 2018: Whole-Slide Mitosis Detection)
     - RaeNet: gamma transform, random flipping, Gaussian blur, affine translation and colour distortion on the training data
+(*) use imagenet pretrained encoder
 (*) decrease learning rate 
     - RaeNet: decreasing the learning rate by a factor of 0.01 every 50 epochs
 (?) check input type: float32 vs float64: is there any difference?
@@ -99,6 +101,8 @@ def train(run_name, experiments_dir, wandb_key):
             # transform x and y
             x = torch.tensor(x.astype('float32'))
             x = torch.transpose(x, 1, 3).to(device)
+            x = transforms.Normalize(mean=(199.7924916, 181.19122616, 208.50401919),
+                                     std=(29.33384243, 37.29050276, 18.96106408))(x)
             y = torch.tensor(y.astype('int64')).to(device)
 
             # forward and update
@@ -112,7 +116,7 @@ def train(run_name, experiments_dir, wandb_key):
             y = y.cpu().detach().numpy().flatten()
             y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
             train_metrics[idx] = {'loss': loss.item(),
-                                  'dice per class': f1_score(y, y_hat, average=None),
+                                  'dice per class': f1_score(y, y_hat, average=None, labels=[0, 1, 2]),
                                   'dice weighted': f1_score(y, y_hat, average='weighted')}
 
         # validate
@@ -135,7 +139,7 @@ def train(run_name, experiments_dir, wandb_key):
                 y = y.cpu().detach().numpy().flatten()
                 y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
                 validation_metrics[idx] = {'loss': loss.item(),
-                                           'dice per class': f1_score(y, y_hat, average=None),
+                                           'dice per class': f1_score(y, y_hat, average=None, labels=[0, 1, 2]),
                                            'dice weighted': f1_score(y, y_hat, average='weighted')}
 
         # compute and print metrics

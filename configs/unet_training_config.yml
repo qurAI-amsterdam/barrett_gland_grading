@@ -21,7 +21,6 @@ wholeslidedata:
             
         point_sampler:
             attribute: RandomPointSampler
-            buffer: -256
             
         sample_callbacks:
             - module: wholeslidedata.samplers.callbacks

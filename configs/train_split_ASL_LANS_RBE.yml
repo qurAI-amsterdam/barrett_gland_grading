@@ -1,0 +1,1309 @@
+---
+training:
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL12_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL12_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL18_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL18_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL24_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL24_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL29_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL29_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL11_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL11_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL06_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL06_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL17_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL17_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL13_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL13_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL02_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL02_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL03_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL03_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL26_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL26_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL16_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL16_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL07_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL07_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL09_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL09_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL01_3_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL01_3_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL05_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL05_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL22_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL22_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL21_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL21_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL33_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL33_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL25_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL25_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL27_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL27_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL28_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL28_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL20_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL20_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL19_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL19_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL23_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL23_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL34_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL34_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL10_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL10_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL31_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL31_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL15_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL15_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL14_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL14_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL08_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL08_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL30_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL30_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL32_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL32_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL195_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL195_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL006_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL006_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL187_01_05_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL187_01_05_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL086_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL086_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL076_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL076_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL111_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL111_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL080_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL080_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL013_02_03_04_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL013_02_03_04_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL007_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL007_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL046_02_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL046_02_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL059_01_03_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL059_01_03_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL013_02_02_02_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL013_02_02_02_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL056_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL056_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL030_01_03_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL030_01_03_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL022_01_01_03_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL022_01_01_03_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL042_01_03_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL042_01_03_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL108_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL108_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL044_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL044_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL150_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL150_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL054_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL054_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL025_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL025_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL049_01_04_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL049_01_04_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL035_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL035_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL062_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL062_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL015_01_03_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL015_01_03_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL169_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL169_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL147_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL147_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL168_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL168_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL155_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL155_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL185_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL185_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL061_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL061_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00080_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00080_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00137_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00137_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00066_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00066_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00108-HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00108-HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00073_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00073_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51207_HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51207_HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00088_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00088_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00146_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00146_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT31_III-HE1.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT31_III-HE1.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT04_VIII-HE1.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT04_VIII-HE1.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00067_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00067_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00173_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00173_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00119_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00119_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT12_VI-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT12_VI-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00097_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00097_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00105-HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00105-HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00159_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00159_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00132_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00132_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT10_I-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT10_I-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00050_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00050_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00076_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00076_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00150_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00150_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00011_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00011_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT36_I-HE1.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT36_I-HE1.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00131_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00131_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00168_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00168_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00068_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00068_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00085_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00085_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT03_VIII-HE2.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT03_VIII-HE2.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00018_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00018_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00062_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00062_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00160_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00160_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00183_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00183_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00016_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00016_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-VII.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-VII.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00166_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00166_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00102-HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00102-HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00133_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00133_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00148_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00148_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00161_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00161_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00153_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00153_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-III.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-III.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00090_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00090_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00077_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00077_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT39_VI-HE1.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT39_VI-HE1.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00082_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00082_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT28_II-HE2.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT28_II-HE2.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50727_HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50727_HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT18_IV-HE2.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT18_IV-HE2.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00139_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00139_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00095_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00095_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00074_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00074_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00093_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00093_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00125_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00125_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00007_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00007_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00078_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00078_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00002_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00002_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00061_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00061_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00072_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00072_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00103-HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00103-HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00071_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00071_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00005_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00005_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00019_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00019_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00151_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00151_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-15026_HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-15026_HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00171_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00171_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00098_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00098_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00089_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00089_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00109-HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00109-HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00017_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00017_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00184_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00184_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00155_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00155_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00182_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00182_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51016_HE-III.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51016_HE-III.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00154_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00154_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00100-HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00100-HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00110-HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00110-HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00122_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00122_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00140_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00140_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT38_XI-HE1.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT38_XI-HE1.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-VI.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-VI.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51018_HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51018_HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-13024_HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-13024_HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00064_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00064_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00138_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00138_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00116_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00116_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00055_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00055_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT51_VI-HE1.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT51_VI-HE1.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00158_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00158_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00006_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00006_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00130_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00130_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00086_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00086_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT32_VI-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT32_VI-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00014_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00014_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT24_IX-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT24_IX-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51018_HE-III.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51018_HE-III.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51016_HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51016_HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00147_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00147_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-14922_HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-14922_HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00121_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00121_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00065_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00065_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT34_VIII-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT34_VIII-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00001_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00001_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00152_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00152_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-14346_HE-IV.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-14346_HE-IV.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00004_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00004_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00163_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00163_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00099_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00099_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00136_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00136_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00015_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00015_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00149_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00149_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00142_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00142_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT13_V-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT13_V-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00047_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00047_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00114_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00114_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00185_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00185_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00144_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00144_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00111-HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00111-HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-14026_HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-14026_HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00107-HE-III.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00107-HE-III.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00135_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00135_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-IV.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-IV.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00128_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00128_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00091_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00091_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT37_III-HE1.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT37_III-HE1.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00046_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00046_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT28_I-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT28_I-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00113_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00113_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00081_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00081_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00170_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00170_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00118_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00118_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00049_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00049_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT31_IV-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT31_IV-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00084_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00084_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT30_XIII-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT30_XIII-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51017_HE-II.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51017_HE-II.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00172_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00172_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00181_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00181_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00187_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00187_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00104-HE-III.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00104-HE-III.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-15026_HE-III.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-15026_HE-III.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50490_HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50490_HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00162_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00162_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00051_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00051_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00069_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00069_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-V.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-50730_HE-V.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00179_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00179_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00070_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00070_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00010_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00010_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00101-HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00101-HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00178_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00178_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00115_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00115_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00124_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00124_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-13736_HE-III.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-13736_HE-III.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-14922_HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-14922_HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT18_VI-HE3.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT18_VI-HE3.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00092_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00092_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00013_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00013_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51017_HE-III.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-51017_HE-III.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00075_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00075_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00157_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00157_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00079_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00079_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00134_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00134_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00127_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00127_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00106-HE-I.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00106-HE-I.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00094_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00094_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00141_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00141_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00129_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00129_HE.xml
+
+validation:
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL36_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL36_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL35_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL35_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL04_1_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/ASL/ASL04_1_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL036_01_01_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL036_01_01_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL146_01_03_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL146_01_03_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/LANS/RL026_01_02_01_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/LANS/RL026_01_02_01_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT09_XI-HE2.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT09_XI-HE2.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT39_V-HE1.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/ROCT39_V-HE1.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00054_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00054_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-13731_HE-XIV.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBET17-13731_HE-XIV.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00087_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00087_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00143_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00143_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00083_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00083_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00063_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00063_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00096_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00096_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00012_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00012_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00145_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00145_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00164_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00164_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00169_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00169_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00126_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00126_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00117_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00117_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00003_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00003_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00165_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00165_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00112_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00112_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00056_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00056_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00120_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00120_HE.xml
+    -
+        wsi:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00176_HE.tiff
+        wsa:
+            path: /data/archief/AMC-data/Barrett/RBE/RBE-00176_HE.xml
