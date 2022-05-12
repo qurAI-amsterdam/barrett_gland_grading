@@ -5,7 +5,7 @@ areas of interest on H&E tissue samples from patients with Barrett's Esophagus (
 ### The Task:
 BE is associated with an increased risk of developing esophageal cancer. Regular check-ups and pathological assessment of biopsy material are crucial for identifying BE patients at risk.
 Dysplasia in BE is assessed according to the revised Vienna criteria, which are based on the dysplasia classification in inflammatory bowel disease. Evaluation of cytological and architectural severity and invasion status leads to assignment in
-one of the following categories: negative for dysplasia, indefinite for dysplasia (IND), low grade dysplasia (LGD), noninvasive high grade dysplasia (HGD), and invasive neoplasia. Key characteristics used to assess the
+one of the following categories: non-dysplastic Barrett's esophagus (NDBE), indefinite for dysplasia (IND), low grade dysplasia (LGD) and high grade dysplasia (HGD). Key characteristics used to assess the
 dysplasia grade in BE are surface maturation, glandular architecture, and cytonuclear changes. Description and figure from [[1]](#1).
 
 
@@ -15,22 +15,22 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 ### Outline of the project:
 
 - [ ] Create a clean archive dataset:
-    * Individual directories for each dataset: ASL, Bolero, LANS, RBE.
-        * Containing all the tiff files and xmls files (converted in the same fashion).
+    * Individual directories for each dataset: ASL, Bolero, LANS and RBE.
+        * Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
         * A csv file with case or biopsy level diagnosis.
     * Remove polygon annotations with <3 coordinates.
-    * Gland annotations that include non tissue => mask out non tissue (Otsu)
+    * Gland annotations that include non tissue => mask out non tissue.
     * Move data to the research network.
-- [ ] Split data for training, evaluation and testing (keep Bolero apart for testing).
-- [ ] Train a standard UNet as baseline segmentation pipeline for grading into: NDBE, LGD, HGD.
+- [ ] Split data for training, evaluation and testing. We use Bolero as a hold out test set.
+- [ ] Train a standard UNet as baseline segmentation pipeline for grading into: NDBE, LGD and HGD.
 - [ ] Data augmentations for segmentation in pathology:
     * Manual
-      - HookNet: spatial, color, noise and stain augmentation [[2]](#1). 
+      - HookNet: spatial, color, noise and stain augmentation [[2]](#2). 
       - RaeNet: gamma transform, random flipping, Gaussian blur, affine translation and colour distortion.
     * Trivial Augment: https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html.
     * HE Auto augment: https://github.com/DIAGNijmegen/pathology-he-auto-augment.
     * Spatial augmentations need to be applied on both image and segmentation.
-    * Stain-Transforming Cycle-Consistent GAN [[5]](#4).
+    * Stain-Transforming Cycle-Consistent GAN [[5]](#5).
 - [ ] Experiments:
   * Context aggregation networks for segmentation in pathology: Hooknet [[3]](#3), RAENet [[4]](#4)
   * ImageNet pretrained encoder.

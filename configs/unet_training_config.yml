@@ -1,7 +1,9 @@
 wholeslidedata:
     default:
-        yaml_source: train_split.yml
+        yaml_source: train_split_ASL_LANS_RBE.yml
         seed: 2
+        associations:
+            exact_match: True
 
         label_map:
             ndbe-g: 1
@@ -14,7 +16,7 @@ wholeslidedata:
             filters: ['xml']
             
         batch_shape:
-            batch_size: 25
+            batch_size: 50
             spacing: 1
             shape: [512, 512, 3]
             y_shape: [324, 324]
@@ -34,10 +36,10 @@ unet:
 
     # training
     learning_rate: 0.005
-    epochs: 100
+    epochs: 250
     train_batches: 1000
     val_batches: 100
-    gpus: 1
+    gpus: 2
     cpus: 1
     
             

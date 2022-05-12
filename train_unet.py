@@ -16,23 +16,6 @@ import wandb
 from utils import mean_metrics
 from torchvision import transforms
 
-"""
-To-do: Train segmentation network for Non-Dysplastic vs Dysplastic
-(*) add more data from RBE
-(*) adjust sampling strategy (with the wholeslidedata package)
-(*) normalize data
-(*) add data augmentation
-    - HookNet: spatial, color, noise and stain augmentation (Tellez, 2018: Whole-Slide Mitosis Detection)
-    - RaeNet: gamma transform, random flipping, Gaussian blur, affine translation and colour distortion on the training data
-(*) use imagenet pretrained encoder
-(*) decrease learning rate 
-    - RaeNet: decreasing the learning rate by a factor of 0.01 every 50 epochs
-(?) check input type: float32 vs float64: is there any difference?
-(?) add class weights
-(?) add dice loss
-(?) plot intermediate predictions in weights and biases
-"""
-
 
 def load_config(user_config):
     with open(user_config, 'r') as yamlfile:
