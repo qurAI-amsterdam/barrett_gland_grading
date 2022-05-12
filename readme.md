@@ -24,7 +24,7 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 - [ ] Split data for training, evaluation and testing. We use Bolero as a hold out test set.
 - [ ] Train a standard UNet as baseline segmentation pipeline for grading into: NDBE, LGD and HGD.
 - [ ] Data augmentations for segmentation in pathology:
-    * Manual
+    * Manual:
       - HookNet: spatial, color, noise and stain augmentation [[2]](#2). 
       - RaeNet: gamma transform, random flipping, Gaussian blur, affine translation and colour distortion.
     * Trivial Augment: https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html.
@@ -34,17 +34,17 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 - [ ] Experiments:
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), Hooknet [[3]](#3), RAENet [[4]](#4).
   * ImageNet pretrained encoder.
-  * Roto-Translation Equivariant CNN's [[6]](#6)
+  * Roto-Translation Equivariant CNN's [[6]](#6).
 
 ### Segmentation pipeline for gland grading into: NDBE, LGD or HGD
 * Networks architectures to consider next: HistNet [[7]](#7), Hooknet [[3]](#3), RAENet [[4]](#4).
-* For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-whole-slide-data
+* For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-whole-slide-data.
   * Includes configuration for patch extraction such as batch size, patch size, spacing.
   * Includes different strategies to sample patches from the WSI (balanced, random, slidingwindow).
-  * Configuration stored in (`configs/unet_training_config.yml`)
+  * Configuration stored in (`configs/unet_training_config.yml`).
 
 ### Datasets 
-Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories NDBE, LGD and HGD.
+Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories: NDBE, LGD and HGD.
 Case or slide level annotations were not provided yet. The relevant datasets on AMC servers (/data/archief/AMC-data/Barrett/) are listed below:
 
 | Dataset   | Cases | Biopsies | Diagnosis Available<br/>(biopsy/case level) | Raters<br/>(biopsy/case level) |
