@@ -1,7 +1,9 @@
 wholeslidedata:
     default:
-        yaml_source: data.yml
+        yaml_source: train_split_ASL_LANS_RBE.yml
         seed: 2
+        associations:
+            exact_match: True
 
         label_map:
             ndbe-g: 1
