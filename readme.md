@@ -32,12 +32,12 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
     * Spatial augmentations need to be applied on both image and segmentation.
     * Stain-Transforming Cycle-Consistent GAN [[5]](#5).
 - [ ] Experiments:
-  * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), Hooknet [[3]](#3), RAENet [[4]](#4)
+  * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), Hooknet [[3]](#3), RAENet [[4]](#4).
   * ImageNet pretrained encoder.
   * Roto-Translation Equivariant CNN's [[6]](#6)
 
 ### Segmentation pipeline for gland grading into: NDBE, LGD or HGD
-* Networks architectures to consider next: HistNet [[7]](#7), Hooknet [[3]](#3), RAENet [[4]](#4)
+* Networks architectures to consider next: HistNet [[7]](#7), Hooknet [[3]](#3), RAENet [[4]](#4).
 * For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-whole-slide-data
   * Includes configuration for patch extraction such as batch size, patch size, spacing.
   * Includes different strategies to sample patches from the WSI (balanced, random, slidingwindow).
