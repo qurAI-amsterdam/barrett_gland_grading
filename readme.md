@@ -37,7 +37,7 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
   * Roto-Translation Equivariant CNN's [[6]](#6).
 
 ### Segmentation pipeline for gland grading into: NDBE, LGD or HGD
-* Networks architectures to consider next: HistNet [[7]](#7), Hooknet [[3]](#3), RAENet [[4]](#4).
+* Networks architectures to consider next: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
 * For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-whole-slide-data.
   * Includes configuration for patch extraction such as batch size, patch size, spacing.
   * Includes different strategies to sample patches from the WSI (balanced, random, slidingwindow).
@@ -52,8 +52,8 @@ Case or slide level annotations were not provided yet. The relevant datasets on 
 | ASL       |  36   |   139    |                      ?                      |               ?                |
 | Bolero    |  51   |   193    |                  should be                  |               4                |
 | LANS      |  34   |   104    |                  should be                  |               14               |
-| RBE       |  191  |   473    |                      ?                      |               ?                |
-| **Total** |  312  |   909    |                     N/A                     |              N/A               |
+| RBE       |  212  |   534    |                      ?                      |               ?                |
+| **Total** |  312  |   970    |                     N/A                     |              N/A               |
 
 
 ### Results

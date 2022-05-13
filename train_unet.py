@@ -14,7 +14,12 @@ from tqdm import tqdm
 from sklearn.metrics import f1_score
 import wandb
 from utils import mean_metrics
-from torchvision import transforms
+
+"""
+To-Do:
+(1) Mask out non tissue in patches.
+(2) Add data augmentation.
+"""
 
 
 def load_config(user_config):
@@ -84,8 +89,6 @@ def train(run_name, experiments_dir, wandb_key):
             # transform x and y
             x = torch.tensor(x.astype('float32'))
             x = torch.transpose(x, 1, 3).to(device)
-            x = transforms.Normalize(mean=(199.7924916, 181.19122616, 208.50401919),
-                                     std=(29.33384243, 37.29050276, 18.96106408))(x)
             y = torch.tensor(y.astype('int64')).to(device)
 
             # forward and update
@@ -106,6 +109,7 @@ def train(run_name, experiments_dir, wandb_key):
         with torch.no_grad():
             for idx in tqdm(range(train_config['val_batches']), desc='Validating'):
                 x, y, info = next(validation_batch_generator)
+
                 # dysplastic vs non-dysplastic
                 y = to_dysplastic_vs_non_dysplastic(y)
 
