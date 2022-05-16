@@ -14,25 +14,33 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 
 ### Outline of the project:
 
-- [ ] Create a clean archive dataset:
+- [x] Create a clean archive dataset:
     * Individual directories for each dataset: ASL, Bolero, LANS and RBE.
         * Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
         * A csv file with case or biopsy level diagnosis.
     * Remove polygon annotations with <3 coordinates.
     * Gland annotations that include non tissue => mask out non tissue.
-    * Move data to the research network.
-- [ ] Split data for training, evaluation and testing. We use Bolero as a hold out test set.
-- [ ] Train a standard UNet as baseline segmentation pipeline for grading into: NDBE, LGD and HGD.
+  
+    **Comments**: 
+     * Done for the data on the server (/data/archief/AMC-data/Barrett/). Clean up of the original archive on (L:) will be done together with Onno.
+     * Masking out non tissue for loose segmentations around the border didn't work out yet with Otsu and morphology. 
+- [x] Split data for training, evaluation and testing. We use Bolero as internal test set.
+- [x] Train a standard UNet as baseline segmentation pipeline for grading into: NDBE vs Dysplasia (LGD and HGD).
+
+    **Comments**:
+  * Results look good (spacing: 1, 512x512). Dice on validation: weighted: ~0.87-0.88, seperate: 0.93, 0.78, 0.83.
+  * Produces mixed glands. We might want to postprocess and assign the most common prediction to the whole gland.
+  * Not tested on Bolero yet.
 - [ ] Data augmentations for segmentation in pathology:
+    * Spatial augmentations need to be applied on both image and segmentation.
     * Manual:
       - HookNet: spatial, color, noise and stain augmentation [[2]](#2). 
       - RaeNet: gamma transform, random flipping, Gaussian blur, affine translation and colour distortion.
+    * Stain-Transforming Cycle-Consistent GAN [[5]](#5).
     * Trivial Augment: https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html.
     * HE Auto augment: https://github.com/DIAGNijmegen/pathology-he-auto-augment.
-    * Spatial augmentations need to be applied on both image and segmentation.
-    * Stain-Transforming Cycle-Consistent GAN [[5]](#5).
 - [ ] Experiments:
-  * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), Hooknet [[3]](#3), RAENet [[4]](#4).
+  * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
   * ImageNet pretrained encoder.
   * Roto-Translation Equivariant CNN's [[6]](#6).
 

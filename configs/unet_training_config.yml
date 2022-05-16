@@ -37,8 +37,8 @@ unet:
     # training
     learning_rate: 0.005
     epochs: 1000
-    train_batches: 250
-    val_batches: 50
+    train_batches: 20
+    val_batches: 5
     gpus: 2
     cpus: 1
     

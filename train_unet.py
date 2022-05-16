@@ -88,7 +88,7 @@ def train(run_name, experiments_dir, wandb_key):
 
             # transform x and y
             x = torch.tensor(x.astype('float32'))
-            x = torch.transpose(x, 1, 3).to(device)
+            x = x.transpose(1, 3).transpose(2, 3).to(device)
             y = torch.tensor(y.astype('int64')).to(device)
 
             # forward and update
@@ -115,7 +115,7 @@ def train(run_name, experiments_dir, wandb_key):
 
                 # transform x and y
                 x = torch.tensor(x.astype('float32'))
-                x = torch.transpose(x, 1, 3).to(device)
+                x = x.transpose(1, 3).transpose(2, 3).to(device)
                 y = torch.tensor(y.astype('int64')).to(device)
 
                 # forward and validate
