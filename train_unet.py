@@ -8,7 +8,7 @@ from wholeslidedata.iterators import create_batch_iterator
 from label_utils import to_dysplastic_vs_non_dysplastic
 import os
 import argparse
-from utils import print_dataset_statistics
+from utils import print_dataset_statistics, plot_pred_batch
 import yaml
 from tqdm import tqdm
 from sklearn.metrics import f1_score
@@ -17,8 +17,8 @@ from utils import mean_metrics
 
 """
 To-Do:
-(1) Mask out non tissue in patches.
-(2) Add data augmentation.
+(1) Add data augmentation. Start with manual augmentations.
+(2) Think about which experiments you want to try with resolution and patch size.
 """
 
 
@@ -26,7 +26,7 @@ def load_config(user_config):
     with open(user_config, 'r') as yamlfile:
         data = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
-    return data['unet']
+    return data['wholeslidedata'], data['unet']
 
 
 def train(run_name, experiments_dir, wandb_key):
@@ -36,14 +36,14 @@ def train(run_name, experiments_dir, wandb_key):
 
     # make experiment dir & copy source files (config and training script)
     exp_dir = os.path.join(experiments_dir, run_name)
-    print('Experiment stored at: {}'.format(exp_dir))
+    print('\nExperiment stored at: {}'.format(exp_dir))
     copy_tree(os.path.join(base_dir, 'configs'), os.path.join(exp_dir, 'src', 'configs'))
     copy_tree(os.path.join(base_dir, 'nn_archs'), os.path.join(exp_dir, 'src', 'nn_archs'))
     shutil.copy2(os.path.join(base_dir, 'train_unet.py'), os.path.join(exp_dir, 'src'))
 
     # load network config and store in experiment dir
     print('Loaded config: {}'.format(user_config))
-    train_config = load_config(user_config)
+    wholeslide_config, train_config = load_config(user_config)
 
     # create train and validation generators (no reset)
     training_batch_generator = create_batch_iterator(user_config=user_config,
@@ -55,10 +55,21 @@ def train(run_name, experiments_dir, wandb_key):
                                                        cpus=train_config['cpus'])
 
     print('\nTraining dataset ')
-    print_dataset_statistics(training_batch_generator.dataset)
+    train_data_dict = print_dataset_statistics(training_batch_generator.dataset)
     print('\nValidation dataset ')
-    print_dataset_statistics(validation_batch_generator.dataset)
-    print('\n')
+    val_data_dict = print_dataset_statistics(validation_batch_generator.dataset)
+    print('')
+
+    # log EVERYTHING with weights and biases
+    os.environ["WANDB_API_KEY"] = wandb_key
+    wandb.init(project="Barrett's Gland Grading",
+               dir=exp_dir,
+               config={'data': {'sampling': wholeslide_config,
+                                'train data': train_data_dict,
+                                'validation data': val_data_dict},
+                       'unet_train_config': train_config})
+    wandb.run.name = run_name
+    print('')
 
     # create model and put on device(s)
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -67,11 +78,6 @@ def train(run_name, experiments_dir, wandb_key):
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=train_config['learning_rate'])
     criterion = nn.CrossEntropyLoss()
-
-    # log with weights and biases
-    os.environ["WANDB_API_KEY"] = wandb_key
-    wandb.init(project="Barrett's Gland Grading", dir=exp_dir)
-    wandb.run.name = run_name
 
     min_val = float('inf')
 
@@ -122,6 +128,12 @@ def train(run_name, experiments_dir, wandb_key):
                 y_hat = model.forward(x)
                 loss = criterion(y_hat, y)
 
+                # store one example as Tensor, x back to [B, H, W, C] for plotting
+                x = x.transpose(2, 3).transpose(1, 3).to(torch.uint8)
+                example_val_batch_x = x.cpu().detach().numpy()
+                example_val_batch_y = y.cpu().detach().numpy()
+                example_val_batch_y_hat = y_hat.cpu().detach().numpy()
+
                 # compute dice
                 y = y.cpu().detach().numpy().flatten()
                 y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
@@ -135,14 +147,25 @@ def train(run_name, experiments_dir, wandb_key):
         print("Train loss: {:.3f}, val loss: {:.3f}".format(training_means['loss'], validation_means['loss']))
         print("Train dice: {}, val dice: {}".format(np.round(training_means['dice per class'], decimals=2),
                                                     np.round(validation_means['dice per class'], decimals=2)))
+
+        # plot predictions on the validation set
+        os.makedirs(os.path.join(exp_dir, 'val_predictions'), exist_ok=True)
+        image_save_path = os.path.join(exp_dir, 'val_predictions', 'predictions_epoch_{}.png'.format(n))
+        plot_pred_batch(example_val_batch_x, example_val_batch_y, example_val_batch_y_hat, save_path=image_save_path)
+
         wandb.log({'epoch': n + 1,
                    'train loss': training_means['loss'], 'train dice': training_means['dice weighted'],
-                   'val loss': validation_means['loss'], 'val dice': validation_means['dice weighted']})
+                   'val loss': validation_means['loss'], 'val dice': validation_means['dice weighted'],
+                   'train dice per class': list(np.round(training_means['dice per class'], decimals=2)),
+                   'val dice per class': list(np.round(validation_means['dice per class'], decimals=2)),
+                   'prediction': wandb.Image(image_save_path)})
 
         # save best model
+        os.makedirs(os.path.join(exp_dir, 'checkpoints'), exist_ok=True)
         if validation_means['loss'] < min_val:
-            torch.save(model.state_dict(),
-                       os.path.join(exp_dir, 'model_epoch_{}_loss_{:.3f}.pt').format(n, validation_means['loss']))
+            save_dir = os.path.join(exp_dir, 'checkpoints', 'model_epoch_{}_loss_{:.3f}_dice_{:.3f}.pt'.
+                                    format(n, validation_means['loss'], validation_means['dice weighted']))
+            torch.save(model.state_dict(), save_dir)
             min_val = validation_means['loss']
 
 

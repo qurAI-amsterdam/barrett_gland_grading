@@ -16,10 +16,10 @@ wholeslidedata:
             filters: ['xml']
             
         batch_shape:
-            batch_size: 50
+            batch_size: 10
             spacing: 1
-            shape: [512, 512, 3]
-            y_shape: [324, 324]
+            shape: [1024, 1024, 3]
+            y_shape: [836, 836]
             
         point_sampler:
             attribute: RandomPointSampler
@@ -27,7 +27,7 @@ wholeslidedata:
         sample_callbacks:
             - module: wholeslidedata.samplers.callbacks
               attribute: FitOutput
-              output_shape: [324, 324]
+              output_shape: [836, 836]
               
 unet:
     # model
@@ -37,8 +37,8 @@ unet:
     # training
     learning_rate: 0.005
     epochs: 1000
-    train_batches: 20
-    val_batches: 5
+    train_batches: 100        # 100*10 = 1000 train patches
+    val_batches: 20           # 20*10  = 200 validation patches
     gpus: 2
     cpus: 1
     

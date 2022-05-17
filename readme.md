@@ -22,8 +22,8 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
     * Gland annotations that include non tissue => mask out non tissue.
   
     **Comments**: 
-     * Done for the data on the server (/data/archief/AMC-data/Barrett/). Clean up of the original archive on (L:) will be done together with Onno.
-     * Masking out non tissue for loose segmentations around the border didn't work out yet with Otsu and morphology. 
+     * Working with decent clean data on the server for now (/data/archief/AMC-data/Barrett/). Clean up of the original archive on (L:) will be done together with Onno.
+     * Masking out non tissue for loose segmentations around the border didn't work out yet with Otsu and morphology. We can also do it manually.
 - [x] Split data for training, evaluation and testing. We use Bolero as internal test set.
 - [x] Train a standard UNet as baseline segmentation pipeline for grading into: NDBE vs Dysplasia (LGD and HGD).
 
@@ -39,11 +39,13 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
     * Stain-Transforming Cycle-Consistent GAN [[5]](#5).
     * Trivial Augment: https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html.
     * HE Auto augment: https://github.com/DIAGNijmegen/pathology-he-auto-augment.
+- [ ] Visualization and evaluation on slide level, preferably in a notebook.
 - [ ] Experiments:
+  * Find well working combinations of batch size, patch size and spacing so that it fits on GPU.
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
   * ImageNet pretrained encoder.
   * Roto-Translation Equivariant CNN's [[6]](#6).
-
+  
 ### Segmentation pipeline for gland grading into: NDBE, LGD or HGD
 * Networks architectures to consider next: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
 * For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-whole-slide-data.
@@ -68,6 +70,19 @@ Case or slide level annotations were not provided yet. The relevant datasets on 
 Evaluation:
   * Quantitative with DICE/F1 compared to the ground truth annotations.
   * Qualitative assessment by Sybren.
+
+#### Preliminary Testing
+We should perform some of these experiments on an internal test set (Bolero).
+
+| Method | Batch Size | Patch Size | Spacing <br/> (mpp) | Validation Dice | Test <br/> (Bolero) |
+|:------:|:----------:|:----------:|:-------------------:|:---------------:|:-------------------:|
+|  UNet  |     50     |  512x512   |          2          |       TBD       |         TBD         |
+|  UNet  |     50     |  512x512   |          1          |      0.88       |         TBD         | 
+|  UNet  |     50     |  512x512   |         0.5         |       TBD       |         TBD         |
+|  UNet  |     10     | 1024x1024  |          2          |       TBD       |         TBD         |
+|  UNet  |     10     | 1024x1024  |          1          |       TBD       |         TBD         |
+|  UNet  |     10     | 1024x1024  |         0.5         |       TBD       |         TBD         |
+
 
 ## References
 <a id="1">[1]</a> 
