@@ -3,10 +3,18 @@ from matplotlib import pyplot as plt
 from pprint import pprint
 import numpy as np
 import matplotlib.patches as mpatches
+import yaml
 
 # define some colors
 colors_1 = ["white", "green", "orange", "red", 'yellow', 'yellow', 'purple', 'pink', 'grey', "blue"]
 colors_2 = ["white", "green", "red", "yellow", 'brown', 'yellow', 'purple', 'pink', 'grey', 'green']
+
+
+def load_config(user_config):
+    with open(user_config, 'r') as yamlfile:
+        data = yaml.load(yamlfile, Loader=yaml.FullLoader)
+
+    return data['wholeslidedata'], data['unet']
 
 
 # dataset utilities

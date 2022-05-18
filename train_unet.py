@@ -9,24 +9,16 @@ from label_utils import to_dysplastic_vs_non_dysplastic
 import os
 import argparse
 from utils import print_dataset_statistics, plot_pred_batch
-import yaml
 from tqdm import tqdm
 from sklearn.metrics import f1_score
 import wandb
-from utils import mean_metrics
+from utils import mean_metrics, load_config
 
 """
 To-Do:
 (1) Add data augmentation. Start with manual augmentations.
 (2) Think about which experiments you want to try with resolution and patch size.
 """
-
-
-def load_config(user_config):
-    with open(user_config, 'r') as yamlfile:
-        data = yaml.load(yamlfile, Loader=yaml.FullLoader)
-
-    return data['wholeslidedata'], data['unet']
 
 
 def train(run_name, experiments_dir, wandb_key):

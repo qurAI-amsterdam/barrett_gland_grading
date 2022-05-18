@@ -74,14 +74,14 @@ Evaluation:
 #### Preliminary Testing
 We should perform some of these experiments on an internal test set (Bolero).
 
-| Method | Batch Size | Patch Size | Spacing <br/> (mpp) | Validation Dice | Test <br/> (Bolero) |
-|:------:|:----------:|:----------:|:-------------------:|:---------------:|:-------------------:|
-|  UNet  |     50     |  512x512   |          2          |       TBD       |         TBD         |
-|  UNet  |     50     |  512x512   |          1          |      0.88       |         TBD         | 
-|  UNet  |     50     |  512x512   |         0.5         |       TBD       |         TBD         |
-|  UNet  |     10     | 1024x1024  |          2          |       TBD       |         TBD         |
-|  UNet  |     10     | 1024x1024  |          1          |       TBD       |         TBD         |
-|  UNet  |     10     | 1024x1024  |         0.5         |       TBD       |         TBD         |
+| Method | Batch Size | Patch Size | Spacing <br/> (mpp) |        Validation Dice        | Test <br/> (Bolero) |
+|:------:|:----------:|:----------:|:-------------------:|:-----------------------------:|:-------------------:|
+|  UNet  |     50     |  512x512   |          2          |              TBD              |         TBD         |
+|  UNet  |     50     |  512x512   |          1          |        0.88  <br/> (0.93, 0.78, 0.83)         |         TBD         | 
+|  UNet  |     50     |  512x512   |         0.5         |              TBD              |         TBD         |
+|  UNet  |     10     | 1024x1024  |          2          |              TBD              |         TBD         |
+|  UNet  |     10     | 1024x1024  |          1          | 0.91 <br/> (0.96, 0.79, 0.81) |         TBD         |
+|  UNet  |     10     | 1024x1024  |         0.5         |              TBD              |         TBD         |
 
 
 ## References
