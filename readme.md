@@ -23,14 +23,9 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
   
     **Comments**: 
      * Working with decent clean data on the server for now (/data/archief/AMC-data/Barrett/). Clean up of the original archive on (L:) will be done together with Onno.
-     * Masking out non tissue for loose segmentations around the border didn't work out yet with Otsu and morphology. We can also do it manually.
+     * Masking out non tissue for loose segmentations around the border didn't work out yet. We might have to do this manually.
 - [x] Split data for training, evaluation and testing. We use Bolero as internal test set.
 - [x] Train a standard UNet as baseline segmentation pipeline for grading into: NDBE vs Dysplasia (LGD and HGD).
-
-    **Comments**:
-  * Results look good (spacing: 1, 512x512). Dice on validation: weighted: ~0.87-0.88, seperate: 0.93, 0.78, 0.83.
-  * Produces mixed glands. We might want to postprocess and assign the most common prediction to the whole gland.
-  * Not tested on Bolero yet.
 - [ ] Data augmentations for segmentation in pathology:
     * Spatial augmentations need to be applied on both image and segmentation.
     * Manual:
@@ -39,7 +34,7 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
     * Stain-Transforming Cycle-Consistent GAN [[5]](#5).
     * Trivial Augment: https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html.
     * HE Auto augment: https://github.com/DIAGNijmegen/pathology-he-auto-augment.
-- [ ] Visualization and evaluation on slide level, preferably in a notebook.
+- [ ] Visualization and evaluation (dice and pixel level confusion matrix) on slide level, preferably in a notebook.
 - [ ] Experiments:
   * Find well working combinations of batch size, patch size and spacing so that it fits on GPU.
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
