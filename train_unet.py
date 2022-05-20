@@ -5,7 +5,7 @@ import torch.nn as nn
 import numpy as np
 from nn_archs import UNet
 from wholeslidedata.iterators import create_batch_iterator
-from label_utils import to_dysplastic_vs_non_dysplastic
+from preprocessing import to_dysplastic_vs_non_dysplastic
 import os
 import argparse
 from utils import print_dataset_statistics, plot_pred_batch
@@ -13,11 +13,12 @@ from tqdm import tqdm
 from sklearn.metrics import f1_score
 import wandb
 from utils import mean_metrics, load_config
+import segmentation_models_pytorch as smp
+from preprocessing import get_preprocessing
 
 """
 To-Do:
-(1) Add data augmentation. Start with manual augmentations.
-(2) Think about which experiments you want to try with resolution and patch size.
+(1) Add data augmentation: albumentations included in PathologyWholeSlide data.
 """
 
 
@@ -66,6 +67,20 @@ def train(run_name, experiments_dir, wandb_key):
     # create model and put on device(s)
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     model = UNet(n_channels=train_config['n_channels'], n_classes=train_config['n_classes'])
+    preprocessing = get_preprocessing()
+
+    # # deeplab with pretrained resnet50 encoder
+    # model = smp.DeepLabV3Plus(
+    #     encoder_name='resnet50',                    # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+    #     encoder_weights='imagenet',                 # use `imagenet` pretrained weights for encoder initialization
+    #     in_channels=train_config['n_channels'],     # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+    #     classes=train_config['n_classes'],          # model output channels (number of classes in your dataset)
+    #     activation=None,                            # return logits
+    # )
+    #
+    # # apply preprocessing for using pretrained weights
+    # preprocessing = get_preprocessing(smp.encoders.get_preprocessing_fn('resnet50', 'imagenet'))
+
     model = nn.DataParallel(model) if train_config['gpus'] > 1 else model
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=train_config['learning_rate'])
@@ -79,15 +94,11 @@ def train(run_name, experiments_dir, wandb_key):
         validation_metrics = {}
 
         for idx in tqdm(range(train_config['train_batches']), desc='Epoch {}'.format(n + 1)):
-            x, y, info = next(training_batch_generator)
+            x_np, y_np, info = next(training_batch_generator)
 
-            # dysplastic vs non-dysplastic
-            y = to_dysplastic_vs_non_dysplastic(y)
-
-            # transform x and y
-            x = torch.tensor(x.astype('float32'))
-            x = x.transpose(1, 3).transpose(2, 3).to(device)
-            y = torch.tensor(y.astype('int64')).to(device)
+            # preprocessing
+            sample = preprocessing(image=x_np, mask=y_np)
+            x, y = sample['image'].to(device), sample['mask'].to(device)
 
             # forward and update
             optimizer.zero_grad()
@@ -106,24 +117,19 @@ def train(run_name, experiments_dir, wandb_key):
         # validate
         with torch.no_grad():
             for idx in tqdm(range(train_config['val_batches']), desc='Validating'):
-                x, y, info = next(validation_batch_generator)
+                x_np, y_np, info = next(validation_batch_generator)
 
-                # dysplastic vs non-dysplastic
-                y = to_dysplastic_vs_non_dysplastic(y)
-
-                # transform x and y
-                x = torch.tensor(x.astype('float32'))
-                x = x.transpose(1, 3).transpose(2, 3).to(device)
-                y = torch.tensor(y.astype('int64')).to(device)
+                # preprocessing
+                sample = preprocessing(image=x_np, mask=y_np)
+                x, y = sample['image'].to(device), sample['mask'].to(device)
 
                 # forward and validate
                 y_hat = model.forward(x)
                 loss = criterion(y_hat, y)
 
-                # store one example as Tensor, x back to [B, H, W, C] for plotting
-                x = x.transpose(2, 3).transpose(1, 3).to(torch.uint8)
-                example_val_batch_x = x.cpu().detach().numpy()
-                example_val_batch_y = y.cpu().detach().numpy()
+                # store one example, not preprocessed
+                example_val_batch_x = x_np
+                example_val_batch_y = to_dysplastic_vs_non_dysplastic(y_np)
                 example_val_batch_y_hat = y_hat.cpu().detach().numpy()
 
                 # compute dice
@@ -145,11 +151,14 @@ def train(run_name, experiments_dir, wandb_key):
         image_save_path = os.path.join(exp_dir, 'val_predictions', 'predictions_epoch_{}.png'.format(n))
         plot_pred_batch(example_val_batch_x, example_val_batch_y, example_val_batch_y_hat, save_path=image_save_path)
 
+        # log metrics, for validation log dices per class
+        val_dice_per_class = list(np.round(validation_means['dice per class'], decimals=2))
         wandb.log({'epoch': n + 1,
                    'train loss': training_means['loss'], 'train dice': training_means['dice weighted'],
                    'val loss': validation_means['loss'], 'val dice': validation_means['dice weighted'],
-                   'train dice per class': list(np.round(training_means['dice per class'], decimals=2)),
-                   'val dice per class': list(np.round(validation_means['dice per class'], decimals=2)),
+                   'val dice BG': val_dice_per_class[0],
+                   'val dice NDBE': val_dice_per_class[1],
+                   'val dice DYS': val_dice_per_class[2],
                    'prediction': wandb.Image(image_save_path)})
 
         # save best model

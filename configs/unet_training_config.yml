@@ -17,7 +17,7 @@ wholeslidedata:
             
         batch_shape:
             batch_size: 10
-            spacing: 0.5
+            spacing: 1
             shape: [1024, 1024, 3]
             y_shape: [836, 836]
             
