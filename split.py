@@ -14,10 +14,14 @@ SEED = 55
 def write_data_yaml(train_associations, val_associations, output_path):
     """
     Writes both train and validation associations to a config split file.
-    :param train_associations: the selected samples for training
-    :param val_associations: the selected samples for validation
-    :param output_path: path where to config split file is stored
-    :return: writes the config file
+
+    Args:
+        train_associations: the selected samples for training
+        val_associations: the selected samples for validation
+        output_path: path where to config split file is stored
+
+    Returns:
+        none: writes to config file
     """
     s = '---\ntraining:'
 
@@ -41,9 +45,13 @@ def get_associations_from_folders(folder, datasets):
     """
     Gets all associations (link between image and annotation file) from the folder where the datasets are located.
     An exact match in image and annotation file names is required.
-    :param folder: the main folder that holds the directories for each individual dataset.
-    :param datasets: the datasets to be included: 'ASL, Bolero, LANS, RBE'
-    :return: all found associations (dict)
+
+    Args:
+        folder: the main folder that holds the directories for each individual dataset.
+        datasets: the datasets to be included: 'ASL, Bolero, LANS, RBE'
+
+    Returns:
+        dict: all found associations
     """
     total_images = []
     total_annotations = []
@@ -82,11 +90,15 @@ def train_val_split(folder, datasets, output_path, train_percent=0.9):
     """
     Produces a train validation split. Output is a config (yml) file with the paths to the images and annotations for
     each sample in the train and validation set.
-    :param folder: the folder where all data is located.
-    :param datasets: names of the datasets included
-    :param output_path: path where the config file for the split is stored
-    :param train_percent: percentage of images used for training, the rest is for validation
-    :return: writes to the config split file.
+
+    Args:
+        folder: the folder where all data is located.
+        datasets: names of the datasets included
+        output_path: path where the config file for the split is stored
+        train_percent: percentage of images used for training, the rest is for validation
+
+    Returns:
+        none: writes to the config split file.
     """
 
     # get file keys

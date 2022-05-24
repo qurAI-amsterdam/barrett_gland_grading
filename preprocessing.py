@@ -7,10 +7,10 @@ def to_dysplastic_vs_non_dysplastic(y, **kwargs):
     """Simplifies the segmentation problem by setting: non-dysplastic (label = 1) vs dysplastic (label = 2).
 
     Args:
-    y_batch: input batch labels (np.array)
+        y: input batch labels (np.array)
 
     Returns:
-        y_batch (np.array)
+        y (np.array): mask is now NDBE vs DYS
     """
     return np.where(y > 1, 2, y)
 

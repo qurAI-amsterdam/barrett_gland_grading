@@ -54,7 +54,7 @@ def train(run_name, experiments_dir, wandb_key):
                config={'data': {'sampling': wholeslide_config,
                                 'train data': train_data_dict,
                                 'validation data': val_data_dict},
-                                'unet_train_config': train_config})
+                                'train_config': train_config})
     wandb.run.name = run_name
     print('')
 

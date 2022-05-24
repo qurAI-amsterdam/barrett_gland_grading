@@ -8,11 +8,14 @@ import pandas as pd
 
 def get_coords(element):
     """Function to get coordinates of polygon for certain element.
-    Parameters:
-    element (element): Annotation element with coordinates for polygon inside.
+
+    Args:
+        element (element): Annotation element with coordinates for polygon inside.
+
     Returns:
-    coords (array): Array with polygon coordinates for element array[[int(x1), int(y1)], ... [int(xN), int(yN)]]
-    (Thanks Bart.)
+        coords (array): Array with polygon coordinates for element array[[int(x1), int(y1)], ... [int(xN), int(yN)]]
+
+    (Thanks Bart)
     """
     coords = np.array(
         [[int(re.split(',|\.', coordinates.attrib['X'])[0]), int(re.split(",|\.", coordinates.attrib['Y'])[0])]
@@ -24,10 +27,14 @@ def get_coords(element):
 def fix_annotation_files(files, verbose=True, check=True):
     """Removes all annotations with type polygon, where polygon contains < 3 coordinates.
     A fixed version with (_fixed_) postfix is added to the folder where it was originally found.
-    Parameters:
-    annotation_file (str): path to the annotation file
+
+    Args:
+        files (str): path to the annotation file
+        verbose: whether to print info
+        check: check only mode (no writing)
+
     Returns:
-    res (pd.DataFrame): Overview in a dataframe of which elements have been removed.
+        res (pd.DataFrame): Overview in a dataframe of which elements have been removed.
     """
     res = pd.DataFrame(columns=['file', 'annotation', 'coords'])
 

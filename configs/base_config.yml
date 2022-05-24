@@ -21,6 +21,27 @@ wholeslidedata:
         point_sampler:
             attribute: RandomPointSampler
 
+    training:
+      
+        # rotates, flips, gamma transform, color jitter (saturation, contrast, hue)
+        batch_callbacks:
+            - module: wholeslidedata.accessories.albumentations.callbacks
+              attribute: AlbumentationsAugmentationsCallback
+              augmentations:
+                  - RandomRotate90:
+                        p: 0.5
+                  - Flip:
+                        p: 0.5
+                  - RandomGamma:
+                        gamma_limit: [50, 100]
+                        p: 0.5
+                  - ColorJitter:
+                        brightness: 0.1
+                        contrast: 0.1
+                        saturation: 0.1
+                        hue: 0.1
+                        p: 0.5
+
 net:
     # model
     encoder_name: 'resnet34'

@@ -78,11 +78,15 @@ def plot_pred_batch(x, y, y_hat, save_path, patches=4):
     """ Plots the center of a batch with prediction.
     The plot is stored in the experiment dir to keep track of performance.
 
-    x: [B, H, W, CHANNELS]
-    y: [B, H, W]
-    y_hat: [B, CLASSES, H, W]
-    save_path: path where plot of predictions is stored.
-    patches: how many patches to include in the plot
+    Args:
+        x: [B, H, W, CHANNELS]
+        y: [B, H, W]
+        y_hat: [B, CLASSES, H, W]
+        save_path: path where plot of predictions is stored.
+        patches: how many patches to include in the plot
+
+    Returns:
+        none: saves the figure at the save path
     """
     patches = min(len(x), patches)
 
