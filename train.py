@@ -3,7 +3,6 @@ import shutil
 import torch
 import torch.nn as nn
 import numpy as np
-from nn_archs import UNet
 from wholeslidedata.iterators import create_batch_iterator
 from preprocessing import to_dysplastic_vs_non_dysplastic
 import os
@@ -16,23 +15,18 @@ from utils import mean_metrics, load_config
 import segmentation_models_pytorch as smp
 from preprocessing import get_preprocessing
 
-"""
-To-Do:
-(1) Add data augmentation: albumentations included in PathologyWholeSlide data.
-"""
-
 
 def train(run_name, experiments_dir, wandb_key):
     # config path
     base_dir = '/home/mbotros/code/barrett_gland_grading/'
-    user_config = os.path.join(base_dir, 'configs/unet_training_config.yml')
+    user_config = os.path.join(base_dir, 'configs/base_config.yml')
 
     # make experiment dir & copy source files (config and training script)
     exp_dir = os.path.join(experiments_dir, run_name)
     print('\nExperiment stored at: {}'.format(exp_dir))
     copy_tree(os.path.join(base_dir, 'configs'), os.path.join(exp_dir, 'src', 'configs'))
     copy_tree(os.path.join(base_dir, 'nn_archs'), os.path.join(exp_dir, 'src', 'nn_archs'))
-    shutil.copy2(os.path.join(base_dir, 'train_unet.py'), os.path.join(exp_dir, 'src'))
+    shutil.copy2(os.path.join(base_dir, 'train.py'), os.path.join(exp_dir, 'src'))
 
     # load network config and store in experiment dir
     print('Loaded config: {}'.format(user_config))
@@ -60,32 +54,33 @@ def train(run_name, experiments_dir, wandb_key):
                config={'data': {'sampling': wholeslide_config,
                                 'train data': train_data_dict,
                                 'validation data': val_data_dict},
-                       'unet_train_config': train_config})
+                                'unet_train_config': train_config})
     wandb.run.name = run_name
     print('')
 
     # create model and put on device(s)
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    model = UNet(n_channels=train_config['n_channels'], n_classes=train_config['n_classes'])
-    preprocessing = get_preprocessing()
 
-    # # deeplab with pretrained resnet50 encoder
-    # model = smp.DeepLabV3Plus(
-    #     encoder_name='resnet50',                    # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
-    #     encoder_weights='imagenet',                 # use `imagenet` pretrained weights for encoder initialization
-    #     in_channels=train_config['n_channels'],     # model input channels (1 for gray-scale images, 3 for RGB, etc.)
-    #     classes=train_config['n_classes'],          # model output channels (number of classes in your dataset)
-    #     activation=None,                            # return logits
-    # )
-    #
-    # # apply preprocessing for using pretrained weights
-    # preprocessing = get_preprocessing(smp.encoders.get_preprocessing_fn('resnet50', 'imagenet'))
+    # DeepLabV3+ with pretrained resnet34 encoder
+    model = smp.DeepLabV3Plus(
+        encoder_name=train_config['encoder_name'],        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+        encoder_weights=train_config['encoder_weights'],  # use `imagenet` pretrained weights for encoder initialization
+        in_channels=train_config['n_channels'],           # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+        classes=train_config['n_classes'],                # model output channels (number of classes in your dataset)
+        activation=None,                                  # return logits
+    )
+
+    # apply specific preprocessing when using pretrained weights
+    if train_config['encoder_weights']:
+        preprocessing = get_preprocessing(smp.encoders.get_preprocessing_fn(
+            train_config['encoder_name'], train_config['encoder_weights']))
+    else:
+        preprocessing = get_preprocessing()
 
     model = nn.DataParallel(model) if train_config['gpus'] > 1 else model
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=train_config['learning_rate'])
     criterion = nn.CrossEntropyLoss()
-
     min_val = float('inf')
 
     for n in range(train_config['epochs']):

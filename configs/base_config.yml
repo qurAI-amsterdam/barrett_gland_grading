@@ -9,36 +9,30 @@ wholeslidedata:
             ndbe-g: 1
             lgd-g: 2
             hgd-g: 3
-#            e-stroma: 4
-#            squamous-t: 5
            
         annotation_sources: 
             filters: ['xml']
             
         batch_shape:
-            batch_size: 10
+            batch_size: 40
             spacing: 1
             shape: [1024, 1024, 3]
-            y_shape: [836, 836]
             
         point_sampler:
             attribute: RandomPointSampler
-            
-        sample_callbacks:
-            - module: wholeslidedata.samplers.callbacks
-              attribute: FitOutput
-              output_shape: [836, 836]
-              
-unet:
+
+net:
     # model
+    encoder_name: 'resnet34'
+    encoder_weights: 'imagenet'
     n_channels: 3
     n_classes: 3
 
     # training
     learning_rate: 0.005
-    epochs: 1000
-    train_batches: 100        # 100*10 = 1000 train patches
-    val_batches: 20           # 20*10  = 200 validation patches
+    epochs: 250
+    train_batches: 25        # 25*40 = 1000 train patches
+    val_batches: 10          # 10*40 = 400 validation patches
     gpus: 2
     cpus: 1
     

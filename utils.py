@@ -14,7 +14,7 @@ def load_config(user_config):
     with open(user_config, 'r') as yamlfile:
         data = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
-    return data['wholeslidedata'], data['unet']
+    return data['wholeslidedata'], data['net']
 
 
 # dataset utilities

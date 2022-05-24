@@ -14,69 +14,59 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 
 ### Outline of the project:
 
-- [x] Create a clean archive dataset:
-    * Individual directories for each dataset: ASL, Bolero, LANS and RBE.
-        * Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
-        * A csv file with case or biopsy level diagnosis.
-    * Remove polygon annotations with <3 coordinates.
-    * Gland annotations that include non tissue => mask out non tissue.
-  
-    **Comments**: 
-     * Working with decent clean data on the server for now (/data/archief/AMC-data/Barrett/). Clean up of the original archive on (L:) will be done together with Onno.
-     * Masking out non tissue for loose segmentations around the border didn't work out yet. We might have to do this manually.
+- [ ] Create a clean archive dataset:
+  - [ ] Individual directories for each dataset: ASL, Bolero, LANS and RBE.
+          
+    * Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
+    * A csv file with case or biopsy level diagnosis.
+  - [x] Remove polygon annotations with <3 coordinates.
+  - [ ] Deal with lazy gland annotations.
 - [x] Split data for training, evaluation and testing. We use Bolero as internal test set.
-- [x] Train a standard UNet as baseline segmentation pipeline for grading into: NDBE vs Dysplasia (LGD and HGD).
+- [ ] Train a standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
 - [ ] Data augmentations for segmentation in pathology:
-    * Spatial augmentations need to be applied on both image and segmentation.
     * Manual:
       - HookNet: spatial, color, noise and stain augmentation [[2]](#2). 
       - RaeNet: gamma transform, random flipping, Gaussian blur, affine translation and colour distortion.
     * Stain-Transforming Cycle-Consistent GAN [[5]](#5).
-    * Trivial Augment: https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html.
-    * HE Auto augment: https://github.com/DIAGNijmegen/pathology-he-auto-augment.
 - [ ] Visualization and evaluation (dice and pixel level confusion matrix) on slide level, preferably in a notebook.
 - [ ] Experiments:
-  * Find well working combinations of batch size, patch size and spacing so that it fits on GPU.
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
   * ImageNet pretrained encoder.
   * Roto-Translation Equivariant CNN's [[6]](#6).
   
 ### Segmentation pipeline for gland grading into: NDBE, LGD or HGD
-* Networks architectures to consider next: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
-* For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-whole-slide-data.
+For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-whole-slide-data.
   * Includes configuration for patch extraction such as batch size, patch size, spacing.
   * Includes different strategies to sample patches from the WSI (balanced, random, slidingwindow).
-  * Configuration stored in (`configs/unet_training_config.yml`).
+  * Configuration stored in (`configs/base_config.yml`).
 
 ### Datasets 
 Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories: NDBE, LGD and HGD.
 Case or slide level annotations were not provided yet. The relevant datasets on AMC servers (/data/archief/AMC-data/Barrett/) are listed below:
 
-| Dataset   | Cases | Biopsies | Diagnosis Available<br/>(biopsy/case level) | Raters<br/>(biopsy/case level) |
-|-----------|:-----:|:--------:|:-------------------------------------------:|:------------------------------:|
-| ASL       |  36   |   139    |                      ?                      |               ?                |
-| Bolero    |  51   |   193    |                  should be                  |               4                |
-| LANS      |  34   |   104    |                  should be                  |               14               |
-| RBE       |  212  |   534    |                      ?                      |               ?                |
-| **Total** |  312  |   970    |                     N/A                     |              N/A               |
+| Dataset   | Cases | Biopsies | Diagnosis Available<br/>(biopsy/case level) | Raters<br/>(biopsy/case level) | P53 <br/> Available | Lazy <br> Annotations |
+|-----------|:-----:|:--------:|:-------------------------------------------:|:------------------------------:|:-------------------:|:---------------------:|
+| ASL       |  36   |   139    |                      ?                      |               ?                |          ?          |          yes          |
+| Bolero    |  51   |   193    |                  should be                  |               4                |         Yes         |          yes          |
+| LANS      |  34   |   104    |                  should be                  |               14               |          ?          |          yes          |
+| RBE       |  212  |   534    |                      ?                      |               ?                |          ?          |          no           |
+| **Total** |  312  |   970    |                     N/A                     |              N/A               |          ?          |          N/A          |        |
 
 
 ### Results
 Evaluation:
   * Quantitative with DICE/F1 compared to the ground truth annotations.
   * Qualitative assessment by Sybren.
-
-#### Preliminary Testing
+  
 We should perform some of these experiments on an internal test set (Bolero).
 
-| Method | Batch Size | Patch Size | Spacing <br/> (mpp) |        Validation Dice        | Test <br/> (Bolero) |
-|:------:|:----------:|:----------:|:-------------------:|:-----------------------------:|:-------------------:|
-|  UNet  |     50     |  512x512   |          2          |              TBD              |         TBD         |
-|  UNet  |     50     |  512x512   |          1          |        0.88  <br/> (0.93, 0.78, 0.83)         |         TBD         | 
-|  UNet  |     50     |  512x512   |         0.5         |              TBD              |         TBD         |
-|  UNet  |     10     | 1024x1024  |          2          |              TBD              |         TBD         |
-|  UNet  |     10     | 1024x1024  |          1          | 0.91 <br/> (0.96, 0.79, 0.81) |         TBD         |
-|  UNet  |     10     | 1024x1024  |         0.5         |              TBD              |         TBD         |
+|   Method   | Batch Size | Patch Size | Spacing <br/> (mpp) | Validation Dice | Test <br/> (Bolero) |
+|:----------:|:----------:|:----------:|:-------------------:|:---------------:|:-------------------:|
+|    UNet    |            |            |                     |                 |                     |
+|   UNet++   |            |            |                     |                 |                     |
+| DeepLabV3+ |            |            |                     |                 |                     |
+|  HookNet   |            |            |                     |                 |                     |
+|  HistNet   |            |            |                     |                 |                     |
 
 
 ## References
