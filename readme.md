@@ -16,7 +16,6 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 
 - [ ] Create a clean archive dataset:
   - [ ] Individual directories for each dataset: ASL, Bolero, LANS and RBE.
-          
     * Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
     * A csv file with case or biopsy level diagnosis.
   - [x] Remove polygon annotations with <3 coordinates.
