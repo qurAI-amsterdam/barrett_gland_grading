@@ -22,7 +22,6 @@ wholeslidedata:
             attribute: RandomPointSampler
 
     training:
-      
         # rotates, flips, gamma transform, color jitter (saturation, contrast, hue)
         batch_callbacks:
             - module: wholeslidedata.accessories.albumentations.callbacks
@@ -56,6 +55,3 @@ net:
     val_batches: 10          # 10*40 = 400 validation patches
     gpus: 2
     cpus: 1
-    
-            
-
