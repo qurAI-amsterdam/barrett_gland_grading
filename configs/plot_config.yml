@@ -1,6 +1,6 @@
 wholeslidedata:
     default:
-        yaml_source: split_ASL_LANS_RBE.yml
+        yaml_source: ASL_LANS_RBE_split.yml
         seed: 2
         associations:
             exact_match: True

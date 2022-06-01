@@ -50,7 +50,7 @@ def fix_annotation_files(files, verbose=True, check=True):
             nr_of_coords = len(get_coords(polygon))
             if nr_of_coords < 3:
                 annotations.remove(polygon)
-                res = res.append({'file': annotation_file,
+                res = res.concat({'file': annotation_file,
                                   'annotation': polygon.attrib['Name'],
                                   'coords': get_coords(polygon)}, ignore_index=True)
         # write

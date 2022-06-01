@@ -18,19 +18,12 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
   - [ ] Individual directories for each dataset: ASL, Bolero, LANS and RBE.
     * Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
     * A csv file with case or biopsy level diagnosis.
-  - [x] Remove polygon annotations with <3 coordinates.
-  - [ ] Deal with lazy gland annotations.
 - [x] Split data for training, evaluation and testing. We use Bolero as internal test set.
 - [ ] Train a standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
-- [ ] Data augmentations for segmentation in pathology:
-    * Manual:
-      - HookNet: spatial, color, noise and stain augmentation [[2]](#2). 
-      - RaeNet: gamma transform, random flipping, Gaussian blur, affine translation and colour distortion.
-    * Stain-Transforming Cycle-Consistent GAN [[5]](#5).
+- [ ] Data augmentations for segmentation in pathology.
 - [ ] Visualization and evaluation (dice and pixel level confusion matrix) on slide level, preferably in a notebook.
 - [ ] Experiments:
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
-  * ImageNet pretrained encoder.
   * Roto-Translation Equivariant CNN's [[6]](#6).
   
 ### Segmentation pipeline for gland grading into: NDBE, LGD or HGD
@@ -48,8 +41,8 @@ Case or slide level annotations were not provided yet. The relevant datasets on 
 | ASL       |  36   |   139    |                      ?                      |               ?                |          ?          |          yes          |
 | Bolero    |  51   |   193    |                  should be                  |               4                |         Yes         |          yes          |
 | LANS      |  34   |   104    |                  should be                  |               14               |          ?          |          yes          |
-| RBE       |  212  |   534    |                      ?                      |               ?                |          ?          |          no           |
-| **Total** |  312  |   970    |                     N/A                     |              N/A               |          ?          |          N/A          |        |
+| RBE       |  229  |   556    |                      ?                      |               ?                |          ?          |          no           |
+| **Total** |  350  |   992    |                     N/A                     |              N/A               |          ?          |          N/A          |        |
 
 
 ### Results

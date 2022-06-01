@@ -17,6 +17,13 @@ from preprocessing import get_preprocessing
 
 
 def train(run_name, experiments_dir, wandb_key):
+    """Training script for gland grading.
+
+    Args:
+        run_name: the name of this experiments run.
+        experiments_dir: the directory where to store a copy of the source code, weights and intermediate results.
+        wandb_key: weights and biases key for remote logging.
+    """
     # config path
     base_dir = '/home/mbotros/code/barrett_gland_grading/'
     user_config = os.path.join(base_dir, 'configs/base_config.yml')

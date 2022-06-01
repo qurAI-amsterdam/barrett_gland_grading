@@ -7,13 +7,12 @@ import argparse
 import numpy as np
 from wholeslidedata.source.files import WholeSlideAnnotationFile, WholeSlideImageFile
 
-LABELS = ['Biopsy-Outlines', 'NDBE-G', 'LGD-G', 'HGD-G']
+LABELS = ['NDBE-G', 'LGD-G', 'HGD-G']
 SEED = 55
 
 
 def write_data_yaml(train_associations, val_associations, output_path):
-    """
-    Writes both train and validation associations to a config split file.
+    """Writes both train and validation associations to a config split file.
 
     Args:
         train_associations: the selected samples for training
@@ -22,6 +21,8 @@ def write_data_yaml(train_associations, val_associations, output_path):
 
     Returns:
         none: writes to config file
+
+    Todo: refactor this = create dict and write to yaml instead of str.
     """
     s = '---\ntraining:'
 
@@ -42,8 +43,7 @@ def write_data_yaml(train_associations, val_associations, output_path):
 
 
 def get_associations_from_folders(folder, datasets):
-    """
-    Gets all associations (link between image and annotation file) from the folder where the datasets are located.
+    """Gets all associations (link between image and annotation file) from the folder where the datasets are located.
     An exact match in image and annotation file names is required.
 
     Args:
@@ -87,9 +87,8 @@ def get_associations_from_folders(folder, datasets):
 
 
 def train_val_split(folder, datasets, output_path, train_percent=0.9):
-    """
-    Produces a train validation split. Output is a config (yml) file with the paths to the images and annotations for
-    each sample in the train and validation set.
+    """Produces a train validation split. Output is a config (yml) file with the paths to the images
+    and annotations for each sample in the train and validation set.
 
     Args:
         folder: the folder where all data is located.
@@ -140,7 +139,7 @@ if __name__ == '__main__':
     parser.add_argument("--train_percent", help="Percentage used for training, the rest is used for validation.",
                         default=0.9, type=float)
     parser.add_argument("--output_path", help="Path to the folder where the data.yml is stored.",
-                        default='/home/mbotros/code/barrett_gland_grading/configs/split_ASL_LANS_RBE.yml')
+                        default='/home/mbotros/code/barrett_gland_grading/configs/ASL_LANS_RBE_split.yml')
     args = parser.parse_args()
     dataset_names = [dataset for dataset in args.datasets.split(', ')]
 

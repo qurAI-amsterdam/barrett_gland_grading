@@ -1,6 +1,6 @@
 wholeslidedata:
     default:
-        yaml_source: split_ASL_LANS_RBE.yml
+        yaml_source: ASL_LANS_RBE_split.yml
         seed: 2
         associations:
             exact_match: True
@@ -21,25 +21,25 @@ wholeslidedata:
         point_sampler:
             attribute: RandomPointSampler
 
-    training:
-        # rotates, flips, gamma transform, color jitter (saturation, contrast, hue)
-        batch_callbacks:
-            - module: wholeslidedata.accessories.albumentations.callbacks
-              attribute: AlbumentationsAugmentationsCallback
-              augmentations:
-                  - RandomRotate90:
-                        p: 0.5
-                  - Flip:
-                        p: 0.5
-                  - RandomGamma:
-                        gamma_limit: [50, 100]
-                        p: 0.5
-                  - ColorJitter:
-                        brightness: 0.1
-                        contrast: 0.1
-                        saturation: 0.1
-                        hue: 0.1
-                        p: 0.5
+#    training:
+#        # rotates, flips, gamma transform, color jitter (saturation, contrast, hue)
+#        batch_callbacks:
+#            - module: wholeslidedata.accessories.albumentations.callbacks
+#              attribute: AlbumentationsAugmentationsCallback
+#              augmentations:
+#                  - RandomRotate90:
+#                        p: 0.5
+#                  - Flip:
+#                        p: 0.5
+#                  - RandomGamma:
+#                        gamma_limit: [50, 100]
+#                        p: 0.5
+#                  - ColorJitter:
+#                        brightness: 0.1
+#                        contrast: 0.1
+#                        saturation: 0.1
+#                        hue: 0.1
+#                        p: 0.5
 
 net:
     # model
