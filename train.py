@@ -13,7 +13,7 @@ from sklearn.metrics import f1_score
 import wandb
 from utils import mean_metrics, load_config
 import segmentation_models_pytorch as smp
-from preprocessing import get_preprocessing
+from preprocessing import get_preprocessing, tissue_mask_batch
 
 
 def train(run_name, experiments_dir, wandb_key):
@@ -87,6 +87,9 @@ def train(run_name, experiments_dir, wandb_key):
     model = nn.DataParallel(model) if train_config['gpus'] > 1 else model
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=train_config['learning_rate'])
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
+                                                step_size=train_config['scheduler_step'],
+                                                gamma=train_config['scheduler_gamma'])
     criterion = nn.CrossEntropyLoss()
     min_val = float('inf')
 
@@ -98,7 +101,8 @@ def train(run_name, experiments_dir, wandb_key):
         for idx in tqdm(range(train_config['train_batches']), desc='Epoch {}'.format(n + 1)):
             x_np, y_np, info = next(training_batch_generator)
 
-            # preprocessing
+            # tissue masking and preprocessing
+            y_np = tissue_mask_batch(x_np, y_np)
             sample = preprocessing(image=x_np, mask=y_np)
             x, y = sample['image'].to(device), sample['mask'].to(device)
 
@@ -121,7 +125,8 @@ def train(run_name, experiments_dir, wandb_key):
             for idx in tqdm(range(train_config['val_batches']), desc='Validating'):
                 x_np, y_np, info = next(validation_batch_generator)
 
-                # preprocessing
+                # tissue masking and preprocessing
+                y_np = tissue_mask_batch(x_np, y_np)
                 sample = preprocessing(image=x_np, mask=y_np)
                 x, y = sample['image'].to(device), sample['mask'].to(device)
 
@@ -129,7 +134,7 @@ def train(run_name, experiments_dir, wandb_key):
                 y_hat = model.forward(x)
                 loss = criterion(y_hat, y)
 
-                # store one example, not preprocessed
+                # store one example: image not normalized but augmented, mask augmented and tissue masked
                 example_val_batch_x = x_np
                 example_val_batch_y = to_dysplastic_vs_non_dysplastic(y_np)
                 example_val_batch_y_hat = y_hat.cpu().detach().numpy()
@@ -171,11 +176,14 @@ def train(run_name, experiments_dir, wandb_key):
             torch.save(model.state_dict(), save_dir)
             min_val = validation_means['loss']
 
+        # scheduler step
+        scheduler.step()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--run_name", type=str, default='test', help="the name of this experiment")
-    parser.add_argument("--exp_dir", type=str, default='/home/mbotros/experiments/barrett_gland_grading',
+    parser.add_argument("--exp_dir", type=str, default='/data/archief/AMC-data/Barrett/experiments/barrett_gland_grading',
                         help="experiment dir")
     parser.add_argument("--wandb_key", type=str, help="key for logging to weights and biases")
     args = parser.parse_args()

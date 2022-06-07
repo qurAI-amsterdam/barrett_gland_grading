@@ -2,7 +2,7 @@
 This repository contains code for development of a Neural Network that support pathologists with identifying dysplastic 
 areas of interest on H&E tissue samples from patients with Barrett's Esophagus (BE). 
 
-### The Task:
+### The Task
 BE is associated with an increased risk of developing esophageal cancer. Regular check-ups and pathological assessment of biopsy material are crucial for identifying BE patients at risk.
 Dysplasia in BE is assessed according to the revised Vienna criteria, which are based on the dysplasia classification in inflammatory bowel disease. Evaluation of cytological and architectural severity and invasion status leads to assignment in
 one of the following categories: non-dysplastic Barrett's esophagus (NDBE), indefinite for dysplasia (IND), low grade dysplasia (LGD) and high grade dysplasia (HGD). Key characteristics used to assess the
@@ -16,12 +16,13 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 
 - [ ] Create a clean archive dataset:
   - [ ] Individual directories for each dataset: ASL, Bolero, LANS and RBE.
-    * Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
-    * A csv file with case or biopsy level diagnosis.
+     - [x] Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
+     - [ ] A csv file with case or biopsy level diagnosis.
 - [x] Split data for training, evaluation and testing. We use Bolero as internal test set.
-- [ ] Train a standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
-- [ ] Data augmentations for segmentation in pathology.
-- [ ] Visualization and evaluation (dice and pixel level confusion matrix) on slide level, preferably in a notebook.
+- [x] Train a standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
+- [ ] Create a processor: takes in WSI, outputs a mask (graded glands).
+- [ ] Visualization and evaluation (dice and pixel level confusion matrix), preferably in a notebook.
+- [ ] Grand Challenge Algorithm
 - [ ] Experiments:
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
   * Roto-Translation Equivariant CNN's [[6]](#6).

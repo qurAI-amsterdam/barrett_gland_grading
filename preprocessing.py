@@ -42,7 +42,6 @@ def filter_holes(tissue_w_holes, size_thresh):
 
     (from: https://github.com/BPdeRooij/barrett_patch_extractor/)
     """
-
     # filter small objects from mask
     label_objects, _ = ndimage.label(tissue_w_holes)
     sizes = np.bincount(label_objects.ravel())
@@ -61,7 +60,7 @@ def filter_holes(tissue_w_holes, size_thresh):
     return np.logical_or(tissue_w_holes, holes)
 
 
-def tissue_mask_batch(x, y, lum_thresh=0.85, size_thresh=10000):
+def tissue_mask_batch(x, y, lum_thresh=0.85, size_thresh=5000):
     """Luminosity based tissue masker.
 
     Args:
