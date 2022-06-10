@@ -69,7 +69,7 @@ def train(run_name, experiments_dir, wandb_key):
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
     # DeepLabV3+ with pretrained resnet34 encoder
-    model = smp.DeepLabV3Plus(
+    model = smp.UnetPlusPlus(
         encoder_name=train_config['encoder_name'],        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
         encoder_weights=train_config['encoder_weights'],  # use `imagenet` pretrained weights for encoder initialization
         in_channels=train_config['n_channels'],           # model input channels (1 for gray-scale images, 3 for RGB, etc.)
