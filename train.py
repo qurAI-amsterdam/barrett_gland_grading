@@ -7,9 +7,9 @@ from wholeslidedata.iterators import create_batch_iterator
 from preprocessing import to_dysplastic_vs_non_dysplastic
 import os
 import argparse
-from utils import print_dataset_statistics, plot_pred_batch
+from utils import print_dataset_statistics, plot_pred_batch, plot_confusion_matrix
 from tqdm import tqdm
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, confusion_matrix
 import wandb
 from utils import mean_metrics, load_config
 import segmentation_models_pytorch as smp
@@ -56,7 +56,7 @@ def train(run_name, experiments_dir, wandb_key):
 
     # log EVERYTHING with weights and biases
     os.environ["WANDB_API_KEY"] = wandb_key
-    wandb.init(project="Barrett's Gland Grading",
+    wandb.init(project="Barrett's Gland Grading NDvsD",
                dir=exp_dir,
                config={'data': {'sampling': wholeslide_config,
                                 'train data': train_data_dict,
@@ -68,9 +68,10 @@ def train(run_name, experiments_dir, wandb_key):
     # create model and put on device(s)
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-    # DeepLabV3+ with pretrained resnet34 encoder
+    # UNet++
     model = smp.UnetPlusPlus(
         encoder_name=train_config['encoder_name'],        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+        encoder_depth=train_config['encoder_depth'],      # number of stages used in encoder
         encoder_weights=train_config['encoder_weights'],  # use `imagenet` pretrained weights for encoder initialization
         in_channels=train_config['n_channels'],           # model input channels (1 for gray-scale images, 3 for RGB, etc.)
         classes=train_config['n_classes'],                # model output channels (number of classes in your dataset)
@@ -98,7 +99,7 @@ def train(run_name, experiments_dir, wandb_key):
         train_metrics = {}
         validation_metrics = {}
 
-        for idx in tqdm(range(train_config['train_batches']), desc='Epoch {}'.format(n + 1)):
+        for idx in tqdm(range(train_config['train_batches']), desc='Epoch {}, lr: {}'.format(n + 1, scheduler.get_last_lr()[0])):
             x_np, y_np, info = next(training_batch_generator)
 
             # tissue masking and preprocessing
@@ -144,37 +145,40 @@ def train(run_name, experiments_dir, wandb_key):
                 y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
                 validation_metrics[idx] = {'loss': loss.item(),
                                            'dice per class': f1_score(y, y_hat, average=None, labels=[0, 1, 2]),
-                                           'dice weighted': f1_score(y, y_hat, average='weighted')}
+                                           'dice weighted': f1_score(y, y_hat, average='weighted'),
+                                           'confusion matrix': confusion_matrix(y, y_hat, normalize='true')}
 
-        # compute and print metrics
-        training_means = mean_metrics(train_metrics)
-        validation_means = mean_metrics(validation_metrics)
-        print("Train loss: {:.3f}, val loss: {:.3f}".format(training_means['loss'], validation_means['loss']))
-        print("Train dice: {}, val dice: {}".format(np.round(training_means['dice per class'], decimals=2),
-                                                    np.round(validation_means['dice per class'], decimals=2)))
+        # accumulate metrics over the epoch
+        train_metrics_mean = mean_metrics(train_metrics)
+        validation_metrics_mean = mean_metrics(validation_metrics)
+
+        print("Train loss: {:.3f}, val loss: {:.3f}".format(train_metrics_mean['loss'], validation_metrics_mean['loss']))
+        print("Train dice: {}, val dice: {}".format(np.round(train_metrics_mean['dice per class'], decimals=2),
+                                                    np.round(validation_metrics_mean['dice per class'], decimals=2)))
 
         # plot predictions on the validation set
         os.makedirs(os.path.join(exp_dir, 'val_predictions'), exist_ok=True)
-        image_save_path = os.path.join(exp_dir, 'val_predictions', 'predictions_epoch_{}.png'.format(n))
-        plot_pred_batch(example_val_batch_x, example_val_batch_y, example_val_batch_y_hat, save_path=image_save_path)
+        pred_save_path = os.path.join(exp_dir, 'val_predictions', 'predictions_epoch_{}.png'.format(n))
+        cm_save_path = os.path.join(exp_dir, 'val_predictions', 'confusion_matrix_epoch_{}.png'.format(n))
+        plot_pred_batch(example_val_batch_x, example_val_batch_y, example_val_batch_y_hat, save_path=pred_save_path)
+        plot_confusion_matrix(validation_metrics_mean['confusion matrix'], save_path=cm_save_path)
 
         # log metrics, for validation log dices per class
-        val_dice_per_class = list(np.round(validation_means['dice per class'], decimals=2))
-        wandb.log({'epoch': n + 1,
-                   'train loss': training_means['loss'], 'train dice': training_means['dice weighted'],
-                   'val loss': validation_means['loss'], 'val dice': validation_means['dice weighted'],
-                   'val dice BG': val_dice_per_class[0],
-                   'val dice NDBE': val_dice_per_class[1],
-                   'val dice DYS': val_dice_per_class[2],
-                   'prediction': wandb.Image(image_save_path)})
+        val_dices = list(validation_metrics_mean['dice per class'])
+        wandb.log({'Epoch': n + 1,
+                   'train loss': train_metrics_mean['loss'], 'train dice': train_metrics_mean['dice weighted'],
+                   'val loss': validation_metrics_mean['loss'], 'val dice': validation_metrics_mean['dice weighted'],
+                   'val dice BG': val_dices[0], 'val dice NDBE': val_dices[1], 'val dice DYS': val_dices[2],
+                   'prediction': wandb.Image(pred_save_path),'confusion matrix': wandb.Image(cm_save_path)}
+                  )
 
         # save best model
         os.makedirs(os.path.join(exp_dir, 'checkpoints'), exist_ok=True)
-        if validation_means['loss'] < min_val:
+        if validation_metrics_mean['loss'] < min_val:
             save_dir = os.path.join(exp_dir, 'checkpoints', 'model_epoch_{}_loss_{:.3f}_dice_{:.3f}.pt'.
-                                    format(n, validation_means['loss'], validation_means['dice weighted']))
-            torch.save(model.state_dict(), save_dir)
-            min_val = validation_means['loss']
+                                    format(n, validation_metrics_mean['loss'], validation_metrics_mean['dice weighted']))
+            torch.save(model.module.state_dict(), save_dir)
+            min_val = validation_metrics_mean['loss']
 
         # scheduler step
         scheduler.step()
@@ -183,7 +187,7 @@ def train(run_name, experiments_dir, wandb_key):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--run_name", type=str, default='test', help="the name of this experiment")
-    parser.add_argument("--exp_dir", type=str, default='/data/archief/AMC-data/Barrett/experiments/barrett_gland_grading',
+    parser.add_argument("--exp_dir", type=str, default='/data/archief/AMC-data/Barrett/experiments/barrett_gland_grading/NDvsD',
                         help="experiment dir")
     parser.add_argument("--wandb_key", type=str, help="key for logging to weights and biases")
     args = parser.parse_args()

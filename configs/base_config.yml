@@ -1,6 +1,6 @@
 wholeslidedata:
     default:
-        yaml_source: ASL_LANS_RBE_split.yml
+        yaml_source: split.yml
         seed: 2
         associations:
             exact_match: True
@@ -14,7 +14,7 @@ wholeslidedata:
             filters: ['xml']
             
         batch_shape:
-            batch_size: 10
+            batch_size: 8
             spacing: 1
             shape: [1024, 1024, 3]
             
@@ -43,17 +43,18 @@ wholeslidedata:
 
 net:
     # model
-    encoder_name: 'resnet34'
+    encoder_name: 'efficientnet-b4'
+    encoder_depth: 5
     encoder_weights: 'imagenet'
     n_channels: 3
     n_classes: 3
 
     # training
     learning_rate: 0.001
-    scheduler_step: 30
+    scheduler_step: 50
     scheduler_gamma: 0.1
     epochs: 150
-    train_batches: 100       # 100*10 = 1000 train patches
-    val_batches: 40          # 40*10 = 400 validation patches
+    train_batches: 50       # 50 * 8 = 400 train patches
+    val_batches: 25         # 25 * 8 = 200 validation patches
     gpus: 2
     cpus: 1

@@ -11,12 +11,13 @@ LABELS = ['NDBE-G', 'LGD-G', 'HGD-G']
 SEED = 55
 
 
-def write_data_yaml(train_associations, val_associations, output_path):
+def write_data_yaml(train_associations, val_associations, test_associations, output_path):
     """Writes both train and validation associations to a config split file.
 
     Args:
         train_associations: the selected samples for training
         val_associations: the selected samples for validation
+        test_associations: the selected samples for testing
         output_path: path where to config split file is stored
 
     Returns:
@@ -33,6 +34,12 @@ def write_data_yaml(train_associations, val_associations, output_path):
 
     s += '\n\nvalidation:'
     for files in val_associations.values():
+        image_file = files[WholeSlideImageFile][0].path
+        annotation_file = files[WholeSlideAnnotationFile][0].path
+        s += '\n\t-\n\t\twsi:\n\t\t\tpath: {}\n\t\twsa:\n\t\t\tpath: {}'.format(image_file, annotation_file)
+
+    s += '\n\ntesting:'
+    for files in test_associations.values():
         image_file = files[WholeSlideImageFile][0].path
         annotation_file = files[WholeSlideAnnotationFile][0].path
         s += '\n\t-\n\t\twsi:\n\t\t\tpath: {}\n\t\twsa:\n\t\t\tpath: {}'.format(image_file, annotation_file)
@@ -86,7 +93,7 @@ def get_associations_from_folders(folder, datasets):
     return total_associations
 
 
-def train_val_split(folder, datasets, output_path, train_percent=0.9):
+def train_val_split(folder, datasets, output_path, train_percent=0.8, val_percent=0.1):
     """Produces a train validation split. Output is a config (yml) file with the paths to the images
     and annotations for each sample in the train and validation set.
 
@@ -94,7 +101,8 @@ def train_val_split(folder, datasets, output_path, train_percent=0.9):
         folder: the folder where all data is located.
         datasets: names of the datasets included
         output_path: path where the config file for the split is stored
-        train_percent: percentage of images used for training, the rest is for validation
+        train_percent: percentage of images used for training
+        val_percent: percentage of image used for validation, the rest is used for testing
 
     Returns:
         none: writes to the config split file.
@@ -112,23 +120,30 @@ def train_val_split(folder, datasets, output_path, train_percent=0.9):
     # split indexes
     n = len(indexes)
     n_train_end = int(train_percent * n)
+    n_val_end = int(val_percent * n) + n_train_end
+
     train_keys = file_keys[indexes[:n_train_end]]
-    val_keys = file_keys[indexes[n_train_end:]]
+    val_keys = file_keys[indexes[n_train_end:n_val_end]]
+    test_keys = file_keys[indexes[n_val_end:]]
 
     train_associations = {file_key: files for file_key, files in associations.items() if file_key in train_keys}
     val_associations = {file_key: files for file_key, files in associations.items() if file_key in val_keys}
+    test_associations = {file_key: files for file_key, files in associations.items() if file_key in test_keys}
 
     # print train and val set statistics
     train_dataset = WholeSlideDataSet(mode='default', associations=train_associations, labels=LABELS)
     val_dataset = WholeSlideDataSet(mode='default', associations=val_associations, labels=LABELS)
+    test_dataset = WholeSlideDataSet(mode='default', associations=test_associations, labels=LABELS)
 
     print('\nTraining dataset: {} images.'.format(len(train_associations)))
     print_dataset_statistics(train_dataset, show_all_files=False)
     print('\nValidation dataset: {} images.'.format(len(val_associations)))
     print_dataset_statistics(val_dataset, show_all_files=False)
+    print('\nTest dataset: {} images.'.format(len(test_associations)))
+    print_dataset_statistics(test_dataset, show_all_files=False)
 
     # write to yaml file
-    write_data_yaml(train_associations, val_associations, output_path)
+    write_data_yaml(train_associations, val_associations, test_associations, output_path)
 
 
 if __name__ == '__main__':
@@ -136,13 +151,15 @@ if __name__ == '__main__':
     parser.add_argument("--input_path", help="Path to the folder where the datasets are located.")
     parser.add_argument("--datasets", help="Names of the datasets to include to the train and validation split.",
                         default='ASL, LANS, RBE', type=str)
-    parser.add_argument("--train_percent", help="Percentage used for training, the rest is used for validation.",
-                        default=0.9, type=float)
+    parser.add_argument("--train_percent", help="Percentage used for training.",
+                        default=0.8, type=float)
+    parser.add_argument("--val_percent", help="Percentage used for training, the rest is used for testing.",
+                        default=0.1, type=float)
     parser.add_argument("--output_path", help="Path to the folder where the data.yml is stored.",
-                        default='/home/mbotros/code/barrett_gland_grading/configs/ASL_LANS_RBE_split.yml')
+                        default='/home/mbotros/code/barrett_gland_grading/configs/split.yml')
     args = parser.parse_args()
     dataset_names = [dataset for dataset in args.datasets.split(', ')]
 
     train_val_split(folder=args.input_path, datasets=dataset_names, train_percent=args.train_percent,
-                    output_path=args.output_path)
+                    val_percent=args.val_percent, output_path=args.output_path)
 

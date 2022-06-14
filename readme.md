@@ -18,11 +18,11 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
   - [ ] Individual directories for each dataset: ASL, Bolero, LANS and RBE.
      - [x] Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
      - [ ] A csv file with case or biopsy level diagnosis.
-- [x] Split data for training, evaluation and testing. We use Bolero as internal test set.
-- [x] Train a standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
+- [x] Split data for training, evaluation and testing. We keep Bolero apart as hold out test set.
+- [x] Train standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
 - [ ] Create a processor: takes in WSI, outputs a mask (graded glands).
 - [ ] Visualization and evaluation (dice and pixel level confusion matrix), preferably in a notebook.
-- [ ] Grand Challenge Algorithm
+- [ ] Grand Challenge Algorithm.
 - [ ] Experiments:
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
   * Roto-Translation Equivariant CNN's [[6]](#6).
@@ -37,13 +37,13 @@ For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-wh
 Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories: NDBE, LGD and HGD.
 Case or slide level annotations were not provided yet. The relevant datasets on AMC servers (/data/archief/AMC-data/Barrett/) are listed below:
 
-| Dataset   | Cases | Biopsies | Diagnosis Available<br/>(biopsy/case level) | Raters<br/>(biopsy/case level) | P53 <br/> Available | Lazy <br> Annotations |
-|-----------|:-----:|:--------:|:-------------------------------------------:|:------------------------------:|:-------------------:|:---------------------:|
-| ASL       |  36   |   139    |                      ?                      |               ?                |          ?          |          yes          |
-| Bolero    |  51   |   193    |                  should be                  |               4                |         Yes         |          yes          |
-| LANS      |  34   |   104    |                  should be                  |               14               |          ?          |          yes          |
-| RBE       |  229  |   556    |                      ?                      |               ?                |          ?          |          no           |
-| **Total** |  350  |   992    |                     N/A                     |              N/A               |          ?          |          N/A          |        |
+| Dataset               | Cases | Biopsies | Diagnosis Available<br/>(biopsy/case level) | Raters<br/>(biopsy/case level) | P53 <br/> Available | 
+|-----------------------|:-----:|:--------:|:-------------------------------------------:|:------------------------------:|:-------------------:|
+| ASL                   |  36   |   139    |                     yes                     |             Sybren             |         Yes         |    
+| LANS                  |  34   |   106    |                     yes                     |             Sybren             |         Yes         |          
+| RBE                   |  225  |   540    |                     yes                     |             Sybren             |         Yes         |         
+| **Total Development** |  295  |   785    |                     yes                     |             Sybren             |         Yes         |  
+| **Bolero**            |  51   |   193    |                     yes                     |               4                |         Yes         |   
 
 
 ### Results
@@ -51,15 +51,15 @@ Evaluation:
   * Quantitative with DICE/F1 compared to the ground truth annotations.
   * Qualitative assessment by Sybren.
   
-We should perform some of these experiments on an internal test set (Bolero).
+We should perform some of these experiments on an internal and external test set.
 
-|   Method   | Batch Size | Patch Size | Spacing <br/> (mpp) | Validation Dice | Test <br/> (Bolero) |
-|:----------:|:----------:|:----------:|:-------------------:|:---------------:|:-------------------:|
-|    UNet    |            |            |                     |                 |                     |
-|   UNet++   |            |            |                     |                 |                     |
-| DeepLabV3+ |            |            |                     |                 |                     |
-|  HookNet   |            |            |                     |                 |                     |
-|  HistNet   |            |            |                     |                 |                     |
+|   Method   |            Encoder            | Batch Size | Patch Size | Spacing <br/> (mpp) | Internal Test <BR> (Dice) | External Test <br> (Dice) |
+|:----------:|:-----------------------------:|:----------:|:----------:|:-------------------:|:-------------------------:|:-------------------------:|
+|    UNet    |                               |            |            |                     |                           |
+|   UNet++   | EfficientNet-b4  <br> depth=5 |     8      |    1024    |          1          |                           |
+| DeepLabV3+ |                               |            |            |                     |                           |
+|  HookNet   |                               |            |            |                     |                           |
+|  HistNet   |                               |            |            |                     |                           |
 
 
 ## References

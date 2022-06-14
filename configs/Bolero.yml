@@ -1,5 +1,5 @@
 ---
-training:
+testing:
     -
         wsi:
             path: /data/archief/AMC-data/Barrett/Bolero/RB0001_HE.tiff

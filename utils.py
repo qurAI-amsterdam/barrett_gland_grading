@@ -4,6 +4,8 @@ from pprint import pprint
 import numpy as np
 import matplotlib.patches as mpatches
 import yaml
+import pandas as pd
+import seaborn as sns
 
 # define some colors
 colors_1 = ["white", "green", "orange", "red", 'yellow', 'yellow', 'purple', 'pink', 'grey', "blue"]
@@ -74,7 +76,7 @@ def crop_center(img, cropx, cropy):
     return img[:, starty:starty + cropy, startx:startx + cropx, :]
 
 
-def plot_pred_batch(x, y, y_hat, save_path, patches=4):
+def plot_pred_batch(x, y, y_hat, save_path, patches=3, h_pad=0.5, w_pad=-28):
     """ Plots the center of a batch with prediction.
     The plot is stored in the experiment dir to keep track of performance.
 
@@ -84,9 +86,11 @@ def plot_pred_batch(x, y, y_hat, save_path, patches=4):
         y_hat: [B, CLASSES, H, W]
         save_path: path where plot of predictions is stored.
         patches: how many patches to include in the plot
+        h_pad: height padding
+        w_pad: width padding
 
     Returns:
-        none: saves the figure at the save path
+        none: saves the figure at the save patch
     """
     patches = min(len(x), patches)
 
@@ -101,11 +105,38 @@ def plot_pred_batch(x, y, y_hat, save_path, patches=4):
     red_patch = mpatches.Patch(color='red', label='LGD/HGD', alpha=0.5)
 
     # show just the image
-    fig, axes = plt.subplots(3, patches, figsize=(15, 10), squeeze=False)
-    plt.legend(handles=[green_patch, red_patch], bbox_to_anchor=(1.05, 1.0), loc='upper left', borderaxespad=0.,  prop={'size': 10})
+    fig, axes = plt.subplots(3, patches, figsize=(20, 14), squeeze=False)
+    plt.legend(handles=[green_patch, red_patch], bbox_to_anchor=(1.03, 1.0), loc='upper left', borderaxespad=0.,  prop={'size': 10})
     plot_batch(axes, 0, x[:patches], np.zeros_like(y)[:patches], alpha=0.3, colors=colors_2)
     plot_batch(axes, 1, x[:patches], y[:patches], alpha=0.3, colors=colors_2)
     plot_batch(axes, 2, x[:patches], y_hat[:patches], alpha=0.3, colors=colors_2)
-    plt.tight_layout(h_pad=0, w_pad=0)
+    for ax in axes.flatten():
+        ax.axes.xaxis.set_visible(False)
+        ax.axes.yaxis.set_visible(False)
+    plt.tight_layout(h_pad=h_pad, w_pad=w_pad)
+    plt.savefig(save_path, bbox_inches='tight')
+    plt.close()
+
+
+def plot_confusion_matrix(cf_matrix, save_path):
+    """ Plots the confusion matrix
+
+    Args:
+        cf_matrix: the confusion matrix to plot
+        save_path: location where to store the plot
+
+    Returns:
+        none: saves the figure at the save path
+    """
+
+    df_cm = pd.DataFrame(cf_matrix, index=[i for i in ['BG', 'NDBE', 'DYS']],
+                         columns=[i for i in ['BG', 'NDBE', 'DYS']])
+
+    plt.figure(figsize=(15, 10))
+    with sns.plotting_context(font_scale=2):
+        sns.heatmap(df_cm, annot=True, cmap="Blues", square=True, fmt='.2f')
+    plt.gca().set_yticklabels(labels=['BG', 'NDBE', 'DYS'], va='center')
+    plt.gca().set_ylabel('True', labelpad=30)
+    plt.gca().set_xlabel('Predicted', labelpad=30)
     plt.savefig(save_path, bbox_inches='tight')
     plt.close()
