@@ -12,25 +12,24 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 ![](images/examples_grading_BE.png)
 
 
-### Outline of the project:
+### Outline of the project
 
-- [x] Create a clean archive dataset:
-  - [x] Individual directories for each dataset: ASL, Bolero, LANS and RBE.
-     - [x] Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
-     - [x] A csv file with case or biopsy level diagnosis (inferred from Sybren's gland annotations).
+#### Gland level
 - [x] Split data for training, evaluation and testing. We keep Bolero apart as hold out test set.
 - [x] Train standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
 - [x] Visualization and evaluation (dice and pixel level confusion matrix), preferably in a notebook.
      - [ ] Stitch results back together on slide/biopsy level (currently evaluating with sliding window over the ROI's).
-- [x] Create a reader study to collect biopsy level grades from multiple pathologists:
-      https://grand-challenge.org/reader-studies/barretts-grading/
-     - [ ] Add P53 in the viewer.
 - [ ] Create a processor: takes in WSI, outputs a mask (graded glands).
 - [ ] Deploy on Grand-Challenge.
 - [ ] Experiments:
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
   * Roto-Translation Equivariant CNN's [[6]](#6).
-  
+
+#### Biopsy level
+- [x] Create a reader study to collect biopsy level grades from multiple pathologists: [GC Reader Study](https://grand-challenge.org/reader-studies/barretts-grading/)
+     - [ ] Add P53 in the viewer.
+- [ ] Inspiration: [SlideGraph+](https://arxiv.org/abs/2110.06042), [Self Supervised VIT](https://arxiv.org/abs/2203.00585), [DeepSmile](https://arxiv.org/abs/2107.09405)
+
 ### Segmentation pipeline for gland grading into: NDBE, DYS
 **For on fly patch extraction we use:** https://github.com/DIAGNijmegen/pathology-whole-slide-data.
   * Includes configuration for patch extraction such as batch size, patch size, spacing.
