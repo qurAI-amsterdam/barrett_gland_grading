@@ -43,7 +43,7 @@ wholeslidedata:
 
 net:
     # model
-    encoder_name: 'efficientnet-b4'
+    encoder_name: 'resnet34'
     encoder_depth: 5
     encoder_weights: 'imagenet'
     n_channels: 3

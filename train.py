@@ -68,8 +68,8 @@ def train(run_name, experiments_dir, wandb_key):
     # create model and put on device(s)
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-    # UNet++
-    model = smp.UnetPlusPlus(
+    # UNet with ResNet34 encoder
+    model = smp.Unet(
         encoder_name=train_config['encoder_name'],        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
         encoder_depth=train_config['encoder_depth'],      # number of stages used in encoder
         encoder_weights=train_config['encoder_weights'],  # use `imagenet` pretrained weights for encoder initialization
@@ -169,7 +169,7 @@ def train(run_name, experiments_dir, wandb_key):
                    'train loss': train_metrics_mean['loss'], 'train dice': train_metrics_mean['dice weighted'],
                    'val loss': validation_metrics_mean['loss'], 'val dice': validation_metrics_mean['dice weighted'],
                    'val dice BG': val_dices[0], 'val dice NDBE': val_dices[1], 'val dice DYS': val_dices[2],
-                   'prediction': wandb.Image(pred_save_path),'confusion matrix': wandb.Image(cm_save_path)}
+                   'prediction': wandb.Image(pred_save_path), 'confusion matrix': wandb.Image(cm_save_path)}
                   )
 
         # save best model

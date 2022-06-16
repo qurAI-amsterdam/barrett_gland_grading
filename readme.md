@@ -14,24 +14,31 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 
 ### Outline of the project:
 
-- [ ] Create a clean archive dataset:
-  - [ ] Individual directories for each dataset: ASL, Bolero, LANS and RBE.
+- [x] Create a clean archive dataset:
+  - [x] Individual directories for each dataset: ASL, Bolero, LANS and RBE.
      - [x] Containing all the image files (.tiff converted in the same fashion) and annotation (.xml) files.
-     - [ ] A csv file with case or biopsy level diagnosis.
+     - [x] A csv file with case or biopsy level diagnosis (inferred from Sybren's gland annotations).
 - [x] Split data for training, evaluation and testing. We keep Bolero apart as hold out test set.
 - [x] Train standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
+- [x] Visualization and evaluation (dice and pixel level confusion matrix), preferably in a notebook.
+     - [ ] Stitch results back together on slide/biopsy level (currently evaluating with sliding window over the ROI's).
+- [x] Create a reader study to collect biopsy level grades from multiple pathologists:
+      https://grand-challenge.org/reader-studies/barretts-grading/
+     - [ ] Add P53 in the viewer.
 - [ ] Create a processor: takes in WSI, outputs a mask (graded glands).
-- [ ] Visualization and evaluation (dice and pixel level confusion matrix), preferably in a notebook.
-- [ ] Grand Challenge Algorithm.
+- [ ] Deploy on Grand-Challenge.
 - [ ] Experiments:
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
   * Roto-Translation Equivariant CNN's [[6]](#6).
   
-### Segmentation pipeline for gland grading into: NDBE, LGD or HGD
-For on fly patch extraction we use: https://github.com/DIAGNijmegen/pathology-whole-slide-data.
+### Segmentation pipeline for gland grading into: NDBE, DYS
+**For on fly patch extraction we use:** https://github.com/DIAGNijmegen/pathology-whole-slide-data.
   * Includes configuration for patch extraction such as batch size, patch size, spacing.
   * Includes different strategies to sample patches from the WSI (balanced, random, slidingwindow).
   * Configuration stored in (`configs/base_config.yml`).
+
+**Data Augmentation:** 
+  * Rotates, flips, gamma transform and color jitter (saturation, contrast, hue)
 
 ### Datasets 
 Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories: NDBE, LGD and HGD.
@@ -46,20 +53,20 @@ Case or slide level annotations were not provided yet. The relevant datasets on 
 | **Bolero**            |  51   |   193    |                     yes                     |               4                |         Yes         |   
 
 
-### Results
-Evaluation:
-  * Quantitative with DICE/F1 compared to the ground truth annotations.
-  * Qualitative assessment by Sybren.
-  
-We should perform some of these experiments on an internal and external test set.
+### Experiments
+We randomly split the development set of 295 WSIs in a train, validation and test set (236/29/30), in which each set roughly has the same pixel level percentages of NDBE (~75%), LGD (~12%) and HGD (~12%).
 
-|   Method   |            Encoder            | Batch Size | Patch Size | Spacing <br/> (mpp) | Internal Test <BR> (Dice) | External Test <br> (Dice) |
-|:----------:|:-----------------------------:|:----------:|:----------:|:-------------------:|:-------------------------:|:-------------------------:|
-|    UNet    |                               |            |            |                     |                           |
-|   UNet++   | EfficientNet-b4  <br> depth=5 |     8      |    1024    |          1          |                           |
-| DeepLabV3+ |                               |            |            |                     |                           |
-|  HookNet   |                               |            |            |                     |                           |
-|  HistNet   |                               |            |            |                     |                           |
+**Evaluation:**
+  * Quantitative with DICE/F1 compared to the ground truth annotations.
+  * Qualitative assessment/feedback from Sybren (other pathologists?).
+  
+|   Method   |           Encoder            | Batch Size | Patch Size | Spacing <br/> (mpp) |   Internal Test <BR> (Dice)   | External Test <br> (Dice) |
+|:----------:|:----------------------------:|:----------:|:----------:|:-------------------:|:-----------------------------:|:-------------------------:|
+|    UNet    |    ResNet34 <br> depth=5     |     8      |    1024    |          1          | 0.93 <br>  [0.97, 0.83, 0.86] |
+|   UNet++   | EfficientNet-b4 <br> depth=5 |     8      |    1024    |          1          | 0.94 <br> [0.97, 0.86, 0.87]  |
+| DeepLabV3+ |                              |            |            |                     |                               |
+|  HookNet   |                              |            |            |                     |                               |
+|  HistNet   |                              |            |            |                     |                               |
 
 
 ## References

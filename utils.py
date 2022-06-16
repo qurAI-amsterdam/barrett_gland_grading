@@ -76,7 +76,7 @@ def crop_center(img, cropx, cropy):
     return img[:, starty:starty + cropy, startx:startx + cropx, :]
 
 
-def plot_pred_batch(x, y, y_hat, save_path, patches=3, h_pad=0.5, w_pad=-28):
+def plot_pred_batch(x, y, y_hat, save_path=None, patches=3, h_pad=0.5, w_pad=-28):
     """ Plots the center of a batch with prediction.
     The plot is stored in the experiment dir to keep track of performance.
 
@@ -88,6 +88,7 @@ def plot_pred_batch(x, y, y_hat, save_path, patches=3, h_pad=0.5, w_pad=-28):
         patches: how many patches to include in the plot
         h_pad: height padding
         w_pad: width padding
+        plot: whether to plot or save
 
     Returns:
         none: saves the figure at the save patch
@@ -114,16 +115,20 @@ def plot_pred_batch(x, y, y_hat, save_path, patches=3, h_pad=0.5, w_pad=-28):
         ax.axes.xaxis.set_visible(False)
         ax.axes.yaxis.set_visible(False)
     plt.tight_layout(h_pad=h_pad, w_pad=w_pad)
-    plt.savefig(save_path, bbox_inches='tight')
-    plt.close()
+    if save_path:
+        plt.savefig(save_path, bbox_inches='tight')
+        plt.close()
+    else:
+        plt.show()
 
 
-def plot_confusion_matrix(cf_matrix, save_path):
+def plot_confusion_matrix(cf_matrix, save_path=None):
     """ Plots the confusion matrix
 
     Args:
         cf_matrix: the confusion matrix to plot
         save_path: location where to store the plot
+        plot: whether to plot it of save it
 
     Returns:
         none: saves the figure at the save path
@@ -138,5 +143,8 @@ def plot_confusion_matrix(cf_matrix, save_path):
     plt.gca().set_yticklabels(labels=['BG', 'NDBE', 'DYS'], va='center')
     plt.gca().set_ylabel('True', labelpad=30)
     plt.gca().set_xlabel('Predicted', labelpad=30)
-    plt.savefig(save_path, bbox_inches='tight')
-    plt.close()
+    if save_path:
+        plt.savefig(save_path, bbox_inches='tight')
+        plt.close()
+    else:
+        plt.show()
