@@ -68,8 +68,8 @@ def train(run_name, experiments_dir, wandb_key):
     # create model and put on device(s)
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-    # UNet with ResNet34 encoder
-    model = smp.Unet(
+    # UNet++ EfficientNet-b4
+    model = smp.UnetPlusPlus(
         encoder_name=train_config['encoder_name'],        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
         encoder_depth=train_config['encoder_depth'],      # number of stages used in encoder
         encoder_weights=train_config['encoder_weights'],  # use `imagenet` pretrained weights for encoder initialization
@@ -91,8 +91,10 @@ def train(run_name, experiments_dir, wandb_key):
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
                                                 step_size=train_config['scheduler_step'],
                                                 gamma=train_config['scheduler_gamma'])
-    criterion = nn.CrossEntropyLoss()
-    min_val = float('inf')
+
+    weights = torch.tensor(train_config['class_weights'], device=device)
+    print('Using weights: {}'.format(train_config['class_weights']))
+    criterion = nn.CrossEntropyLoss(weight=weights)
 
     for n in range(train_config['epochs']):
 
@@ -172,13 +174,12 @@ def train(run_name, experiments_dir, wandb_key):
                    'prediction': wandb.Image(pred_save_path), 'confusion matrix': wandb.Image(cm_save_path)}
                   )
 
-        # save best model
+        # save every epoch
         os.makedirs(os.path.join(exp_dir, 'checkpoints'), exist_ok=True)
-        if validation_metrics_mean['loss'] < min_val:
-            save_dir = os.path.join(exp_dir, 'checkpoints', 'model_epoch_{}_loss_{:.3f}_dice_{:.3f}.pt'.
-                                    format(n, validation_metrics_mean['loss'], validation_metrics_mean['dice weighted']))
-            torch.save(model.module.state_dict(), save_dir)
-            min_val = validation_metrics_mean['loss']
+        dice_ndbe_dys = (val_dices[1] + val_dices[2]) / 2
+        save_dir = os.path.join(exp_dir, 'checkpoints', 'model_epoch_{}_loss_{:.3f}_dice_{:.3f}.pt'.
+                                format(n + 1, validation_metrics_mean['loss'], dice_ndbe_dys))
+        torch.save(model.module.state_dict(), save_dir)
 
         # scheduler step
         scheduler.step()

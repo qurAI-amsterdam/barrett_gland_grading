@@ -1,0 +1,29 @@
+wholeslidedata:
+    default:
+        yaml_source: internal_test.yml
+        
+        label_map:
+            ndbe-g: 1
+            lgd-g: 2
+            hgd-g: 3
+           
+        annotation_sources: 
+            filters: ['xml']
+            
+        batch_shape:
+            batch_size: 32
+            spacing: 1
+            shape: [1024, 1024, 3]
+
+            
+        # orderedAnnotationSampler such that the patches and masks are generated in sliding window fashion
+        annotation_sampler:
+            attribute: OrderedAnnotationSampler
+        
+        # use center point Sampler to sample point
+        point_sampler:
+            attribute: CenterPointSampler
+          
+        # set center to True in patch sampler to extract patches based on center point
+        patch_sampler:
+            center: True

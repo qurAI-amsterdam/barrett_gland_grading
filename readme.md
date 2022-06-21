@@ -59,19 +59,18 @@ We randomly split the development set of 295 WSIs in a train, validation and tes
   * Quantitative with DICE/F1 compared to the ground truth annotations.
   * Qualitative assessment/feedback from Sybren (other pathologists?).
   
-|   Method   |           Encoder            | Batch Size | Patch Size | Spacing <br/> (mpp) |   Internal Test <BR> (Dice)   | External Test <br> (Dice) |
-|:----------:|:----------------------------:|:----------:|:----------:|:-------------------:|:-----------------------------:|:-------------------------:|
-|    UNet    |    ResNet34 <br> depth=5     |     8      |    1024    |          1          | 0.93 <br>  [0.97, 0.83, 0.86] |
-|   UNet++   | EfficientNet-b4 <br> depth=5 |     8      |    1024    |          1          | 0.94 <br> [0.97, 0.86, 0.87]  |
-| DeepLabV3+ |                              |            |            |                     |                               |
-|  HookNet   |                              |            |            |                     |                               |
-|  HistNet   |                              |            |            |                     |                               |
+|   Method   |           Encoder            | Batch Size | Patch Size |          Spacing <br/> (mpp)           |                              Internal Test <BR> (Dice) <br> [BG, NDBE, DYS]                              | External Test <br> (Dice) |
+|:----------:|:----------------------------:|:----------:|:----------:|:--------------------------------------:|:--------------------------------------------------------------------------------------------------------:|:-------------------------:|
+|    UNet    |    ResNet34 <br> depth=5     |     8      |    1024    |                   1                    |                                      0.93 <br>  [0.97, 0.83, 0.86]                                       |
+|   UNet++   | EfficientNet-b4 <br> depth=5 |     8      |    1024    | 2 <br> <br> <br> 1 <br> <br> <br>  0.5 | 0.96 <br> [0.98 0.83 0.86] <br> <br>  0.94 <br> [0.97, 0.86, 0.87] <br> <br>  0.93 <br> [0.96 0.86 0.89] |
+| DeepLabV3+ |                              |            |            |                                        |                                                                                                          |
+|  HookNet   |                              |            |            |                                        |                                                                                                          |
+|  HistNet   |                              |            |            |                                        |                                                                                                          |
 
 
 ## References
 <a id="1">[1]</a> 
 M.J. van der Wel, (2019). 
-What makes an expert Barrett’s pathologist? Concordance and pathologist expertise within a digital review panel
 PhD thesis, Faculty of Medicine (AMC-UvA), December 2019.
 
 <a id="2">[2]</a> 

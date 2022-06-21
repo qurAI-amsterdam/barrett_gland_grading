@@ -17,7 +17,8 @@ wholeslidedata:
             batch_size: 8
             spacing: 1
             shape: [1024, 1024, 3]
-            
+
+        # samples random points from balanced annotations (default)
         point_sampler:
             attribute: RandomPointSampler
 
@@ -43,7 +44,7 @@ wholeslidedata:
 
 net:
     # model
-    encoder_name: 'resnet34'
+    encoder_name: 'efficientnet-b4'
     encoder_depth: 5
     encoder_weights: 'imagenet'
     n_channels: 3
@@ -51,6 +52,7 @@ net:
 
     # training
     learning_rate: 0.001
+    class_weights: [1, 10, 10]
     scheduler_step: 50
     scheduler_gamma: 0.1
     epochs: 150
