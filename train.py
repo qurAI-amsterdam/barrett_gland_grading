@@ -92,7 +92,7 @@ def train(run_name, experiments_dir, wandb_key):
                                                 step_size=train_config['scheduler_step'],
                                                 gamma=train_config['scheduler_gamma'])
 
-    weights = torch.tensor(train_config['class_weights'], device=device)
+    weights = torch.tensor(train_config['class_weights'], device=device, dtype=torch.float)
     print('Using weights: {}'.format(train_config['class_weights']))
     criterion = nn.CrossEntropyLoss(weight=weights)
 
@@ -154,7 +154,7 @@ def train(run_name, experiments_dir, wandb_key):
         train_metrics_mean = mean_metrics(train_metrics)
         validation_metrics_mean = mean_metrics(validation_metrics)
 
-        print("Train loss: {:.3f}, val loss: {:.3f}".format(train_metrics_mean['loss'], validation_metrics_mean['loss']))
+        print("Train loss: {}, val loss: {}".format(train_metrics_mean['loss'], validation_metrics_mean['loss']))
         print("Train dice: {}, val dice: {}".format(np.round(train_metrics_mean['dice per class'], decimals=2),
                                                     np.round(validation_metrics_mean['dice per class'], decimals=2)))
 
