@@ -103,14 +103,15 @@ def plot_pred_batch(x, y, y_hat, save_path=None, patches=3, h_pad=0.5, w_pad=-28
     x = crop_center(x, h, w)
 
     green_patch = mpatches.Patch(color='green', label='NDBE', alpha=0.5)
-    red_patch = mpatches.Patch(color='red', label='LGD/HGD', alpha=0.5)
+    orange_patch = mpatches.Patch(color='orange', label='LGD', alpha=0.5)
+    red_patch = mpatches.Patch(color='red', label='HGD', alpha=0.5)
 
     # show just the image
     fig, axes = plt.subplots(3, patches, figsize=(20, 14), squeeze=False)
-    plt.legend(handles=[green_patch, red_patch], bbox_to_anchor=(1.03, 1.0), loc='upper left', borderaxespad=0.,  prop={'size': 10})
-    plot_batch(axes, 0, x[:patches], np.zeros_like(y)[:patches], alpha=0.3, colors=colors_2)
-    plot_batch(axes, 1, x[:patches], y[:patches], alpha=0.3, colors=colors_2)
-    plot_batch(axes, 2, x[:patches], y_hat[:patches], alpha=0.3, colors=colors_2)
+    plt.legend(handles=[green_patch, orange_patch, red_patch], bbox_to_anchor=(1.03, 1.0), loc='upper left', borderaxespad=0.,  prop={'size': 10})
+    plot_batch(axes, 0, x[:patches], np.zeros_like(y)[:patches], alpha=0.3, colors=colors_1)
+    plot_batch(axes, 1, x[:patches], y[:patches], alpha=0.3, colors=colors_1)
+    plot_batch(axes, 2, x[:patches], y_hat[:patches], alpha=0.3, colors=colors_1)
     for ax in axes.flatten():
         ax.axes.xaxis.set_visible(False)
         ax.axes.yaxis.set_visible(False)
@@ -134,13 +135,13 @@ def plot_confusion_matrix(cf_matrix, save_path=None):
         none: saves the figure at the save path
     """
 
-    df_cm = pd.DataFrame(cf_matrix, index=[i for i in ['BG', 'NDBE', 'DYS']],
-                         columns=[i for i in ['BG', 'NDBE', 'DYS']])
+    df_cm = pd.DataFrame(cf_matrix, index=[i for i in ['BG', 'NDBE', 'LGD', 'HGD']],
+                         columns=[i for i in ['BG', 'NDBE', 'LGD', 'HGD']])
 
     plt.figure(figsize=(15, 10))
     with sns.plotting_context(font_scale=2):
         sns.heatmap(df_cm, annot=True, cmap="Blues", square=True, fmt='.2f')
-    plt.gca().set_yticklabels(labels=['BG', 'NDBE', 'DYS'], va='center')
+    plt.gca().set_yticklabels(labels=['BG', 'NDBE', 'LGD', 'HGD'], va='center')
     plt.gca().set_ylabel('True', labelpad=30)
     plt.gca().set_xlabel('Predicted', labelpad=30)
     if save_path:

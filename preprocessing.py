@@ -106,7 +106,6 @@ def get_preprocessing(preprocessing_fn=None):
 
     _transform.extend([
         albu.Lambda(image=transpose),
-        albu.Lambda(mask=to_dysplastic_vs_non_dysplastic),
         albu.Lambda(image=to_tensor_image, mask=to_tensor_mask),
     ])
     return albu.Compose(_transform)

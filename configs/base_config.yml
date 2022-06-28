@@ -15,7 +15,7 @@ wholeslidedata:
             
         batch_shape:
             batch_size: 8
-            spacing: 0.25
+            spacing: 0.5
             shape: [1024, 1024, 3]
 
         # samples random points from balanced annotations (default)
@@ -48,11 +48,11 @@ net:
     encoder_depth: 5
     encoder_weights: 'imagenet'
     n_channels: 3
-    n_classes: 3
+    n_classes: 4
 
     # training
     learning_rate: 0.001
-    class_weights: [1, 5, 5]
+    class_weights: [1, 5, 5, 5]
     scheduler_step: 75
     scheduler_gamma: 0.1
     epochs: 250

@@ -4,7 +4,6 @@ import torch
 import torch.nn as nn
 import numpy as np
 from wholeslidedata.iterators import create_batch_iterator
-from preprocessing import to_dysplastic_vs_non_dysplastic
 import os
 import argparse
 from utils import print_dataset_statistics, plot_pred_batch, plot_confusion_matrix
@@ -56,7 +55,7 @@ def train(run_name, experiments_dir, wandb_key):
 
     # log EVERYTHING with weights and biases
     os.environ["WANDB_API_KEY"] = wandb_key
-    wandb.init(project="Barrett's Gland Grading NDvsD",
+    wandb.init(project="Barrett's Gland Grading 3 Classes",
                dir=exp_dir,
                config={'data': {'sampling': wholeslide_config,
                                 'train data': train_data_dict,
@@ -92,9 +91,10 @@ def train(run_name, experiments_dir, wandb_key):
                                                 step_size=train_config['scheduler_step'],
                                                 gamma=train_config['scheduler_gamma'])
 
+    # weighted CCE and Dice Loss
     weights = torch.tensor(train_config['class_weights'], device=device, dtype=torch.float)
     print('Using weights: {}'.format(train_config['class_weights']))
-    criterion_cce = nn.CrossEntropyLoss()
+    criterion_cce = nn.CrossEntropyLoss(weight=weights)
     criterion_dice = smp.losses.DiceLoss(mode='multiclass', from_logits=True)
 
     for n in range(train_config['epochs']):
@@ -121,7 +121,7 @@ def train(run_name, experiments_dir, wandb_key):
             y = y.cpu().detach().numpy().flatten()
             y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
             train_metrics[idx] = {'loss': loss.item(),
-                                  'dice per class': f1_score(y, y_hat, average=None, labels=[0, 1, 2]),
+                                  'dice per class': f1_score(y, y_hat, average=None, labels=[0, 1, 2, 3]),
                                   'dice weighted': f1_score(y, y_hat, average='weighted')}
 
         # validate
@@ -140,14 +140,14 @@ def train(run_name, experiments_dir, wandb_key):
 
                 # store one example: image not normalized but augmented, mask augmented and tissue masked
                 example_val_batch_x = x_np
-                example_val_batch_y = to_dysplastic_vs_non_dysplastic(y_np)
+                example_val_batch_y = y_np
                 example_val_batch_y_hat = y_hat.cpu().detach().numpy()
 
                 # compute dice
                 y = y.cpu().detach().numpy().flatten()
                 y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
                 validation_metrics[idx] = {'loss': loss.item(),
-                                           'dice per class': f1_score(y, y_hat, average=None, labels=[0, 1, 2]),
+                                           'dice per class': f1_score(y, y_hat, average=None, labels=[0, 1, 2, 3]),
                                            'dice weighted': f1_score(y, y_hat, average='weighted'),
                                            'confusion matrix': confusion_matrix(y, y_hat, normalize='true')}
 
@@ -171,15 +171,15 @@ def train(run_name, experiments_dir, wandb_key):
         wandb.log({'Epoch': n + 1,
                    'train loss': train_metrics_mean['loss'], 'train dice': train_metrics_mean['dice weighted'],
                    'val loss': validation_metrics_mean['loss'], 'val dice': validation_metrics_mean['dice weighted'],
-                   'val dice BG': val_dices[0], 'val dice NDBE': val_dices[1], 'val dice DYS': val_dices[2],
+                   'val dice BG': val_dices[0], 'val dice NDBE': val_dices[1], 'val dice LGD': val_dices[2], 'val dice HGD': val_dices[3],
                    'prediction': wandb.Image(pred_save_path), 'confusion matrix': wandb.Image(cm_save_path)}
                   )
 
-        # save every epoch
+        # save every epoch, save dice for all but background
         os.makedirs(os.path.join(exp_dir, 'checkpoints'), exist_ok=True)
-        dice_ndbe_dys = (val_dices[1] + val_dices[2]) / 2
+        dice_no_bg = np.mean(val_dices[1:])
         save_dir = os.path.join(exp_dir, 'checkpoints', 'model_epoch_{}_loss_{:.3f}_dice_{:.3f}.pt'.
-                                format(n + 1, validation_metrics_mean['loss'], dice_ndbe_dys))
+                                format(n + 1, validation_metrics_mean['loss'], dice_no_bg))
         torch.save(model.module.state_dict(), save_dir)
 
         # scheduler step
@@ -189,7 +189,7 @@ def train(run_name, experiments_dir, wandb_key):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--run_name", type=str, default='test', help="the name of this experiment")
-    parser.add_argument("--exp_dir", type=str, default='/data/archief/AMC-data/Barrett/experiments/barrett_gland_grading/NDvsD',
+    parser.add_argument("--exp_dir", type=str, default='/data/archief/AMC-data/Barrett/experiments/barrett_gland_grading/3_classes',
                         help="experiment dir")
     parser.add_argument("--wandb_key", type=str, help="key for logging to weights and biases")
     args = parser.parse_args()
