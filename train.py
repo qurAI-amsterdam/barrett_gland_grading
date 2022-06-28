@@ -94,7 +94,8 @@ def train(run_name, experiments_dir, wandb_key):
 
     weights = torch.tensor(train_config['class_weights'], device=device, dtype=torch.float)
     print('Using weights: {}'.format(train_config['class_weights']))
-    criterion = nn.CrossEntropyLoss(weight=weights)
+    criterion_cce = nn.CrossEntropyLoss()
+    criterion_dice = smp.losses.DiceLoss(mode='multiclass', from_logits=True)
 
     for n in range(train_config['epochs']):
 
@@ -112,7 +113,7 @@ def train(run_name, experiments_dir, wandb_key):
             # forward and update
             optimizer.zero_grad()
             y_hat = model.forward(x)
-            loss = criterion(y_hat, y)
+            loss = criterion_cce(y_hat, y) + criterion_dice(y_hat, y)
             loss.backward()
             optimizer.step()
 
@@ -135,7 +136,7 @@ def train(run_name, experiments_dir, wandb_key):
 
                 # forward and validate
                 y_hat = model.forward(x)
-                loss = criterion(y_hat, y)
+                loss = criterion_cce(y_hat, y) + criterion_dice(y_hat, y)
 
                 # store one example: image not normalized but augmented, mask augmented and tissue masked
                 example_val_batch_x = x_np
@@ -160,8 +161,8 @@ def train(run_name, experiments_dir, wandb_key):
 
         # plot predictions on the validation set
         os.makedirs(os.path.join(exp_dir, 'val_predictions'), exist_ok=True)
-        pred_save_path = os.path.join(exp_dir, 'val_predictions', 'predictions_epoch_{}.png'.format(n))
-        cm_save_path = os.path.join(exp_dir, 'val_predictions', 'confusion_matrix_epoch_{}.png'.format(n))
+        pred_save_path = os.path.join(exp_dir, 'val_predictions', 'predictions_epoch_{}.png'.format(n + 1))
+        cm_save_path = os.path.join(exp_dir, 'val_predictions', 'confusion_matrix_epoch_{}.png'.format(n + 1))
         plot_pred_batch(example_val_batch_x, example_val_batch_y, example_val_batch_y_hat, save_path=pred_save_path)
         plot_confusion_matrix(validation_metrics_mean['confusion matrix'], save_path=cm_save_path)
 
