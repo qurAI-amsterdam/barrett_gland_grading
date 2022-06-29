@@ -19,7 +19,7 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 - [x] Train standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
 - [x] Visualization and evaluation (dice and pixel level confusion matrix), preferably in a notebook.
      - [ ] Stitch results back together on slide/biopsy level (currently evaluating with sliding window over the ROI's).
-- [ ] Create a processor: takes in WSI, outputs a mask (graded glands).
+- [ ] Create a processor: takes in WSI, outputs a mask (graded glands). See [[5]](#5) for a WSI inference technique.
 - [ ] Deploy on Grand-Challenge.
 - [ ] Experiments:
   * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
