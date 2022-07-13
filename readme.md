@@ -34,10 +34,10 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 * Rank tiles according to segmentation probabilities. 
 * Train a standard aggregation model (Transformer, Attention-Pooling) [[2]](#1).
 
-  Each slide s is a sample: $(\textbf{x}, y)$:
+  Each slide $s$ is a sample $(\textbf{x}, y)$:
 
-      * $\textbf{x}$: sequence of top N suspicious tiles for a slide s
-      * y: label of slide s
+      $\textbf{x}$: sequence of top N suspicious tiles for slide $s$
+      $y$: dysplasia label of slide $s$
 * Develop full inference pipeline.
 
 ### Datasets 
