@@ -15,7 +15,7 @@ wholeslidedata:
             
         batch_shape:
             batch_size: 8
-            spacing: 0.5
+            spacing: 1
             shape: [1024, 1024, 3]
 
         # samples random points from balanced annotations (default)
@@ -44,6 +44,7 @@ wholeslidedata:
 
 net:
     # model
+    segmentation_model: 'unet++'
     encoder_name: 'efficientnet-b4'
     encoder_depth: 5
     encoder_weights: 'imagenet'
@@ -52,10 +53,9 @@ net:
 
     # training
     learning_rate: 0.001
-    class_weights: [1, 5, 5, 5]
-    scheduler_step: 75
-    scheduler_gamma: 0.1
-    epochs: 250
+    scheduler_factor: 0.2
+    scheduler_patience: 30
+    epochs: 300
     train_batches: 50       # 50 * 8 = 400 train patches
     val_batches: 25         # 25 * 8 = 200 validation patches
     gpus: 2

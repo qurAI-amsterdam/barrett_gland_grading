@@ -12,25 +12,15 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 ![](images/examples_grading_BE.png)
 
 
-### Outline of the project
-
-#### Gland level
+## Outline of the project
+### (1) Segmentation model for: ND vs D and NDBE vs LGD vs HGD
 - [x] Split data for training, evaluation and testing. We keep Bolero apart as hold out test set.
-- [x] Train standard baseline segmentation models for grading into: NDBE vs Dysplasia (LGD and HGD).
+- [x] Train standard baseline segmentation models for grading into: ND vs D and NDBE vs LGD vs HGD.
 - [x] Visualization and evaluation (dice and pixel level confusion matrix), preferably in a notebook.
-     - [ ] Stitch results back together on slide/biopsy level (currently evaluating with sliding window over the ROI's).
-- [ ] Create a processor: takes in WSI, outputs a mask (graded glands). See [[5]](#5) for a WSI inference technique.
+     - [ ] Stitch results back together on slide level (currently evaluating with sliding window over the ROI's).
+- [ ] Create a processor: takes in WSI, outputs a segmentation mask (.tif).
 - [ ] Deploy on Grand-Challenge.
-- [ ] Experiments:
-  * Context aggregation networks for segmentation in pathology: HistNet [[7]](#7), HookNet [[3]](#3), RAENet [[4]](#4).
-  * Roto-Translation Equivariant CNN's [[6]](#6).
 
-#### Biopsy level
-- [x] Create a reader study to collect biopsy level grades from multiple pathologists: [GC Reader Study](https://grand-challenge.org/reader-studies/barretts-grading/)
-     - [ ] Add P53 in the viewer.
-- [ ] Inspiration: [SlideGraph+](https://arxiv.org/abs/2110.06042), [Self Supervised VIT](https://arxiv.org/abs/2203.00585), [DeepSmile](https://arxiv.org/abs/2107.09405)
-
-### Segmentation pipeline for gland grading into: NDBE, DYS
 **For on fly patch extraction we use:** https://github.com/DIAGNijmegen/pathology-whole-slide-data.
   * Includes configuration for patch extraction such as batch size, patch size, spacing.
   * Includes different strategies to sample patches from the WSI (balanced, random, slidingwindow).
@@ -38,6 +28,17 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 
 **Data Augmentation:** 
   * Rotates, flips, gamma transform and color jitter (saturation, contrast, hue)
+
+### (2) Slide-Level Aggregation
+* Extract tissue containing tiles in WSI's. 
+* Rank tiles according to segmentation probabilities. 
+* Train a standard aggregation model (Transformer, Attention-Pooling) [[2]](#1).
+
+  Each slide s is a sample: $(\textbf{x}, y)$:
+
+      * $\textbf{x}$: sequence of top N suspicious tiles for a slide s
+      * y: label of slide s
+* Develop full inference pipeline.
 
 ### Datasets 
 Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories: NDBE, LGD and HGD.
@@ -53,19 +54,25 @@ Case or slide level annotations were not provided yet. The relevant datasets on 
 
 
 ### Experiments
-We randomly split the development set of 295 WSIs in a train, validation and test set (236/29/30), in which each set roughly has the same pixel level percentages of NDBE (~75%), LGD (~12%) and HGD (~12%).
-
+We randomly split the development set of 295 WSIs in a train, validation and test set (236/29/30), in which each set roughly has the same pixel level percentages of NDBE (~75%), LGD (~12%) and HGD (~12%). 
 **Evaluation:**
   * Quantitative with DICE/F1 compared to the ground truth annotations.
   * Qualitative assessment/feedback from Sybren (other pathologists?).
-  
+
+#### ND vs D
 |   Method   |           Encoder            | Batch Size | Patch Size |          Spacing <br/> (mpp)           |                              Internal Test <BR> (Dice) <br> [BG, NDBE, DYS]                              | External Test <br> (Dice) |
 |:----------:|:----------------------------:|:----------:|:----------:|:--------------------------------------:|:--------------------------------------------------------------------------------------------------------:|:-------------------------:|
 |    UNet    |    ResNet34 <br> depth=5     |     8      |    1024    |                   1                    |                                      0.93 <br>  [0.97, 0.83, 0.86]                                       |
 |   UNet++   | EfficientNet-b4 <br> depth=5 |     8      |    1024    | 2 <br> <br> <br> 1 <br> <br> <br>  0.5 | 0.96 <br> [0.98 0.83 0.86] <br> <br>  0.94 <br> [0.97, 0.86, 0.87] <br> <br>  0.93 <br> [0.96 0.86 0.89] |
-| DeepLabV3+ |                              |            |            |                                        |                                                                                                          |
-|  HookNet   |                              |            |            |                                        |                                                                                                          |
-|  HistNet   |                              |            |            |                                        |                                                                                                          |
+| DeepLabV3+ |                              |            |            |                                        |                                                     
+
+
+#### NDBE vs LGD vs HGD
+|   Method   | Encoder | Batch Size | Patch Size |          Spacing <br/> (mpp)           | Internal Test <BR> (Dice) <br> [BG, NDBE, LGD, HGD] | External Test <br> (Dice) |
+|:----------:|:-------:|:----------:|:----------:|:--------------------------------------:|:---------------------------------------------------:|:-------------------------:|
+|    UNet    |         |     8      |    1024    |                   1                    |                                                     |
+|   UNet++   |         |     8      |    1024    | 2 <br> <br> <br> 1 <br> <br> <br>  0.5 |                                                     |
+| DeepLabV3+ |         |            |            |                                        |                                                                                                                                                                                                                                             
 
 
 ## References
@@ -74,31 +81,6 @@ M.J. van der Wel, (2019).
 PhD thesis, Faculty of Medicine (AMC-UvA), December 2019.
 
 <a id="2">[2]</a> 
-Tellez et. al, (2018). 
-Whole-Slide Mitosis Detection in H&E Breast Histology Using PHH3 as a Reference to Train Distilled Stain-Invariant Convolutional Networks.
-IEEE Transactions on Medical Imaging, Volume 37, Issue 9, September 2018.
-
-<a id="3">[3]</a> 
-Rijthoven et. al, (2020). 
-HookNet: multi-resolution convolutional neural networks for semantic segmentation in histopathology whole-slide images. 
-Medical Image Analysis, Volume 68, February 2021.
-
-<a id="4">[4]</a> 
-Patel et. al, (2022). 
-RAE-Net: a deep learning system for staging of estrous cycle. 
-Proceedings of SPIE, Volume 1203, May 2022.
-
-<a id="5">[5]</a> 
-De Bel et. al, (2019). 
-Stain-Transforming Cycle-Consistent Generative Adversarial Networks for Improved Segmentation of Renal Histopathology.
-Proceedings of The 2nd International Conference on Medical Imaging with Deep Learning, PMLR 102:151-163, 2019.
-
-<a id="6">[6]</a> 
-Lafarge et. al, (2020). 
-Roto-Translation Equivariant Convolutional Networks: Application to Histopathology Image Analysis
-Medical Image Analysis, Volume 68, Article 101849, Oct 2020.
-
-<a id="7">[7]</a> 
-Samanta et. al, (2021). 
-Context Aggregation Network For Semantic Labeling In Histopathology Images.
-2021 IEEE 18th International Symposium on Biomedical Imaging (ISBI), April 2021.
+Ilse et. al, (2018).
+Attention-based Deep Multiple Instance Learning
+Proceedings of the 35th International Conference on MachineLearning, Stockholm, Sweden, PMLR 80, 2018.

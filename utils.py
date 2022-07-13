@@ -1,3 +1,4 @@
+import torch
 from wholeslidedata.samplers.utils import plot_mask
 from matplotlib import pyplot as plt
 from pprint import pprint
@@ -94,24 +95,34 @@ def plot_pred_batch(x, y, y_hat, save_path=None, patches=3, h_pad=0.5, w_pad=-28
         none: saves the figure at the save patch
     """
     patches = min(len(x), patches)
+    n_classes = y_hat.shape[1]
 
     # get the prediction
-    y_hat = np.argmax(y_hat, axis=1)
+    y_hat_hard = np.argmax(y_hat, axis=1)
 
     # center crop the image
-    _, h, w = y_hat.shape
+    _, h, w = y_hat_hard.shape
     x = crop_center(x, h, w)
-
-    green_patch = mpatches.Patch(color='green', label='NDBE', alpha=0.5)
-    orange_patch = mpatches.Patch(color='orange', label='LGD', alpha=0.5)
-    red_patch = mpatches.Patch(color='red', label='HGD', alpha=0.5)
 
     # show just the image
     fig, axes = plt.subplots(3, patches, figsize=(20, 14), squeeze=False)
-    plt.legend(handles=[green_patch, orange_patch, red_patch], bbox_to_anchor=(1.03, 1.0), loc='upper left', borderaxespad=0.,  prop={'size': 10})
-    plot_batch(axes, 0, x[:patches], np.zeros_like(y)[:patches], alpha=0.3, colors=colors_1)
-    plot_batch(axes, 1, x[:patches], y[:patches], alpha=0.3, colors=colors_1)
-    plot_batch(axes, 2, x[:patches], y_hat[:patches], alpha=0.3, colors=colors_1)
+
+    if n_classes == 4:
+        green_patch = mpatches.Patch(color='green', label='NDBE', alpha=0.5)
+        orange_patch = mpatches.Patch(color='orange', label='LGD', alpha=0.5)
+        red_patch = mpatches.Patch(color='red', label='HGD', alpha=0.5)
+        plt.legend(handles=[green_patch, orange_patch, red_patch], bbox_to_anchor=(1.03, 1.0), loc='upper left', borderaxespad=0.,  prop={'size': 10})
+        colors = colors_1
+    else:
+        green_patch = mpatches.Patch(color='green', label='NDBE', alpha=0.5)
+        red_patch = mpatches.Patch(color='red', label='DYS', alpha=0.5)
+        plt.legend(handles=[green_patch, red_patch], bbox_to_anchor=(1.03, 1.0), loc='upper left', borderaxespad=0., prop={'size': 10})
+        colors = colors_2
+
+    plot_batch(axes, 0, x[:patches], np.zeros_like(y)[:patches], alpha=0.3, colors=colors)
+    plot_batch(axes, 1, x[:patches], y[:patches], alpha=0.3, colors=colors)
+    plot_batch(axes, 2, x[:patches], y_hat_hard[:patches], alpha=0.3, colors=colors)
+
     for ax in axes.flatten():
         ax.axes.xaxis.set_visible(False)
         ax.axes.yaxis.set_visible(False)
