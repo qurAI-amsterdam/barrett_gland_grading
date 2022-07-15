@@ -30,15 +30,15 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
   * Rotates, flips, gamma transform and color jitter (saturation, contrast, hue)
 
 ### (2) Slide-Level Aggregation
-* Extract tissue containing tiles in WSI's. 
-* Rank tiles according to segmentation probabilities for dysplasia. 
-* Train a standard aggregation model (Transformer, Attention-Pooling) [[2]](#1).
+- [x] Extract tissue containing tiles in WSI's. 
+- [ ] Rank tiles according to segmentation probabilities for dysplasia. 
+- [ ] Train a standard aggregation model (Transformer, Attention-Pooling) [[2]](#1).
 
   Each slide $s$ is a sample $(\textbf{x}, y)$:
   
    * $\textbf{x}$: sequence of top N suspicious tiles for slide $s$
    * $y$: dysplasia label of slide $s$
-* Develop full inference pipeline.
+- [ ] Develop full inference pipeline.
 
 ### Datasets 
 Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories: NDBE, LGD and HGD.
@@ -62,17 +62,16 @@ We randomly split the development set of 295 WSIs in a train, validation and tes
 #### ND vs D
 |   Method   |           Encoder            | Batch Size | Patch Size |          Spacing <br/> (mpp)           |                              Internal Test <BR> (Dice) <br> [BG, NDBE, DYS]                              | External Test <br> (Dice) |
 |:----------:|:----------------------------:|:----------:|:----------:|:--------------------------------------:|:--------------------------------------------------------------------------------------------------------:|:-------------------------:|
-|    UNet    |    ResNet34 <br> depth=5     |     8      |    1024    |                   1                    |                                      0.93 <br>  [0.97, 0.83, 0.86]                                       |
-|   UNet++   | EfficientNet-b4 <br> depth=5 |     8      |    1024    | 2 <br> <br> <br> 1 <br> <br> <br>  0.5 | 0.96 <br> [0.98 0.83 0.86] <br> <br>  0.94 <br> [0.97, 0.86, 0.87] <br> <br>  0.93 <br> [0.96 0.86 0.89] |
-| DeepLabV3+ |                              |            |            |                                        |                                                     
+|    UNet    |    ResNet34 <br> depth=5     |     8      |    1024    |                   1                    |                                      0.93 <br>  [0.97, 0.83, 0.86]                                       |                           |
+|   UNet++   | EfficientNet-b4 <br> depth=5 |     8      |    1024    | 2 <br> <br> <br> 1 <br> <br> <br>  0.5 | 0.96 <br> [0.98 0.83 0.86] <br> <br>  0.94 <br> [0.97, 0.86, 0.87] <br> <br>  0.93 <br> [0.96 0.86 0.89] |                           |
 
 
 #### NDBE vs LGD vs HGD
-|   Method   | Encoder | Batch Size | Patch Size |          Spacing <br/> (mpp)           | Internal Test <BR> (Dice) <br> [BG, NDBE, LGD, HGD] | External Test <br> (Dice) |
-|:----------:|:-------:|:----------:|:----------:|:--------------------------------------:|:---------------------------------------------------:|:-------------------------:|
-|    UNet    |         |     8      |    1024    |                   1                    |                                                     |
-|   UNet++   |         |     8      |    1024    | 2 <br> <br> <br> 1 <br> <br> <br>  0.5 |                                                     |
-| DeepLabV3+ |         |            |            |                                        |                                                                                                                                                                                                                                             
+| Method |           Encoder            | Batch Size | Patch Size |          Spacing <br/> (mpp)           | Internal Test <BR> (Dice) <br> [BG, NDBE, LGD, HGD] | External Test <br> (Dice) |
+|:------:|:----------------------------:|:----------:|:----------:|:--------------------------------------:|:---------------------------------------------------:|:-------------------------:|
+|  UNet  |                              |     8      |    1024    |                   1                    |                                                     |                           |
+| UNet++ | EfficientNet-b4 <br> depth=5 |     8      |    1024    | 2 <br> <br> <br> 1 <br> <br> <br>  0.5 |                                                     |                           |
+|                                                                                                                                                                                                                                           
 
 
 ## References
