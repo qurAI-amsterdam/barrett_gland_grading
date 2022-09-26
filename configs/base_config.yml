@@ -1,6 +1,6 @@
 wholeslidedata:
     default:
-        yaml_source: split.yml
+        yaml_source: '/home/mbotros/code/barrett_gland_grading/configs/split.yml'
         seed: 2
         associations:
             exact_match: True
@@ -14,9 +14,9 @@ wholeslidedata:
             filters: ['xml']
             
         batch_shape:
-            batch_size: 8
+            batch_size: 32
             spacing: 1
-            shape: [1024, 1024, 3]
+            shape: [512, 512, 3]
 
         # samples random points from balanced annotations (default)
         point_sampler:
@@ -47,7 +47,7 @@ net:
     segmentation_model: 'unet++'
     encoder_name: 'efficientnet-b4'
     encoder_depth: 5
-    encoder_weights: 'imagenet'
+    encoder_weights: null
     n_channels: 3
     n_classes: 4
 
@@ -55,8 +55,8 @@ net:
     learning_rate: 0.001
     scheduler_factor: 0.2
     scheduler_patience: 30
-    epochs: 300
-    train_batches: 50       # 50 * 8 = 400 train patches
-    val_batches: 25         # 25 * 8 = 200 validation patches
+    epochs: 100
+    train_batches: 32       # 32 * 32 = 1024 train patches
+    val_batches: 8          # 8 * 32 = 256 validation patches
     gpus: 2
     cpus: 1

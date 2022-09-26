@@ -23,6 +23,8 @@ def load_segmentation_model(train_config, activation=None):
         activation: activation applied at the end
 
     """
+    print('Loading model: {}, weights: {}'.format(train_config['segmentation_model'], train_config['encoder_weights']))
+
     if train_config['segmentation_model'] == 'unet++':
         model = smp.UnetPlusPlus(
             encoder_name=train_config['encoder_name'],
@@ -51,24 +53,16 @@ def load_segmentation_model(train_config, activation=None):
     return model
 
 
-def train(run_name, experiments_dir, wandb_key):
+def train(run_name, exp_dir, wandb_key):
     """Training script for gland grading.
 
     Args:
         run_name: the name of this experiments run.
-        experiments_dir: the directory where to store a copy of the source code, weights and intermediate results.
+        exp_dir: the directory where to store the weights and intermediate results.
         wandb_key: weights and biases key for remote logging.
     """
     # config path
-    base_dir = '/home/mbotros/code/barrett_gland_grading/'
-    user_config = os.path.join(base_dir, 'configs/base_config.yml')
-
-    # make experiment dir & copy source files (config and training script)
-    exp_dir = os.path.join(experiments_dir, run_name)
-    print('\nExperiment stored at: {}'.format(exp_dir))
-    copy_tree(os.path.join(base_dir, 'configs'), os.path.join(exp_dir, 'src', 'configs'))
-    copy_tree(os.path.join(base_dir, 'nn_archs'), os.path.join(exp_dir, 'src', 'nn_archs'))
-    shutil.copy2(os.path.join(base_dir, 'train_segmentation.py'), os.path.join(exp_dir, 'src'))
+    user_config = os.path.join(exp_dir, 'user_config.yml')
 
     # load network config and store in experiment dir
     print('Loaded config: {}'.format(user_config))
@@ -108,6 +102,7 @@ def train(run_name, experiments_dir, wandb_key):
 
     # apply specific preprocessing when using pretrained weights
     if train_config['encoder_weights']:
+        print('Applying preprocessing for {} with {}'.format(train_config['encoder_name'], train_config['encoder_weights']))
         preprocessing = get_preprocessing(smp.encoders.get_preprocessing_fn(
             train_config['encoder_name'], train_config['encoder_weights']))
     else:
@@ -116,11 +111,12 @@ def train(run_name, experiments_dir, wandb_key):
     optimizer = torch.optim.Adam(model.parameters(), lr=train_config['learning_rate'])
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer,
                                                            factor=train_config['scheduler_factor'],
-                                                           patience=train_config['scheduler_patience'])
+                                                           patience=train_config['scheduler_patience'],
+                                                           verbose=True)
 
-    # CCE and Dice Loss
-    criterion_cce = nn.CrossEntropyLoss()
+    # Dice Loss
     criterion_dice = smp.losses.DiceLoss(mode='multiclass', from_logits=True)
+    best_dice = 0
 
     for n in range(train_config['epochs']):
 
@@ -139,7 +135,7 @@ def train(run_name, experiments_dir, wandb_key):
             # forward and update
             optimizer.zero_grad()
             y_hat = model.forward(x)
-            train_loss = criterion_cce(y_hat, y) + criterion_dice(y_hat, y)
+            train_loss = criterion_dice(y_hat, y)
             train_loss.backward()
             optimizer.step()
 
@@ -162,7 +158,7 @@ def train(run_name, experiments_dir, wandb_key):
 
                 # forward and validate
                 y_hat = model.forward(x)
-                val_loss = criterion_cce(y_hat, y) + criterion_dice(y_hat, y)
+                val_loss = criterion_dice(y_hat, y)
 
                 # store one example: image not normalized but augmented, mask augmented and tissue masked
                 example_val_batch_x = x_np
@@ -202,15 +198,20 @@ def train(run_name, experiments_dir, wandb_key):
                    'prediction': wandb.Image(pred_save_path), 'confusion matrix': wandb.Image(cm_save_path)}
                   )
 
-        # save every epoch, save dice for all but background
+        # save if better dice for all but background
         os.makedirs(os.path.join(exp_dir, 'checkpoints'), exist_ok=True)
         dice_no_bg = np.mean(val_dices[1:])
-        save_dir = os.path.join(exp_dir, 'checkpoints', 'model_epoch_{}_loss_{:.3f}_dice_{:.3f}.pt'.
-                                format(n + 1, validation_metrics_mean['loss'], dice_no_bg))
-        torch.save(model.module.state_dict(), save_dir)
+
+        if dice_no_bg > best_dice:
+            best_dice = dice_no_bg
+            save_dir = os.path.join(exp_dir, 'checkpoints', 'best_model.pt')
+            print('Saving model to: {}.'.format(save_dir))
+            torch.save(model.module.state_dict(), save_dir)
 
         # scheduler step
         scheduler.step(val_loss)
+
+    wandb.finish()
 
 
 if __name__ == '__main__':
