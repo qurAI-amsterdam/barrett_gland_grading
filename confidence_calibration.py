@@ -45,6 +45,23 @@ def calc_bins(y_true, y_pred, num_bins=10):
     return bins, bin_accs, bin_confs, bin_sizes
 
 
+def brier_score(y_true, y_pred):
+    """ Compute the Brier score.
+
+    Args:
+        y_true:
+        y_pred:
+
+    Returns:
+
+    """
+
+    # validate probs
+    _validate_probabilities(y_pred)
+
+    return np.mean()
+
+
 def ece(y_true, y_pred):
     """ Computes the Expected Calibration Error.
 
@@ -76,7 +93,7 @@ def avg_entropy_sk(y_pred, epsilon=1e-5):
         epsilon: small number for computation
 
     Returns: for every
-        avg_entropy_sk: (C, )
+        avg_entropy_sk: (B, C)
     """
     # validate probabilities
     _validate_probabilities(y_pred)

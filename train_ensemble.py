@@ -46,9 +46,10 @@ class Ensemble:
         Args:
             x:
                 torch.tensor: (B, H, W)
+            y:
 
         Returns:
-            y_avg_prob: logits
+            y_avg_prob:
                 np.array (B, C, H, W)
         """
 
