@@ -132,25 +132,29 @@ def plot_pred_batch(x, y, y_hat, save_path=None, patches=3, h_pad=0.5, w_pad=-28
         plt.show()
 
 
-def plot_confusion_matrix(cf_matrix, save_path=None):
+def plot_confusion_matrix(cf_matrix, save_path=None, pixel_level=True):
     """ Plots the confusion matrix
 
     Args:
         cf_matrix: the confusion matrix to plot
         save_path: location where to store the plot
         plot: whether to plot it of save it
+        pixel_level: whether to include bg
 
     Returns:
         none: saves the figure at the save path
     """
+    if pixel_level:
+        labels = ['BG', 'NDBE', 'LGD', 'HGD']
+    else:
+        labels = ['NDBE', 'LGD', 'HGD']
 
-    df_cm = pd.DataFrame(cf_matrix, index=[i for i in ['BG', 'NDBE', 'LGD', 'HGD']],
-                         columns=[i for i in ['BG', 'NDBE', 'LGD', 'HGD']])
+    df_cm = pd.DataFrame(cf_matrix, index=labels, columns=labels)
 
     plt.figure(figsize=(15, 10))
     with sns.plotting_context(font_scale=2):
         sns.heatmap(df_cm, annot=True, cmap="Blues", square=True, fmt='.2f')
-    plt.gca().set_yticklabels(labels=['BG', 'NDBE', 'LGD', 'HGD'], va='center')
+    plt.gca().set_yticklabels(labels=labels, va='center')
     plt.gca().set_ylabel('True', labelpad=30)
     plt.gca().set_xlabel('Predicted', labelpad=30)
     if save_path:
