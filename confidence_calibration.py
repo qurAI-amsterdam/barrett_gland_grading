@@ -4,6 +4,7 @@ import matplotlib.patches as mpatches
 from utils import colors_1, colors_2
 from wholeslidedata.samplers.utils import plot_mask
 from metrics_lib import _validate_probabilities
+from sklearn.metrics import log_loss
 
 
 def calc_bins(y_true, y_pred, num_bins=10):
@@ -45,21 +46,52 @@ def calc_bins(y_true, y_pred, num_bins=10):
     return bins, bin_accs, bin_confs, bin_sizes
 
 
-def brier_score(y_true, y_pred):
-    """ Compute the Brier score.
+def nll_score(y_true, y_pred):
+    """ Own implementation of NLL.
 
     Args:
-        y_true:
-        y_pred:
+        y_true: (N,)
+        y_pred: (N, C)
 
     Returns:
+        nll: (1, )
 
     """
-
     # validate probs
     _validate_probabilities(y_pred)
 
-    return np.mean()
+    num_samples = y_pred.shape[0]
+    num_classes = y_pred.shape[-1]
+
+    # to one hot
+    y_true = np.eye(num_classes)[y_true]
+
+    # compute nll
+    nll = -np.sum(np.log(y_pred) * y_true) / num_samples
+    return nll
+
+
+def brier_score(y_true, y_pred):
+    """ Computes the normalized Brier score.
+
+    Args:
+        y_true: (N,)
+        y_pred: (N, C)
+
+    Returns:
+        norm_brier_score: (1, )
+
+    """
+    # validate probs
+    _validate_probabilities(y_pred)
+    num_classes = y_pred.shape[-1]
+
+    # to one hot
+    y_true = np.eye(num_classes)[y_true]
+
+    # compute normalized brier score
+    norm_brier_score = np.mean(np.square(y_pred - y_true))
+    return norm_brier_score
 
 
 def ece(y_true, y_pred):
@@ -71,8 +103,6 @@ def ece(y_true, y_pred):
 
     Returns:
         ece: (1, )
-
-
     """
     ece = 0
     bins, bin_accs, bin_confs, bin_sizes = calc_bins(y_true, y_pred)
@@ -88,12 +118,11 @@ def avg_entropy_sk(y_pred, epsilon=1e-5):
     """ Computes the average of pixel-wise entropy values over the predicted foreground.
 
     Args:
-        y_pred:
-            np.array: (N, C)
+        y_pred: (N, C)
         epsilon: small number for computation
 
-    Returns: for every
-        avg_entropy_sk: (B, C)
+    Returns:
+        avg_entropy_sk: (C, )
     """
     # validate probabilities
     _validate_probabilities(y_pred)
@@ -126,7 +155,6 @@ def plot_reliability_diagram(y_true, y_pred, ax):
 
     Returns:
     """
-    ece_ = ece(y_true, y_pred)
     bins, bin_accs, bin_confs, bin_sizes = calc_bins(y_true, y_pred)
 
     # x/y limits
@@ -155,7 +183,10 @@ def plot_reliability_diagram(y_true, y_pred, ax):
     outputs_patch = mpatches.Patch(color='b', label='Outputs')
     gaps_patch = mpatches.Patch(color='r', alpha=0.4, hatch='\\', label='Gaps')
 
-    plt.legend(handles=[outputs_patch, gaps_patch], title='ECE: {:.2f}'.format(ece_ * 100))
+    plt.legend(handles=[outputs_patch, gaps_patch], title='ECE: {:.2f}\nNLL: {:.2f}\nBrier: {:.2f}'.format(
+        ece(y_true, y_pred) * 100,
+        brier_score(y_true, y_pred),
+        log_loss(y_true, y_pred, labels=[0, 1, 2, 3])))
     plt.show()
 #     plt.savefig('calibrated_network.png', bbox_inches='tight')
 
@@ -181,6 +212,9 @@ def plot_class_probabilities_sample(y_true, y_pred):
     axes[0].set_xlabel('Class Probability', fontsize=18)
     axes[0].set_ylabel('No. of pixels', fontsize=18)
     axes[0].legend(fontsize=15)
+    axes[0].set_title('Average Entropy: {}'.format(
+        tuple(np.round(avg_entropy_sk(y_pred), decimals=2)),
+        fontsize=15))
     axes[0].tick_params(axis='both', labelsize=18, pad=5)
 
     # plot reliability diagram

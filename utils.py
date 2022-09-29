@@ -1,4 +1,3 @@
-import torch
 from wholeslidedata.samplers.utils import plot_mask
 from matplotlib import pyplot as plt
 from pprint import pprint
@@ -22,7 +21,6 @@ def load_config(user_config):
 
 # dataset utilities
 def print_dataset_statistics(dataset, show_all_files=False):
-
     if show_all_files:
         pprint(dataset.annotations_per_label_per_key)
 
