@@ -47,7 +47,7 @@ net:
     segmentation_model: 'unet++'
     encoder_name: 'efficientnet-b4'
     encoder_depth: 5
-    encoder_weights: null
+    encoder_weights: 'imagenet'
     n_channels: 3
     n_classes: 4
 

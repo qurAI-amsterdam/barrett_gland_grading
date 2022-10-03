@@ -8,7 +8,7 @@ import os
 import argparse
 from utils import print_dataset_statistics, plot_pred_batch, plot_confusion_matrix
 from tqdm import tqdm
-from sklearn.metrics import f1_score, confusion_matrix
+from sklearn.metrics import f1_score, confusion_matrix, cohen_kappa_score
 import wandb
 from utils import mean_metrics, load_config
 import segmentation_models_pytorch as smp
@@ -31,7 +31,8 @@ def load_segmentation_model(train_config, activation=None):
             encoder_weights=train_config['encoder_weights'],
             in_channels=train_config['n_channels'],
             classes=train_config['n_classes'],
-            activation=activation
+            activation=activation,
+            aux_params={'classes': 4, 'pooling': 'max', 'activation': None}
         )
     elif train_config['segmentation_model'] == 'deeplabv3+':
         model = smp.DeepLabV3Plus(
@@ -53,16 +54,17 @@ def load_segmentation_model(train_config, activation=None):
     return model
 
 
-def train(run_name, exp_dir, wandb_key):
+def train(run_name, exp_dir, wandb_key, user_config=None):
     """Training script for gland grading.
 
     Args:
         run_name: the name of this experiments run.
         exp_dir: the directory where to store the weights and intermediate results.
         wandb_key: weights and biases key for remote logging.
+        user_config: user config to use
     """
     # config path
-    user_config = os.path.join(exp_dir, 'user_config.yml')
+    user_config = os.path.join(exp_dir, 'user_config.yml') if not user_config else user_config
 
     # load network config and store in experiment dir
     print('Loaded config: {}'.format(user_config))
@@ -114,9 +116,9 @@ def train(run_name, exp_dir, wandb_key):
                                                            patience=train_config['scheduler_patience'],
                                                            verbose=True)
 
-    # Dice Loss
-    criterion_dice = smp.losses.DiceLoss(mode='multiclass', from_logits=True)
-    best_dice = 0
+    # CE Loss
+    criterion = nn.CrossEntropyLoss()
+    best_class_loss = float('inf')
 
     for n in range(train_config['epochs']):
 
@@ -131,18 +133,29 @@ def train(run_name, exp_dir, wandb_key):
             y_np = tissue_mask_batch(x_np, y_np)
             sample = preprocessing(image=x_np, mask=y_np)
             x, y = sample['image'].to(device), sample['mask'].to(device)
+            y_patch = torch.amax(y, dim=(1, 2))
 
             # forward and update
             optimizer.zero_grad()
-            y_hat = model.forward(x)
-            train_loss = criterion_dice(y_hat, y)
+            y_hat, y_hat_patch = model.forward(x)
+
+            # compute loss
+            seg_loss = criterion(y_hat, y)
+            class_loss = criterion(y_hat_patch, y_patch)
+            train_loss = seg_loss + class_loss
             train_loss.backward()
             optimizer.step()
 
             # compute and store metrics
             y = y.cpu().detach().numpy().flatten()
             y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
+            y_patch = y_patch.cpu().detach().numpy()
+            y_hat_patch = torch.argmax(y_hat_patch, dim=1).cpu().detach().numpy()
+
             train_metrics[idx] = {'loss': train_loss.item(),
+                                  'segmentation loss': seg_loss.item(),
+                                  'classification loss': class_loss.item(),
+                                  'kappa': cohen_kappa_score(y_patch, y_hat_patch, weights='quadratic'),
                                   'dice per class': f1_score(y, y_hat, average=None, labels=list(range(train_config['n_classes']))),
                                   'dice weighted': f1_score(y, y_hat, average='weighted')}
 
@@ -155,10 +168,15 @@ def train(run_name, exp_dir, wandb_key):
                 y_np = tissue_mask_batch(x_np, y_np)
                 sample = preprocessing(image=x_np, mask=y_np)
                 x, y = sample['image'].to(device), sample['mask'].to(device)
+                y_patch = torch.amax(y, dim=(1, 2))
 
                 # forward and validate
-                y_hat = model.forward(x)
-                val_loss = criterion_dice(y_hat, y)
+                y_hat, y_hat_patch = model.forward(x)
+
+                # compute loss
+                seg_loss = criterion(y_hat, y)
+                class_loss = criterion(y_hat_patch, y_patch)
+                val_loss = seg_loss + class_loss
 
                 # store one example: image not normalized but augmented, mask augmented and tissue masked
                 example_val_batch_x = x_np
@@ -168,16 +186,23 @@ def train(run_name, exp_dir, wandb_key):
                 # compute dice
                 y = y.cpu().detach().numpy().flatten()
                 y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
+                y_patch = y_patch.cpu().detach().numpy()
+                y_hat_patch = torch.argmax(y_hat_patch, dim=1).cpu().detach().numpy()
+
                 validation_metrics[idx] = {'loss': val_loss.item(),
+                                           'segmentation loss': seg_loss.item(),
+                                           'classification loss': class_loss.item(),
+                                           'kappa': cohen_kappa_score(y_patch, y_hat_patch, weights='quadratic'),
                                            'dice per class': f1_score(y, y_hat, average=None, labels=list(range(train_config['n_classes']))),
                                            'dice weighted': f1_score(y, y_hat, average='weighted'),
-                                           'confusion matrix': confusion_matrix(y, y_hat, normalize='true')}
+                                           'confusion matrix': confusion_matrix(y, y_hat, normalize='true'),
+                                           'confusion matrix patch': confusion_matrix(y_patch, y_hat_patch, labels=[1, 2, 3], normalize='true')}
 
         # accumulate metrics over the epoch
         train_metrics_mean = mean_metrics(train_metrics)
         validation_metrics_mean = mean_metrics(validation_metrics)
 
-        print("Train loss: {}, val loss: {}".format(train_metrics_mean['loss'], validation_metrics_mean['loss']))
+        print("Train loss: {:.2f}, val loss: {:.2f}".format(train_metrics_mean['loss'], validation_metrics_mean['loss']))
         print("Train dice: {}, val dice: {}".format(np.round(train_metrics_mean['dice per class'], decimals=2),
                                                     np.round(validation_metrics_mean['dice per class'], decimals=2)))
 
@@ -185,26 +210,40 @@ def train(run_name, exp_dir, wandb_key):
         os.makedirs(os.path.join(exp_dir, 'val_predictions'), exist_ok=True)
         pred_save_path = os.path.join(exp_dir, 'val_predictions', 'predictions_epoch_{}.png'.format(n + 1))
         cm_save_path = os.path.join(exp_dir, 'val_predictions', 'confusion_matrix_epoch_{}.png'.format(n + 1))
+        cm_patch_save_path = os.path.join(exp_dir, 'val_predictions', 'confusion_matrix_patch_epoch_{}.png'.format(n + 1))
         plot_pred_batch(example_val_batch_x, example_val_batch_y, example_val_batch_y_hat, save_path=pred_save_path)
         plot_confusion_matrix(validation_metrics_mean['confusion matrix'], save_path=cm_save_path)
+        plot_confusion_matrix(validation_metrics_mean['confusion matrix patch'], save_path=cm_patch_save_path, pixel_level=False)
 
         # log metrics, for validation log dices per class
         val_dices = list(validation_metrics_mean['dice per class'])
         wandb.log({'Epoch': n + 1,
-                   'train loss': train_metrics_mean['loss'], 'train dice': train_metrics_mean['dice weighted'],
-                   'val loss': validation_metrics_mean['loss'], 'val dice': validation_metrics_mean['dice weighted'],
-                   'val dice BG': val_dices[0], 'val dice NDBE': val_dices[1], 'val dice LGD': val_dices[2],
+                   'train loss': train_metrics_mean['loss'],
+                   'train loss seg': train_metrics_mean['segmentation loss'],
+                   'train loss class': train_metrics_mean['classification loss'],
+                   'train dice': train_metrics_mean['dice weighted'],
+                   'train kappa': train_metrics_mean['kappa'],
+                   'val loss': validation_metrics_mean['loss'],
+                   'val loss seg': validation_metrics_mean['segmentation loss'],
+                   'val loss class': validation_metrics_mean['classification loss'],
+                   'val dice': validation_metrics_mean['dice weighted'],
+                   'val kappa': validation_metrics_mean['kappa'],
+                   'val dice BG': val_dices[0],
+                   'val dice NDBE': val_dices[1],
+                   'val dice LGD': val_dices[2],
                    'val dice HGD': val_dices[3],
-                   'prediction': wandb.Image(pred_save_path), 'confusion matrix': wandb.Image(cm_save_path)}
+                   'prediction': wandb.Image(pred_save_path),
+                   'confusion matrix': wandb.Image(cm_save_path),
+                   'confusion matrix patch': wandb.Image(cm_patch_save_path)}
                   )
 
-        # save if better dice for all but background
+        # safe best classification loss
         os.makedirs(os.path.join(exp_dir, 'checkpoints'), exist_ok=True)
-        dice_no_bg = np.mean(val_dices[1:])
+        current_class_loss = validation_metrics_mean['classification loss']
 
-        if dice_no_bg > best_dice:
-            best_dice = dice_no_bg
-            save_dir = os.path.join(exp_dir, 'checkpoints', 'best_model.pt')
+        if current_class_loss < best_class_loss:
+            best_class_loss = current_class_loss
+            save_dir = os.path.join(exp_dir, 'checkpoints', 'best_model_loss_{}.pt'.format(current_class_loss))
             print('Saving model to: {}.'.format(save_dir))
             torch.save(model.module.state_dict(), save_dir)
 
@@ -221,5 +260,12 @@ if __name__ == '__main__':
                         default='/data/archief/AMC-data/Barrett/experiments/barrett_gland_grading/3_classes',
                         help="experiment dir")
     parser.add_argument("--wandb_key", type=str, help="key for logging to weights and biases")
+    parser.add_argument("--config_file", type=str, default='/home/mbotros/code/barrett_gland_grading/configs/base_config.yml')
     args = parser.parse_args()
-    train(args.run_name, args.exp_dir, args.wandb_key)
+
+    # make dir for this exp
+    run_dir = os.path.join(args.exp_dir, args.run_name)
+    os.makedirs(run_dir, exist_ok=True)
+    print('Stored at {}'.format(run_dir))
+
+    train(args.run_name, args.exp_dir, args.wandb_key, args.config_file)
