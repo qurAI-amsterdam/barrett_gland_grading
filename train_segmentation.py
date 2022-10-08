@@ -15,6 +15,34 @@ import segmentation_models_pytorch as smp
 from preprocessing import get_preprocessing, tissue_mask_batch
 
 
+def load_trained_segmentation_model(exp_dir, model_path):
+    """ Loads the trained model.
+
+    Args:
+        exp_dir: directory that hold all the information from an experiments (src, checkpoints)
+        model_path: path to the trained model
+
+    """
+    user_config = os.path.join(exp_dir, 'src/configs/base_config.yml')
+    _, train_config = load_config(user_config)
+
+    # LOAD MODEL
+    model = load_segmentation_model(train_config, activation=None)
+    model.load_state_dict(torch.load(model_path))
+    model.eval()
+    print('Loaded model from {}'.format(model_path))
+
+    # LOAD PREPROCESSING
+    if train_config['encoder_weights']:
+        preprocessing = get_preprocessing(smp.encoders.get_preprocessing_fn(
+            train_config['encoder_name'], train_config['encoder_weights']))
+    else:
+        preprocessing = get_preprocessing()
+    print('During training we used {} as encoder with weights from {}.'.format(train_config['encoder_name'],
+                                                                               train_config['encoder_weights']))
+    return model, preprocessing
+
+
 def load_segmentation_model(train_config, activation=None):
     """ Loads the segmentation model.
 
@@ -31,8 +59,7 @@ def load_segmentation_model(train_config, activation=None):
             encoder_weights=train_config['encoder_weights'],
             in_channels=train_config['n_channels'],
             classes=train_config['n_classes'],
-            activation=activation,
-            aux_params={'classes': 4, 'pooling': 'max', 'activation': None}
+            activation=activation
         )
     elif train_config['segmentation_model'] == 'deeplabv3+':
         model = smp.DeepLabV3Plus(
@@ -234,8 +261,7 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
                    'val dice HGD': val_dices[3],
                    'prediction': wandb.Image(pred_save_path),
                    'confusion matrix': wandb.Image(cm_save_path),
-                   'confusion matrix patch': wandb.Image(cm_patch_save_path)}
-                  )
+                   'confusion matrix patch': wandb.Image(cm_patch_save_path)})
 
         # safe best classification loss
         os.makedirs(os.path.join(exp_dir, 'checkpoints'), exist_ok=True)
@@ -268,4 +294,10 @@ if __name__ == '__main__':
     os.makedirs(run_dir, exist_ok=True)
     print('Stored at {}'.format(run_dir))
 
-    train(args.run_name, args.exp_dir, args.wandb_key, args.config_file)
+    # copy the config file in run_dir/src/configs
+    dest_dir = os.path.join(run_dir, 'src', 'configs')
+    os.makedirs(dest_dir, exist_ok=True)
+    shutil.copy2(args.config_file, dest_dir)
+
+    # train
+    train(args.run_name, run_dir, args.wandb_key, args.config_file)

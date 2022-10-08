@@ -130,6 +130,7 @@ def avg_entropy_sk(y_pred, epsilon=1e-5):
     y_pred_hard = np.argmax(y_pred, axis=1)
     num_classes = y_pred.shape[1]
     avg_entropy = np.zeros(num_classes)
+    max_entropy = np.log(2) * num_classes
 
     for c in range(num_classes):
 
@@ -137,12 +138,12 @@ def avg_entropy_sk(y_pred, epsilon=1e-5):
         p_c = y_pred[y_pred_hard == c]
 
         if len(p_c) == 0:
-            avg_entropy[c] = 0
+            avg_entropy[c] = max_entropy
         else:
             avg_entropy[c] = -(1 / len(p_c)) * np.sum(
                 p_c * np.log(p_c + epsilon) + (1 - p_c) * np.log(1 - p_c + epsilon))
 
-    return avg_entropy
+    return avg_entropy / max_entropy
 
 
 def plot_reliability_diagram(y_true, y_pred, ax):

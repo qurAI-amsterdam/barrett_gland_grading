@@ -18,20 +18,16 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
 - [x] Train standard baseline segmentation models for grading into: ND vs D and NDBE vs LGD vs HGD.
 - [x] Visualization and evaluation (dice and pixel level confusion matrix), preferably in a notebook.
      - [ ] Stitch results back together on slide level (currently evaluating with sliding window over the ROI's).
+- [ ] Train with a classification head for patch level classification.
+- [ ] Assess calibration of segmentation with Brier, ECE and NLL for: 
+  - Ensembles 
+  - Different loss functions: Dice and/or CCE
 - [ ] Create a processor: takes in WSI, outputs a segmentation mask (.tif).
 - [ ] Deploy on Grand-Challenge.
 
-**For on fly patch extraction we use:** https://github.com/DIAGNijmegen/pathology-whole-slide-data.
-  * Includes configuration for patch extraction such as batch size, patch size, spacing.
-  * Includes different strategies to sample patches from the WSI (balanced, random, slidingwindow).
-  * Configuration stored in (`configs/base_config.yml`).
-
-**Data Augmentation:** 
-  * Rotates, flips, gamma transform and color jitter (saturation, contrast, hue)
-
 ### (2) Slide-Level Aggregation
 - [x] Extract tissue containing tiles in WSI's. 
-- [ ] Rank tiles according to segmentation probabilities for dysplasia. 
+- [x] Rank tiles according to segmentation probabilities and confidence for dysplasia. 
 - [ ] Train a standard aggregation model (Transformer, Attention-Pooling) [[2]](#1).
 
   Each slide $s$ is a sample $(\textbf{x}, y)$:
@@ -56,8 +52,8 @@ Case or slide level annotations were not provided yet. The relevant datasets on 
 ### Experiments
 We randomly split the development set of 295 WSIs in a train, validation and test set (236/29/30), in which each set roughly has the same pixel level percentages of NDBE (~75%), LGD (~12%) and HGD (~12%). 
 **Evaluation:**
-  * Quantitative with DICE/F1 compared to the ground truth annotations.
-  * Qualitative assessment/feedback from Sybren (other pathologists?).
+  * Dice compared to the ground truth annotations.
+  * Quadratic weighted kappa grade with naive approach max pool.
 
 #### ND vs D
 |   Method   |           Encoder            | Batch Size | Patch Size |          Spacing <br/> (mpp)           |                              Internal Test <BR> (Dice) <br> [BG, NDBE, DYS]                              | External Test <br> (Dice) |
@@ -67,12 +63,10 @@ We randomly split the development set of 295 WSIs in a train, validation and tes
 
 
 #### NDBE vs LGD vs HGD
-| Method |           Encoder            | Batch Size | Patch Size |          Spacing <br/> (mpp)           | Internal Test <BR> (Dice) <br> [BG, NDBE, LGD, HGD] | External Test <br> (Dice) |
-|:------:|:----------------------------:|:----------:|:----------:|:--------------------------------------:|:---------------------------------------------------:|:-------------------------:|
-|  UNet  |                              |     8      |    1024    |                   1                    |                                                     |                           |
-| UNet++ | EfficientNet-b4 <br> depth=5 |     8      |    1024    | 2 <br> <br> <br> 1 <br> <br> <br>  0.5 |                                                     |                           |
-|                                                                                                                                                                                                                                           
-
+| Method |           Encoder            | Batch Size | Patch Size | Spacing <br/> (mpp) | Internal Test <BR> (Dice) <br> [BG, NDBE, LGD, HGD] | External Test <br> (Dice) |
+|:------:|:----------------------------:|:----------:|:----------:|:-------------------:|:---------------------------------------------------:|:-------------------------:|
+ | UNet++ | EfficientNet-b4 <br> depth=5 |     8      |    1024    |                     |                                                     |                           |
+                                                                                                                                                                                                                                      
 
 ## References
 <a id="1">[1]</a> 
