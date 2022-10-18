@@ -26,6 +26,28 @@ def load_model(model_path, train_config, device=None):
     return model
 
 
+class SingleModel:
+    def __init__(self, model):
+        self.model = model
+
+    def forward(self, x, y):
+        """
+        Args:
+            x:
+                torch.tensor: (B, H, W)
+            y:
+
+        Returns:
+            y_avg_prob:
+                np.array (B, C, H, W)
+        """
+
+        y_pred_batch = self.model(x)
+        y_avg_prob = torch.nn.functional.softmax(y_pred_batch, dim=1).cpu().detach().numpy()
+
+        return y_avg_prob
+
+
 class Ensemble:
     """ An ensemble of models.
 
@@ -101,7 +123,7 @@ def train_ensemble(m, ensemble_run_name, exp_dir, wandb_key):
     for i in range(m):
 
         # take a random seed for data shuffling
-        seed = randrange(100)
+        seed = i
         print('Training net {} with data shuffle seed {}.'.format(i, seed))
 
         # make dir for this net

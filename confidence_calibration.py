@@ -114,6 +114,24 @@ def ece(y_true, y_pred):
     return ece
 
 
+def avg_entropy_sk_per_patch(y_pred):
+    """ Compute the average entropy per patch in a batch
+
+    Args:
+        y_pred: (B, C, H, W)
+
+    Returns:
+        h: (B, C)
+    """
+    h = np.zeros((y_pred.shape[0], y_pred.shape[1]))
+
+    for i, y_pred_patch in enumerate(y_pred):
+        y_pred_patch = np.transpose(y_pred_patch, (1, 2, 0)).reshape(-1, y_pred.shape[1])
+        h[i] = avg_entropy_sk(y_pred_patch)
+
+    return h
+
+
 def avg_entropy_sk(y_pred, epsilon=1e-5):
     """ Computes the average of pixel-wise entropy values over the predicted foreground.
 

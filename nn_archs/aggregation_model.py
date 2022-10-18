@@ -31,7 +31,7 @@ class Attention(nn.Module):
         )
 
         self.classifier = nn.Sequential(
-            nn.Linear(self.L*self.K, 1),
+            nn.Linear(self.L * self.K, 1),
             nn.Sigmoid()
         )
 
@@ -69,6 +69,7 @@ class Attention(nn.Module):
 
         return neg_log_likelihood, A
 
+
 class GatedAttention(nn.Module):
     def __init__(self):
         super(GatedAttention, self).__init__()
@@ -103,7 +104,7 @@ class GatedAttention(nn.Module):
         self.attention_weights = nn.Linear(self.D, self.K)
 
         self.classifier = nn.Sequential(
-            nn.Linear(self.L*self.K, 1),
+            nn.Linear(self.L * self.K, 1),
             nn.Sigmoid()
         )
 
@@ -116,7 +117,7 @@ class GatedAttention(nn.Module):
 
         A_V = self.attention_V(H)  # NxD
         A_U = self.attention_U(H)  # NxD
-        A = self.attention_weights(A_V * A_U) # element wise multiplication # NxK
+        A = self.attention_weights(A_V * A_U)  # element wise multiplication # NxK
         A = torch.transpose(A, 1, 0)  # KxN
         A = F.softmax(A, dim=1)  # softmax over N
 

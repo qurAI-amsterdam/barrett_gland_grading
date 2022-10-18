@@ -1,4 +1,3 @@
-from distutils.dir_util import copy_tree
 import shutil
 import torch
 import torch.nn as nn
@@ -144,8 +143,8 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
                                                            verbose=True)
 
     # CE Loss
-    criterion = nn.CrossEntropyLoss()
-    best_class_loss = float('inf')
+    criterion = smp.losses.DiceLoss(mode='multiclass', from_logits=True)
+    best_loss = float('inf')
 
     for n in range(train_config['epochs']):
 
@@ -164,24 +163,20 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
 
             # forward and update
             optimizer.zero_grad()
-            y_hat, y_hat_patch = model.forward(x)
+            y_hat = model.forward(x)
 
             # compute loss
-            seg_loss = criterion(y_hat, y)
-            class_loss = criterion(y_hat_patch, y_patch)
-            train_loss = seg_loss + class_loss
+            train_loss = criterion(y_hat, y)
             train_loss.backward()
             optimizer.step()
 
             # compute and store metrics
+            y_patch = y_patch.cpu().detach().numpy()
+            y_hat_patch = torch.amax(torch.argmax(y_hat, dim=1), dim=(1, 2)).cpu().detach().numpy()
             y = y.cpu().detach().numpy().flatten()
             y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
-            y_patch = y_patch.cpu().detach().numpy()
-            y_hat_patch = torch.argmax(y_hat_patch, dim=1).cpu().detach().numpy()
 
             train_metrics[idx] = {'loss': train_loss.item(),
-                                  'segmentation loss': seg_loss.item(),
-                                  'classification loss': class_loss.item(),
                                   'kappa': cohen_kappa_score(y_patch, y_hat_patch, weights='quadratic'),
                                   'dice per class': f1_score(y, y_hat, average=None, labels=list(range(train_config['n_classes']))),
                                   'dice weighted': f1_score(y, y_hat, average='weighted')}
@@ -198,12 +193,10 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
                 y_patch = torch.amax(y, dim=(1, 2))
 
                 # forward and validate
-                y_hat, y_hat_patch = model.forward(x)
+                y_hat = model.forward(x)
 
                 # compute loss
-                seg_loss = criterion(y_hat, y)
-                class_loss = criterion(y_hat_patch, y_patch)
-                val_loss = seg_loss + class_loss
+                val_loss = criterion(y_hat, y)
 
                 # store one example: image not normalized but augmented, mask augmented and tissue masked
                 example_val_batch_x = x_np
@@ -211,14 +204,12 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
                 example_val_batch_y_hat = y_hat.cpu().detach().numpy()
 
                 # compute dice
+                y_patch = y_patch.cpu().detach().numpy()
+                y_hat_patch = torch.amax(torch.argmax(y_hat, dim=1), dim=(1, 2)).cpu().detach().numpy()
                 y = y.cpu().detach().numpy().flatten()
                 y_hat = torch.argmax(y_hat, dim=1).cpu().detach().numpy().flatten()
-                y_patch = y_patch.cpu().detach().numpy()
-                y_hat_patch = torch.argmax(y_hat_patch, dim=1).cpu().detach().numpy()
 
                 validation_metrics[idx] = {'loss': val_loss.item(),
-                                           'segmentation loss': seg_loss.item(),
-                                           'classification loss': class_loss.item(),
                                            'kappa': cohen_kappa_score(y_patch, y_hat_patch, weights='quadratic'),
                                            'dice per class': f1_score(y, y_hat, average=None, labels=list(range(train_config['n_classes']))),
                                            'dice weighted': f1_score(y, y_hat, average='weighted'),
@@ -246,13 +237,9 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
         val_dices = list(validation_metrics_mean['dice per class'])
         wandb.log({'Epoch': n + 1,
                    'train loss': train_metrics_mean['loss'],
-                   'train loss seg': train_metrics_mean['segmentation loss'],
-                   'train loss class': train_metrics_mean['classification loss'],
                    'train dice': train_metrics_mean['dice weighted'],
                    'train kappa': train_metrics_mean['kappa'],
                    'val loss': validation_metrics_mean['loss'],
-                   'val loss seg': validation_metrics_mean['segmentation loss'],
-                   'val loss class': validation_metrics_mean['classification loss'],
                    'val dice': validation_metrics_mean['dice weighted'],
                    'val kappa': validation_metrics_mean['kappa'],
                    'val dice BG': val_dices[0],
@@ -265,11 +252,11 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
 
         # safe best classification loss
         os.makedirs(os.path.join(exp_dir, 'checkpoints'), exist_ok=True)
-        current_class_loss = validation_metrics_mean['classification loss']
+        current_loss = validation_metrics_mean['loss']
 
-        if current_class_loss < best_class_loss:
-            best_class_loss = current_class_loss
-            save_dir = os.path.join(exp_dir, 'checkpoints', 'best_model_loss_{}.pt'.format(current_class_loss))
+        if current_loss < best_loss:
+            best_loss = current_loss
+            save_dir = os.path.join(exp_dir, 'checkpoints', 'best_model_loss_{}.pt'.format(current_loss))
             print('Saving model to: {}.'.format(save_dir))
             torch.save(model.module.state_dict(), save_dir)
 

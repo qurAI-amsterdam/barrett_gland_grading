@@ -6,6 +6,8 @@ import matplotlib.patches as mpatches
 import yaml
 import pandas as pd
 import seaborn as sns
+import scikitplot as skplt
+
 
 # define some colors
 colors_1 = ["white", "green", "orange", "red", 'yellow', 'yellow', 'purple', 'pink', 'grey', "blue"]
@@ -132,7 +134,7 @@ def plot_pred_batch(x, y, y_hat, save_path=None, patches=3, h_pad=0.5, w_pad=-28
         plt.show()
 
 
-def plot_confusion_matrix(cf_matrix, save_path=None, pixel_level=True):
+def plot_confusion_matrix(cf_matrix, save_path=None, pixel_level=True, kappa=None):
     """ Plots the confusion matrix
 
     Args:
@@ -145,20 +147,33 @@ def plot_confusion_matrix(cf_matrix, save_path=None, pixel_level=True):
         none: saves the figure at the save path
     """
     if pixel_level:
+        fmt = '.2f'
         labels = ['BG', 'NDBE', 'LGD', 'HGD']
     else:
         labels = ['NDBE', 'LGD', 'HGD']
+        fmt = 'd'
 
     df_cm = pd.DataFrame(cf_matrix, index=labels, columns=labels)
 
     plt.figure(figsize=(15, 10))
-    with sns.plotting_context(font_scale=2):
-        sns.heatmap(df_cm, annot=True, cmap="Blues", square=True, fmt='.2f')
+    plt.rcParams.update({'font.size': 22})
+    sns.heatmap(df_cm, annot=True, cmap="Blues", square=True, fmt=fmt)
     plt.gca().set_yticklabels(labels=labels, va='center')
     plt.gca().set_ylabel('True', labelpad=30)
     plt.gca().set_xlabel('Predicted', labelpad=30)
+    if kappa:
+        plt.title('$\kappa=${:.2f}'.format(kappa))
     if save_path:
         plt.savefig(save_path, bbox_inches='tight')
         plt.close()
     else:
         plt.show()
+
+
+def plot_roc_per_class(y_true, y_pred, save_path=None):
+    skplt.metrics.plot_roc_curve(y_true, y_pred, figsize=(11, 10), text_fontsize=16)
+    if save_path:
+        plt.savefig(save_path, bbox_inches='tight')
+        plt.close()
+
+
