@@ -63,7 +63,7 @@ class SlideGradeModel(pl.LightningModule):
         output = self.mlp_head(hidden).squeeze()
         return output
 
-    def configure_optimizers(self, init_lr=1e-3, wd=1e-5, scheduler_patience=50, scheduler_factor=0.1):
+    def configure_optimizers(self, init_lr=1e-4, wd=1e-5, scheduler_patience=50, scheduler_factor=0.2):
         optimizer = torch.optim.Adam(self.parameters(), lr=init_lr, weight_decay=wd)
         lr_scheduler = {
             'scheduler': ReduceLROnPlateau(optimizer, mode='min', factor=scheduler_factor, patience=scheduler_patience),
@@ -103,12 +103,7 @@ class SlideGradeModel(pl.LightningModule):
         y_prob = torch.softmax(y_logits, dim=1)
         loss = self.loss(y_logits, y.long().squeeze())
 
-        # to numpy
-        y_true = y.long().detach().cpu().numpy().flatten()
-        y_prob = y_prob.detach().cpu().numpy()
-        y_pred = np.argmax(y_prob, axis=1)
-
-        # log loss and auc
+        # log loss
         self.log_dict({'train loss': loss.item()})
         return loss
 
@@ -211,7 +206,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--run_name", type=str, default='test', help="the name of this experiment")
     parser.add_argument("--nr_epochs", type=int, default=250, help="the number of epochs")
-    parser.add_argument("--batch_size", type=int, default=64, help="the size of mini batches")
+    parser.add_argument("--batch_size", type=int, default=4096*2, help="the size of mini batches")
     parser.add_argument("--lr", type=int, default=1e-3, help="initial the learning rate")
     parser.add_argument("--wd", type=int, default=1e-5, help="weight decay (L2)")
     parser.add_argument("--exp_dir", type=str,
