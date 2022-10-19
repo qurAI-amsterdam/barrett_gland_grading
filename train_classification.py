@@ -24,8 +24,8 @@ class SlideDataset(Dataset):
         return len(self.slide_sequences)
 
     def __getitem__(self, idx):
-        x = torch.Tensor(self.slide_sequences[idx])     # (L, H_in)
-        y = torch.Tensor(self.slide_labels[idx])        # (1)
+        x = torch.Tensor(self.slide_sequences[idx])  # (L, H_in)
+        y = torch.Tensor(self.slide_labels[idx])          # (1)
         return x, y
 
 
@@ -45,7 +45,6 @@ class SlideGradeModel(pl.LightningModule):
         super().__init__()
         self.gru = nn.GRU(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, batch_first=True)
         self.mlp_head = nn.Linear(hidden_size, num_classes)
-        self.drop_out = nn.Dropout(0.5)
         self.loss = nn.CrossEntropyLoss()
         self.exp_dir = exp_dir
 
@@ -59,7 +58,6 @@ class SlideGradeModel(pl.LightningModule):
 
         """
         _, hidden = self.gru(x)
-        hidden = self.drop_out(hidden)
         output = self.mlp_head(hidden).squeeze()
         return output
 
@@ -141,10 +139,10 @@ def train(run_name, nr_epochs, batch_size, lr, wd, experiments_dir, wandb_key, t
     """
 
     # load data
-    x_train = np.load(os.path.join(experiments_dir, 'x_train.npy'))
-    y_train = np.load(os.path.join(experiments_dir, 'y_train.npy'))
-    x_val = np.load(os.path.join(experiments_dir, 'x_val.npy'))
-    y_val = np.load(os.path.join(experiments_dir, 'y_val.npy'))
+    x_train = np.load(os.path.join(experiments_dir, 'x_train_overlap.npy'))
+    y_train = np.load(os.path.join(experiments_dir, 'y_train_overlap.npy'))
+    x_val = np.load(os.path.join(experiments_dir, 'x_val_overlap.npy'))
+    y_val = np.load(os.path.join(experiments_dir, 'y_val_overlap.npy'))
 
     # make train loaders
     train_dataset = SlideDataset(x_train, y_train)
@@ -192,8 +190,8 @@ def train(run_name, nr_epochs, batch_size, lr, wd, experiments_dir, wandb_key, t
     if test_mode:
 
         # make train loaders
-        x_test = np.load(os.path.join(experiments_dir, 'x_test.npy'))
-        y_test = np.load(os.path.join(experiments_dir, 'y_test.npy'))
+        x_test = np.load(os.path.join(experiments_dir, 'x_test_overlap.npy'))
+        y_test = np.load(os.path.join(experiments_dir, 'y_test_overlap.npy'))
         test_dataset = SlideDataset(x_test, y_test)
         test_loader = DataLoader(test_dataset, batch_size=batch_size, num_workers=28, drop_last=False)
         print('Testing model: {}'.format(trainer.checkpoint_callback.best_model_path))
@@ -207,7 +205,7 @@ if __name__ == '__main__':
     parser.add_argument("--run_name", type=str, default='test', help="the name of this experiment")
     parser.add_argument("--nr_epochs", type=int, default=250, help="the number of epochs")
     parser.add_argument("--batch_size", type=int, default=4096*2, help="the size of mini batches")
-    parser.add_argument("--lr", type=int, default=1e-3, help="initial the learning rate")
+    parser.add_argument("--lr", type=int, default=1e-4, help="initial the learning rate")
     parser.add_argument("--wd", type=int, default=1e-5, help="weight decay (L2)")
     parser.add_argument("--exp_dir", type=str,
                         default='/data/archief/AMC-data/Barrett/experiments/barrett_slide_classification/top_25_entropy',
