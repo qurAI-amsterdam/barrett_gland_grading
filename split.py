@@ -93,6 +93,21 @@ def get_associations_from_folders(folder, datasets):
     return total_associations
 
 
+def five_fold_cv():
+    """
+    Create 5 fold CV split. Output is a directory with 5 config (yml) files .
+
+
+    Returns:
+         non writes 5 splits.
+    """
+
+    # get file keys
+    associations = get_associations_from_folders(folder, datasets)
+    file_keys = np.array([*associations])
+    indexes = np.arange(len(file_keys))
+
+
 def train_val_split(folder, datasets, output_path, train_percent=0.8, val_percent=0.1):
     """Produces a train validation split. Output is a config (yml) file with the paths to the images
     and annotations for each sample in the train and validation set.

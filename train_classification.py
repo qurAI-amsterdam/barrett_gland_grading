@@ -1,5 +1,4 @@
 import numpy as np
-import tqdm
 import os
 import torch
 from torch import nn
@@ -8,9 +7,9 @@ import pytorch_lightning as pl
 from sklearn.metrics import cohen_kappa_score, accuracy_score, roc_auc_score, confusion_matrix
 from torch.utils.data import Dataset, DataLoader
 import wandb
-from utils import plot_confusion_matrix, plot_roc_per_class
+from utils import plot_confusion_matrix, plot_roc_curves
 from pytorch_lightning.loggers import WandbLogger
-from pytorch_lightning import Trainer
+from pytorch_lightning import Trainer, seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
@@ -79,9 +78,10 @@ class SlideGradeModel(pl.LightningModule):
         auc = roc_auc_score(y_true, y_prob, multi_class='ovr')
         cm = confusion_matrix(y_true, y_pred, labels=[0, 1, 2])
         plot_confusion_matrix(cm, save_path=os.path.join(self.exp_dir, 'test_cm.png'), pixel_level=False, kappa=kappa)
-        plot_roc_per_class(y_true, y_prob, save_path=os.path.join(self.exp_dir, 'test_roc_per_class.png'))
+        plot_roc_curves(y_true, y_prob, save_path=self.exp_dir, plot_roc_dysplasia=True)
         wandb.log({'confusion matrix': wandb.Image(os.path.join(self.exp_dir, 'test_cm.png')),
-                   'roc': wandb.Image(os.path.join(self.exp_dir, 'test_roc_per_class.png'))})
+                   'roc per class': wandb.Image(os.path.join(self.exp_dir, 'test_roc_per_class.png')),
+                   'roc dysplasia': wandb.Image(os.path.join(self.exp_dir, 'test_roc_dysplasia.png'))})
         print('test acc: {:05.2f}, test kappa: {:.2f}, test auc {:.2f}'.format(acc, kappa, auc))
         self.log_dict({'test acc': acc, 'test kappa': kappa, 'test auc': auc})
 
@@ -137,6 +137,7 @@ class SlideGradeModel(pl.LightningModule):
 def train(run_name, nr_epochs, batch_size, lr, wd, experiments_dir, wandb_key, test_mode):
     """ Train something (Transformer/LSTM/GRU/GraphNN) for slide level classification.
     """
+    seed_everything(5, workers=True)
 
     # load data
     x_train = np.load(os.path.join(experiments_dir, 'x_train_overlap.npy'))
@@ -181,7 +182,8 @@ def train(run_name, nr_epochs, batch_size, lr, wd, experiments_dir, wandb_key, t
                       devices=1,
                       strategy='dp',
                       max_epochs=nr_epochs,
-                      log_every_n_steps=1)
+                      log_every_n_steps=1,
+                      deterministic=True)
 
     # train the model
     trainer.fit(model, train_loader, val_loader)
