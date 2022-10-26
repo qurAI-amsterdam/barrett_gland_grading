@@ -1,5 +1,7 @@
 import numpy as np
 import os
+
+import pandas as pd
 import torch
 from torch import nn
 import argparse
@@ -15,16 +17,20 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 
 class SlideDataset(Dataset):
-    def __init__(self, x, y):
+    def __init__(self, x, y, ids=None):
         self.slide_sequences = x
         self.slide_labels = y
+        self.ids = ids
 
     def __len__(self):
         return len(self.slide_sequences)
 
+    def get_slide_id(self, idx):
+        return self.ids[idx]
+
     def __getitem__(self, idx):
-        x = torch.Tensor(self.slide_sequences[idx])  # (L, H_in)
-        y = torch.Tensor(self.slide_labels[idx])          # (1)
+        x = torch.Tensor(self.slide_sequences[idx])        # (L, H_in)
+        y = torch.Tensor(self.slide_labels[idx])           # (1)
         return x, y
 
 
@@ -40,12 +46,13 @@ class SlideGradeModel(pl.LightningModule):
     Base Pytorch Lighting Model for classification on slide level.
     """
 
-    def __init__(self, exp_dir, input_size=4, hidden_size=512, num_layers=1, num_classes=3):
+    def __init__(self, exp_dir, run_dir, input_size=4, hidden_size=512, num_layers=1, num_classes=3):
         super().__init__()
         self.gru = nn.GRU(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, batch_first=True)
         self.mlp_head = nn.Linear(hidden_size, num_classes)
         self.loss = nn.CrossEntropyLoss()
         self.exp_dir = exp_dir
+        self.run_dir = run_dir
 
     def forward(self, x):
         """
@@ -73,15 +80,26 @@ class SlideGradeModel(pl.LightningModule):
     def test_epoch_end(self, outputs):
         y_true, y_pred, y_prob = accumulate_outputs(outputs)
         print('Evaluating on {} samples.'.format(len(y_true)))
+        ids = np.load(os.path.join(self.exp_dir, 'y_test_names.npy'))
+
+        # store results
+        results_df = pd.DataFrame({'slide': ids, 'y_true': y_true, 'y_pred': y_pred,
+                                   'p_nd': y_prob[:, 0], 'p_lgd': y_prob[:, 1], 'p_hgd': y_prob[:, 2]})
+        print(results_df)
+        results_save_path = os.path.join(self.run_dir, 'results.csv')
+        print('Saving results to: {}'.format(results_save_path))
+        results_df.to_csv(results_save_path, index=False)
+
+        # compute metrics
         acc = accuracy_score(y_true, y_pred)
         kappa = cohen_kappa_score(y_true, y_pred, weights='quadratic')
         auc = roc_auc_score(y_true, y_prob, multi_class='ovr')
         cm = confusion_matrix(y_true, y_pred, labels=[0, 1, 2])
-        plot_confusion_matrix(cm, save_path=os.path.join(self.exp_dir, 'test_cm.png'), pixel_level=False, kappa=kappa)
-        plot_roc_curves(y_true, y_prob, save_path=self.exp_dir, plot_roc_dysplasia=True)
-        wandb.log({'confusion matrix': wandb.Image(os.path.join(self.exp_dir, 'test_cm.png')),
-                   'roc per class': wandb.Image(os.path.join(self.exp_dir, 'test_roc_per_class.png')),
-                   'roc dysplasia': wandb.Image(os.path.join(self.exp_dir, 'test_roc_dysplasia.png'))})
+        plot_confusion_matrix(cm, save_path=os.path.join(self.run_dir, 'test_cm.png'), pixel_level=False, kappa=kappa)
+        plot_roc_curves(y_true, y_prob, save_path=self.run_dir, plot_roc_dysplasia=True)
+        wandb.log({'confusion matrix': wandb.Image(os.path.join(self.run_dir, 'test_cm.png')),
+                   'roc per class': wandb.Image(os.path.join(self.run_dir, 'test_roc_per_class.png')),
+                   'roc dysplasia': wandb.Image(os.path.join(self.run_dir, 'test_roc_dysplasia.png'))})
         print('test acc: {:05.2f}, test kappa: {:.2f}, test auc {:.2f}'.format(acc, kappa, auc))
         self.log_dict({'test acc': acc, 'test kappa': kappa, 'test auc': auc})
 
@@ -98,7 +116,6 @@ class SlideGradeModel(pl.LightningModule):
         # forward and predict
         x, y = train_batch
         y_logits = self.forward(x)
-        y_prob = torch.softmax(y_logits, dim=1)
         loss = self.loss(y_logits, y.long().squeeze())
 
         # log loss
@@ -154,7 +171,12 @@ def train(run_name, nr_epochs, batch_size, lr, wd, experiments_dir, wandb_key, t
     # create model & configure optimizer
     hidden_size = 512
     num_layers = 1
-    model = SlideGradeModel(exp_dir=experiments_dir, input_size=4, hidden_size=hidden_size, num_layers=num_layers, num_classes=3)
+    model = SlideGradeModel(exp_dir=experiments_dir,
+                            run_dir=os.path.join(experiments_dir, run_name),
+                            input_size=4,
+                            hidden_size=hidden_size,
+                            num_layers=num_layers,
+                            num_classes=3)
     model.configure_optimizers(init_lr=lr, wd=wd)
 
     # log everything
@@ -195,7 +217,7 @@ def train(run_name, nr_epochs, batch_size, lr, wd, experiments_dir, wandb_key, t
         x_test = np.load(os.path.join(experiments_dir, 'x_test_overlap.npy'))
         y_test = np.load(os.path.join(experiments_dir, 'y_test_overlap.npy'))
         test_dataset = SlideDataset(x_test, y_test)
-        test_loader = DataLoader(test_dataset, batch_size=batch_size, num_workers=28, drop_last=False)
+        test_loader = DataLoader(test_dataset, batch_size=batch_size, num_workers=28, drop_last=False, shuffle=False)
         print('Testing model: {}'.format(trainer.checkpoint_callback.best_model_path))
 
         # get results on the test set
