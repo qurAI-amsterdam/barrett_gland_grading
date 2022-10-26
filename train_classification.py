@@ -1,6 +1,5 @@
 import numpy as np
 import os
-
 import pandas as pd
 import torch
 from torch import nn
@@ -229,8 +228,8 @@ if __name__ == '__main__':
     parser.add_argument("--run_name", type=str, default='test', help="the name of this experiment")
     parser.add_argument("--nr_epochs", type=int, default=250, help="the number of epochs")
     parser.add_argument("--batch_size", type=int, default=4096*2, help="the size of mini batches")
-    parser.add_argument("--lr", type=int, default=1e-4, help="initial the learning rate")
-    parser.add_argument("--wd", type=int, default=1e-5, help="weight decay (L2)")
+    parser.add_argument("--lr", type=float, default=1e-4, help="initial the learning rate")
+    parser.add_argument("--wd", type=float, default=1e-5, help="weight decay (L2)")
     parser.add_argument("--exp_dir", type=str,
                         default='/data/archief/AMC-data/Barrett/experiments/barrett_slide_classification/top_25_entropy',
                         help="experiment dir classification")
