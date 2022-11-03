@@ -182,6 +182,8 @@ def plot_roc_curves(y_true, y_prob, save_path=None, plot_roc_dysplasia=False):
     if save_path:
         plt.savefig(os.path.join(save_path, 'test_roc_per_class.png'), bbox_inches='tight')
         plt.close()
+    else:
+        plt.show()
     if plot_roc_dysplasia:
 
         # get dysplasia probs and targets

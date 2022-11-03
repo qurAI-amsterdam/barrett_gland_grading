@@ -13,6 +13,7 @@ from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning import Trainer, seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.optim.lr_scheduler import ReduceLROnPlateau
+from nn_archs.gru import GRU
 
 
 class SlideDataset(Dataset):
@@ -45,10 +46,9 @@ class SlideGradeModel(pl.LightningModule):
     Base Pytorch Lighting Model for classification on slide level.
     """
 
-    def __init__(self, exp_dir, run_dir, input_size=4, hidden_size=512, num_layers=1, num_classes=3):
+    def __init__(self, exp_dir, run_dir):
         super().__init__()
-        self.gru = nn.GRU(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, batch_first=True)
-        self.mlp_head = nn.Linear(hidden_size, num_classes)
+        self.model = GRU()
         self.loss = nn.CrossEntropyLoss()
         self.exp_dir = exp_dir
         self.run_dir = run_dir
@@ -62,9 +62,7 @@ class SlideGradeModel(pl.LightningModule):
             y_hat: a batch of predictions (=logits) with shape (B, 1)
 
         """
-        _, hidden = self.gru(x)
-        output = self.mlp_head(hidden).squeeze()
-        return output
+        return self.model(x)
 
     def configure_optimizers(self, init_lr=1e-4, wd=1e-5, scheduler_patience=50, scheduler_factor=0.2):
         optimizer = torch.optim.Adam(self.parameters(), lr=init_lr, weight_decay=wd)
@@ -168,14 +166,7 @@ def train(run_name, nr_epochs, batch_size, lr, wd, experiments_dir, wandb_key, t
     val_loader = DataLoader(val_dataset, batch_size=batch_size, num_workers=28)
 
     # create model & configure optimizer
-    hidden_size = 512
-    num_layers = 1
-    model = SlideGradeModel(exp_dir=experiments_dir,
-                            run_dir=os.path.join(experiments_dir, run_name),
-                            input_size=4,
-                            hidden_size=hidden_size,
-                            num_layers=num_layers,
-                            num_classes=3)
+    model = SlideGradeModel(exp_dir=experiments_dir, run_dir=os.path.join(experiments_dir, run_name))
     model.configure_optimizers(init_lr=lr, wd=wd)
 
     # log everything
@@ -185,9 +176,7 @@ def train(run_name, nr_epochs, batch_size, lr, wd, experiments_dir, wandb_key, t
         "batch_size": batch_size,
         "learning_rate": lr,
         "epochs": nr_epochs,
-        "weight_decay": wd,
-        "hidden size": hidden_size,
-        "num layers": num_layers
+        "weight_decay": wd
     })
     wandb.run.name = run_name
 
