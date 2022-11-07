@@ -1,4 +1,4 @@
-## BE expert-level gland grading with Neural Networks
+ ## BE expert-level gland grading with Neural Networks
 This repository contains code for development of a Neural Network that support pathologists with identifying dysplastic 
 areas of interest on H&E tissue samples from patients with Barrett's Esophagus (BE). 
 
@@ -21,7 +21,9 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
   - Ensembles 
   - Different loss functions: Dice and/or CCE
   - **Ensemble of CE probably a good choice.**
-- [ ] Stain Normalization 
+- [x] Stain Normalization 
+  - **Seems to make the grading harder. Results are significantly worse.**
+- [ ] 
   
 ### (2) Slide-Level Aggregation
 - [x] Extract tissue containing tiles in WSI's. 
@@ -35,6 +37,7 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
   - [x] GRU (with ordered tiles)
   - [x] Set Transformer
   - [ ] DeepMIL [[2]](#1) (with all tiles)
+- [ ] Visualization
 
 ### Datasets 
 Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories: NDBE, LGD and HGD.
@@ -51,6 +54,7 @@ Case or slide level annotations were not provided yet. The relevant datasets on 
 
 ### Experiments
 We randomly split the development set of 295 WSIs in a train, validation and test set (236/29/30), in which each set roughly has the same pixel level percentages of NDBE (~75%), LGD (~12%) and HGD (~12%). 
+
 **Evaluation on slide level:**
   * Quadratic weighted kappa grade + confusion matrix
   * Multiclass AUC

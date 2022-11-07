@@ -55,7 +55,7 @@ net:
     learning_rate: 0.001
     scheduler_factor: 0.2
     scheduler_patience: 20
-    epochs: 50
+    epochs: 100
     train_batches: 32       # 32 * 32 = 1024 train patches
     val_batches: 8          # 8 * 32 = 256 validation patches
     gpus: 2

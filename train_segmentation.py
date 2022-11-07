@@ -11,7 +11,7 @@ from sklearn.metrics import f1_score, confusion_matrix, cohen_kappa_score
 import wandb
 from utils import mean_metrics, load_config
 import segmentation_models_pytorch as smp
-from preprocessing import get_preprocessing, tissue_mask_batch
+from preprocessing import get_preprocessing, tissue_mask_batch, StainNormalizerMP
 
 
 def load_trained_segmentation_model(exp_dir, model_path):
@@ -143,8 +143,14 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
                                                            verbose=True)
 
     # CE Loss
-    criterion = smp.losses.DiceLoss(mode='multiclass', from_logits=True)
+    # criterion = smp.losses.DiceLoss(mode='multiclass', from_logits=True)
+    criterion = nn.CrossEntropyLoss()
     best_loss = float('inf')
+
+    # stain normalizer
+    target_path = '/home/mbotros/tmp/target.npy'
+    stain_normalizer = StainNormalizerMP(target=np.load('/home/mbotros/tmp/target.npy'))
+    print('Loaded target for stain normalization from: {}'.format(target_path))
 
     for n in range(train_config['epochs']):
 
@@ -155,8 +161,9 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
                         desc='Epoch {}, lr: {}'.format(n + 1, optimizer.param_groups[0]['lr'])):
             x_np, y_np, info = next(training_batch_generator)
 
-            # tissue masking and preprocessing
+            # tissue masking, stain norm and preprocessing
             y_np = tissue_mask_batch(x_np, y_np)
+            x_np = stain_normalizer.forward(x_np)
             sample = preprocessing(image=x_np, mask=y_np)
             x, y = sample['image'].to(device), sample['mask'].to(device)
             y_patch = torch.amax(y, dim=(1, 2))
@@ -188,6 +195,7 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
 
                 # tissue masking and preprocessing
                 y_np = tissue_mask_batch(x_np, y_np)
+                x_np = stain_normalizer.forward(x_np)
                 sample = preprocessing(image=x_np, mask=y_np)
                 x, y = sample['image'].to(device), sample['mask'].to(device)
                 y_patch = torch.amax(y, dim=(1, 2))
@@ -229,6 +237,7 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
         pred_save_path = os.path.join(exp_dir, 'val_predictions', 'predictions_epoch_{}.png'.format(n + 1))
         cm_save_path = os.path.join(exp_dir, 'val_predictions', 'confusion_matrix_epoch_{}.png'.format(n + 1))
         cm_patch_save_path = os.path.join(exp_dir, 'val_predictions', 'confusion_matrix_patch_epoch_{}.png'.format(n + 1))
+        print('shapes: {}'.format((example_val_batch_x.shape, example_val_batch_y.shape, example_val_batch_y_hat.shape)))
         plot_pred_batch(example_val_batch_x, example_val_batch_y, example_val_batch_y_hat, save_path=pred_save_path)
         plot_confusion_matrix(validation_metrics_mean['confusion matrix'], save_path=cm_save_path)
         plot_confusion_matrix(validation_metrics_mean['confusion matrix patch'], save_path=cm_patch_save_path, pixel_level=False)

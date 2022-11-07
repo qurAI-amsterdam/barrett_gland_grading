@@ -3,6 +3,8 @@ import albumentations as albu
 import torch
 from scipy import ndimage
 from tiatoolbox.utils.misc import get_luminosity_tissue_mask
+from multiprocessing import Pool, get_context
+import staintools
 
 
 def to_dysplastic_vs_non_dysplastic(y, **kwargs):
@@ -90,6 +92,42 @@ def tissue_mask_batch(x, y, lum_thresh=0.85, size_thresh=5000):
         y_masked[i] = np.where(np.logical_and(tissue_mask, mask), mask, 0)
 
     return y_masked
+
+
+class StainNormalizerMP:
+    """ Batch wise stain normalization based on Staintools. Multiprocessing to speed it up.
+    """
+
+    def __init__(self, target):
+        self.normalizer = self.get_normalizer(target)
+
+    def get_normalizer(self, target, luminosity_standardize=True, method='vahadane'):
+
+        # Standardize brightness (optional, can improve the tissue mask calculation)
+        if luminosity_standardize:
+            target = staintools.LuminosityStandardizer.standardize(target)
+
+        normalizer = staintools.StainNormalizer(method=method)
+        normalizer.fit(target)
+
+        return normalizer
+
+    def normalize_patch(self, patch):
+        patch = staintools.LuminosityStandardizer.standardize(patch)
+        patch = self.normalizer.transform(patch)
+        return patch
+
+    def forward(self, x):
+        """ Forwards a batch
+        """
+        x = x.astype('uint8')
+        x_t = np.zeros_like(x)
+
+        with get_context('spawn').Pool(processes=8) as pool:
+            for i, patch in enumerate(pool.map(self.normalize_patch, x)):
+                x_t[i] = patch
+
+        return x_t
 
 
 def get_preprocessing(preprocessing_fn=None):

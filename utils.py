@@ -157,7 +157,7 @@ def plot_confusion_matrix(cf_matrix, save_path=None, pixel_level=True, kappa=Non
         labels = ['BG', 'NDBE', 'LGD', 'HGD']
     else:
         labels = ['NDBE', 'LGD', 'HGD']
-        fmt = 'd'
+        fmt = '.2f'
 
     df_cm = pd.DataFrame(cf_matrix, index=labels, columns=labels)
 
