@@ -11,7 +11,7 @@ from sklearn.metrics import f1_score, confusion_matrix, cohen_kappa_score
 import wandb
 from utils import mean_metrics, load_config
 import segmentation_models_pytorch as smp
-from preprocessing import get_preprocessing, tissue_mask_batch, StainNormalizerMP
+from preprocessing import get_preprocessing, tissue_mask_batch
 
 
 def load_trained_segmentation_model(exp_dir, model_path):
@@ -147,11 +147,6 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
     criterion = nn.CrossEntropyLoss()
     best_loss = float('inf')
 
-    # stain normalizer
-    target_path = '/home/mbotros/tmp/target.npy'
-    stain_normalizer = StainNormalizerMP(target=np.load('/home/mbotros/tmp/target.npy'))
-    print('Loaded target for stain normalization from: {}'.format(target_path))
-
     for n in range(train_config['epochs']):
 
         train_metrics = {}
@@ -163,7 +158,6 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
 
             # tissue masking, stain norm and preprocessing
             y_np = tissue_mask_batch(x_np, y_np)
-            x_np = stain_normalizer.forward(x_np)
             sample = preprocessing(image=x_np, mask=y_np)
             x, y = sample['image'].to(device), sample['mask'].to(device)
             y_patch = torch.amax(y, dim=(1, 2))
@@ -195,7 +189,6 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
 
                 # tissue masking and preprocessing
                 y_np = tissue_mask_batch(x_np, y_np)
-                x_np = stain_normalizer.forward(x_np)
                 sample = preprocessing(image=x_np, mask=y_np)
                 x, y = sample['image'].to(device), sample['mask'].to(device)
                 y_patch = torch.amax(y, dim=(1, 2))

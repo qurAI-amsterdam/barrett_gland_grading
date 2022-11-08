@@ -14,6 +14,7 @@ from pytorch_lightning import Trainer, seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from nn_archs.gru import GRU
+from nn_archs.deepmil import DeepMil
 
 
 class SlideDataset(Dataset):
@@ -48,7 +49,7 @@ class SlideGradeModel(pl.LightningModule):
 
     def __init__(self, exp_dir, run_dir):
         super().__init__()
-        self.model = GRU()
+        self.model = DeepMil(hidden_size=1024*16)
         self.loss = nn.CrossEntropyLoss()
         self.exp_dir = exp_dir
         self.run_dir = run_dir
@@ -215,7 +216,7 @@ def train(run_name, nr_epochs, batch_size, lr, wd, experiments_dir, wandb_key, t
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--run_name", type=str, default='test', help="the name of this experiment")
-    parser.add_argument("--nr_epochs", type=int, default=250, help="the number of epochs")
+    parser.add_argument("--nr_epochs", type=int, default=1000, help="the number of epochs")
     parser.add_argument("--batch_size", type=int, default=4096*2, help="the size of mini batches")
     parser.add_argument("--lr", type=float, default=1e-4, help="initial the learning rate")
     parser.add_argument("--wd", type=float, default=1e-5, help="weight decay (L2)")
