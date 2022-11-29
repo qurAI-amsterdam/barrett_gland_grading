@@ -138,7 +138,7 @@ def plot_pred_batch(x, y, y_hat, save_path=None, patches=3, h_pad=0.5, w_pad=-28
         plt.show()
 
 
-def plot_confusion_matrix(cf_matrix, save_path=None, pixel_level=True, kappa=None):
+def plot_confusion_matrix(cf_matrix, save_path=None, pixel_level=True, normalized=True, kappa=None):
     """ Plots the confusion matrix
 
     Args:
@@ -146,6 +146,7 @@ def plot_confusion_matrix(cf_matrix, save_path=None, pixel_level=True, kappa=Non
         save_path: location where to store the plot
         plot: whether to plot it of save it
         pixel_level: whether to include bg
+        normalized: whether it is normalized
         kappa: plot kappa as title
 
     Returns:
@@ -153,11 +154,14 @@ def plot_confusion_matrix(cf_matrix, save_path=None, pixel_level=True, kappa=Non
 
     """
     if pixel_level:
-        fmt = '.2f'
         labels = ['BG', 'NDBE', 'LGD', 'HGD']
+        fmt = '.2f'
     else:
         labels = ['NDBE', 'LGD', 'HGD']
-        fmt = '.2f'
+        if normalized:
+            fmt = '.2f'
+        else:
+            fmt = 'd'
 
     df_cm = pd.DataFrame(cf_matrix, index=labels, columns=labels)
 

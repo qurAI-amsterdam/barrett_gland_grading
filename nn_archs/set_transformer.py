@@ -109,4 +109,4 @@ class SetTransformer(nn.Module):
             nn.Linear(dim_hidden, dim_output))
 
     def forward(self, x):
-        return self.dec(self.enc(x))
+        return self.dec(self.enc(x)).squeeze()

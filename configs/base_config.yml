@@ -14,7 +14,7 @@ wholeslidedata:
             filters: ['xml']
             
         batch_shape:
-            batch_size: 32
+            batch_size: 16
             spacing: 1
             shape: [512, 512, 3]
 

@@ -21,14 +21,15 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
   - Ensembles 
   - Different loss functions: Dice and/or CCE
   - **Ensemble of CE probably a good choice.**
-- [x] Stain Normalization 
+- [ ] Stain Normalization 
   - **Seems to make the grading harder. Results are significantly worse.**
+  - Perform Stain Normalization on slide level.
 - [ ] 
   
 ### (2) Slide-Level Aggregation
 - [x] Extract tissue containing tiles in WSI's. 
 - [x] Rank tiles according to segmentation probabilities and confidence for dysplasia. 
-- [ ] Train aggregation models (Transformer, Attention-Pooling).
+- [x] Train aggregation models (Transformer, Attention-Pooling).
 
   Each slide $s$ is a sample $(\textbf{x}, y)$:
   
@@ -36,8 +37,8 @@ dysplasia grade in BE are surface maturation, glandular architecture, and cytonu
    * $y$: dysplasia label of slide $s$
   - [x] GRU (with ordered tiles)
   - [x] Set Transformer
-  - [ ] DeepMIL [[2]](#1) (with all tiles)
-- [ ] Visualization
+  - [x] DeepMIL [[2]](#1) (with all tiles)
+- [x] Visualization
 
 ### Datasets 
 Below a summary is shown of all the data available for this project. Gland level annotations were provided by Sybren Meijer for the categories: NDBE, LGD and HGD.

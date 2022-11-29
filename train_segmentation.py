@@ -11,6 +11,7 @@ from sklearn.metrics import f1_score, confusion_matrix, cohen_kappa_score
 import wandb
 from utils import mean_metrics, load_config
 import segmentation_models_pytorch as smp
+from nn_archs.denseunet import DenseUnet
 from preprocessing import get_preprocessing, tissue_mask_batch
 
 
@@ -230,7 +231,6 @@ def train(run_name, exp_dir, wandb_key, user_config=None):
         pred_save_path = os.path.join(exp_dir, 'val_predictions', 'predictions_epoch_{}.png'.format(n + 1))
         cm_save_path = os.path.join(exp_dir, 'val_predictions', 'confusion_matrix_epoch_{}.png'.format(n + 1))
         cm_patch_save_path = os.path.join(exp_dir, 'val_predictions', 'confusion_matrix_patch_epoch_{}.png'.format(n + 1))
-        print('shapes: {}'.format((example_val_batch_x.shape, example_val_batch_y.shape, example_val_batch_y_hat.shape)))
         plot_pred_batch(example_val_batch_x, example_val_batch_y, example_val_batch_y_hat, save_path=pred_save_path)
         plot_confusion_matrix(validation_metrics_mean['confusion matrix'], save_path=cm_save_path)
         plot_confusion_matrix(validation_metrics_mean['confusion matrix patch'], save_path=cm_patch_save_path, pixel_level=False)

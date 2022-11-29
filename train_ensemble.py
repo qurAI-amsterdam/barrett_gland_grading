@@ -80,7 +80,7 @@ class Ensemble:
 
         for i, model in enumerate(self.models):
             # forward, convert logits to probabilities
-            y_pred_batch_m = model(x)
+            y_pred_batch_m = model.forward(x)
             y_pred_batch_m_soft = torch.nn.functional.softmax(y_pred_batch_m, dim=1).cpu().detach().numpy()
             y_pred_patches.append(y_pred_batch_m_soft[:len(y)])
 
