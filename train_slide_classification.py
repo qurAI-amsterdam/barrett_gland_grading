@@ -31,7 +31,7 @@ class SlideDataset(Dataset):
         return self.ids[idx]
 
     def __getitem__(self, idx):
-        x = torch.Tensor(self.slide_sequences[idx])[:, :4]      # (L, H_in)
+        x = torch.Tensor(self.slide_sequences[idx])              # (L, H_in)
         y = torch.Tensor(self.slide_labels[idx])                 # (1)
         return x, y
 
@@ -224,7 +224,7 @@ if __name__ == '__main__':
     parser.add_argument("--lr", type=float, default=1e-4, help="initial the learning rate")
     parser.add_argument("--wd", type=float, default=1e-5, help="weight decay (L2)")
     parser.add_argument("--exp_dir", type=str,
-                        default='/data/archief/AMC-data/Barrett/experiments/barrett_slide_classification/top_25_entropy_avg_msp',
+                        default='/data/archief/AMC-data/Barrett/experiments/barrett_slide_classification/top_25_entropy/',
                         help="experiment dir classification")
     parser.add_argument("--wandb_key", type=str, help="key for logging to weights and biases")
     parser.add_argument("--test", type=bool, help="whether to also test", default=True)

@@ -132,6 +132,30 @@ def avg_entropy_sk_per_patch(y_pred):
     return h
 
 
+def avg_entropy(y_pred, epsilon=1e-5):
+    """ Computes the average of pixel-wise entropy values for all pixels.
+
+    Args:
+        y_pred: (N, C)
+        epsilon: small number for computation
+
+    Returns:
+        avg_entropy_sk: (C, )
+    """
+    # validate probabilities
+    _validate_probabilities(y_pred)
+    num_classes = y_pred.shape[1]
+    avg_entropy = np.zeros(num_classes)
+
+    for c in range(num_classes):
+
+        # for every pixel the prob of c
+        p_c = y_pred[:, c]
+        avg_entropy[c] = -(1 / len(p_c)) * np.sum(p_c * np.log(p_c + epsilon) + (1 - p_c) * np.log(1 - p_c + epsilon))
+
+    return avg_entropy
+
+
 def avg_entropy_sk(y_pred, epsilon=1e-5):
     """ Computes the average of pixel-wise entropy values over the predicted foreground.
 
@@ -198,7 +222,7 @@ def plot_reliability_diagram(y_true, y_pred, ax):
     # Equally spaced axes
     plt.gca().set_aspect('equal', adjustable='box')
 
-    # TO-Do: add ece, nll, brier score
+    # Legend
     outputs_patch = mpatches.Patch(color='b', label='Outputs')
     gaps_patch = mpatches.Patch(color='r', alpha=0.4, hatch='\\', label='Gaps')
 

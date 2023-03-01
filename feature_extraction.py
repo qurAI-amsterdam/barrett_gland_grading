@@ -66,26 +66,12 @@ def extract_tiles(model, batch_iterator, preprocessing, device):
 def extract_sus_tiles(slides, rbe_slide_df, info_tiles):
     """
     """
-
-
-    # for idx, slide in enumerate(slides):
-    #
-    #     # look up y
-    #     y[idx] = int(rbe_slide_df[rbe_slide_df['slide'] == slide]['grade normal']) - 1
-    #
-    #     # construct features: top 25 low entropy suspicious tiles
-    #     slide_df = df[df['file'] == slide]
-    #     suspicious_tiles = slide_df[slide_df['naive pred'] > 1].sort_values(by=['entropy pred'])[:25]
-    #
-    #     for tile_idx, tile in suspicious_tiles.reset_index().iterrows():
-    #         x[idx, tile_idx, :] = tile['entropy_sk']
     return NotImplementedError
 
 
 def extract_features(extract_config_dev, extract_config_test, save_path):
     """
     """
-
     # set device
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
@@ -130,7 +116,7 @@ def extract_features(extract_config_dev, extract_config_test, save_path):
     test_slides = [slide for slide in np.unique(test_info_tiles['file']) if slide in list(rbe_slide_df['slide'])]
     print('{} train slides.\n {} val slides.\n{} test slides'.format(len(train_slides), len(val_slides), len(test_slides)))
 
-    # ToDO: extract sus tiles
+    # ToDo: extract sus tiles
     print('Features stored at: {}'.format(save_path))
 
 
