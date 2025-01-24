@@ -10,8 +10,9 @@ one of the following categories: non-dysplastic Barrett's esophagus (NDBE), inde
 
 ![](images/examples_grading_BE.png)
 
+## Algorithm for grading dysplasia in Barrett's
+![](images/figure1.pdf)
 
-## Outline of the project
 ### (1) Segmentation model for: NDBE vs LGD vs HGD
 Implemented as an ensemble of UNet++ models. (`train_segmentation.py, train_ensemble.py`)
 
@@ -25,7 +26,6 @@ Implemented as a SetTransformer (`train_slide_classification.py`), trained for t
    * $y$: dysplasia label of slide $s$
 
 For ranking of confidence in containing dysplasia see `confidence_calibration.py`
-
 
 ### Datasets 
 For this project we had a development dataset and an observer dataset. 
